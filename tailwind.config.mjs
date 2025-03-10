@@ -1,17 +1,14 @@
-/** @type {import('@tailwindcss/postcss').Config} */
-export default {
+/** @type {import('tailwindcss').Config} */
+const config = {
   content: [
-    "./app/**/*.{js,ts,jsx,tsx,mdx}",
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    extend: {
-      fontFamily: {
-        outfit: ["Outfit", "sans-serif"],
-        ovo: ["Ovo", "serif"],
-      },
-    },
+    extend: {},
   },
   plugins: [],
 };
+
+export default config;
