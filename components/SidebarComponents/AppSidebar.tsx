@@ -4,7 +4,6 @@ import {
   CalendarPlus2,
   BriefcaseMedical,
   User,
-  UserCircle2,
 } from "lucide-react";
 
 import {
@@ -19,6 +18,12 @@ import {
 } from "@/components/ui/sidebar";
 
 import UserNav from "./UserNav";
+
+const userData = {
+  name: "Mainul Rahat",
+  phone: "+8801521507316",
+  avatar: "@/public/user_image.jpg",
+};
 
 const SidebarData = [
   {
@@ -69,7 +74,7 @@ const AppSidebar = () => {
       </SidebarContent>
 
       <SidebarFooter>
-        <UserNav />
+        <UserNav userData={userData} />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
