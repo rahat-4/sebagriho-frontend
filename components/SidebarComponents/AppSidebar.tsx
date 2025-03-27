@@ -1,13 +1,19 @@
+"use client";
+
 import {
   Hospital,
   LayoutDashboard,
   CalendarPlus2,
   BriefcaseMedical,
   User,
+  GalleryVerticalEnd,
+  AudioWaveform,
+  Command,
 } from "lucide-react";
 
 import {
   Sidebar,
+  SidebarHeader,
   SidebarContent,
   SidebarGroup,
   SidebarMenu,
@@ -17,49 +23,62 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 
+import { TeamSwitcher } from "./TeamSwitcher";
 import UserNav from "./UserNav";
 
-const userData = {
-  name: "Mainul Rahat",
-  phone: "+8801521507316",
-  avatar: "@/public/user_image.jpg",
-};
+import UserImage from "@/public/user_image.jpg";
+import SebagrihoLogo from "@/public/sebagriho_logo.png";
 
-const SidebarData = [
-  {
-    title: "Organizations",
-    icon: Hospital,
-    url: "/admin/organizations",
+const data = {
+  user: {
+    name: "shadcn",
+    email: "m@example.com",
+    avatar: UserImage.src,
   },
-  {
-    title: "Dashboard",
-    icon: LayoutDashboard,
-    url: "/admin/dashboard",
+  company: {
+    name: "Sebagriho",
+    logo: SebagrihoLogo.src,
+    plan: "Healthcare Everywhere",
   },
-  {
-    title: "Appointments",
-    icon: CalendarPlus2,
-    url: "/admin/appointments",
-  },
-  {
-    title: "Doctors",
-    icon: BriefcaseMedical,
-    url: "/admin/doctors",
-  },
-  {
-    title: "Patients",
-    icon: User,
-    url: "/admin/patients",
-  },
-];
+  navMain: [
+    {
+      title: "Organizations",
+      icon: Hospital,
+      url: "/admin/organizations",
+    },
+    {
+      title: "Dashboard",
+      icon: LayoutDashboard,
+      url: "/admin/dashboard",
+    },
+    {
+      title: "Appointments",
+      icon: CalendarPlus2,
+      url: "/admin/appointments",
+    },
+    {
+      title: "Doctors",
+      icon: BriefcaseMedical,
+      url: "/admin/doctors",
+    },
+    {
+      title: "Patients",
+      icon: User,
+      url: "/admin/patients",
+    },
+  ],
+};
 
 const AppSidebar = () => {
   return (
     <Sidebar collapsible="icon">
+      <SidebarHeader>
+        <TeamSwitcher company={data.company} />
+      </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
           <SidebarMenu>
-            {SidebarData.map((item, index) => (
+            {data.navMain.map((item, index) => (
               <SidebarMenuItem key={index}>
                 <SidebarMenuButton asChild>
                   <a href={item.url}>
@@ -74,7 +93,7 @@ const AppSidebar = () => {
       </SidebarContent>
 
       <SidebarFooter>
-        <UserNav userData={userData} />
+        <UserNav user={data.user} />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

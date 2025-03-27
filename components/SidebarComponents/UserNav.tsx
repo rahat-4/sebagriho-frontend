@@ -17,9 +17,9 @@ import {
 } from "@/components/ui/sidebar";
 
 const UserNav = ({
-  userData,
+  user,
 }: {
-  userData: { name: string; phone: string; avatar: string };
+  user: { name: string; email: string; avatar: string };
 }) => {
   return (
     <SidebarMenu>
@@ -27,7 +27,7 @@ const UserNav = ({
         <DropdownMenu>
           <SidebarMenuButton>
             <Avatar className="h-8 w-8 rounded-lg">
-              <AvatarImage src={userData.avatar} alt={userData.name} />
+              <AvatarImage src={user.avatar} alt={user.name} />
               <AvatarFallback className="rounded-lg">MR</AvatarFallback>
             </Avatar>
           </SidebarMenuButton>
