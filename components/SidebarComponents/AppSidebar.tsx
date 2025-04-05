@@ -6,9 +6,6 @@ import {
   CalendarPlus2,
   BriefcaseMedical,
   User,
-  GalleryVerticalEnd,
-  AudioWaveform,
-  Command,
 } from "lucide-react";
 
 import {

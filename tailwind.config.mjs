@@ -6,7 +6,12 @@ const config = {
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        outfit: ["Outfit", "sans-serif"],
+        ovo: ["Ovo", "serif"],
+      },
+    },
   },
   plugins: [],
 };
