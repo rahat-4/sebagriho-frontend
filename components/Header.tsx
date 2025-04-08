@@ -10,23 +10,27 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-
 import { UserRoundSearch, CircleX } from "lucide-react";
-
 import Image from "next/image";
-
 import SebagrihoLogo from "@/public/sebagriho.png";
+
+// Reusable input component
+const FilterInput = ({ placeholder }: { placeholder: string }) => (
+  <Input type="text" placeholder={placeholder} className="w-full text-xs" />
+);
 
 const Header = () => {
   return (
     <div className="flex items-center justify-between p-3 bg-white shadow-sm sticky top-0 z-10">
       <Image src={SebagrihoLogo} alt="Sebagriho Logo" width={120} />
+
       <Drawer direction="top">
         <DrawerTrigger>
           <Button variant="outline">
-            Search Doctor <UserRoundSearch />
+            Search Doctor <UserRoundSearch className="ml-2" />
           </Button>
         </DrawerTrigger>
+
         <DrawerContent>
           <DrawerHeader>
             <DrawerTitle>
@@ -39,36 +43,27 @@ const Header = () => {
               Find doctors near you with advanced filters.
             </DrawerDescription>
           </DrawerHeader>
+
           <div className="px-4">
-            <Input
-              type="text"
-              placeholder="Search by doctor's name"
-              className="w-full mb-4"
-            />
-            <div className="flex gap-2 mb-4">
-              <Input type="text" placeholder="Specialty" className="w-full" />
-              <Input
-                type="text"
-                placeholder="Bangladesh"
-                className="w-full"
-                disabled
-              />
+            <FilterInput placeholder="Doctor's name" />
+            <div className="flex gap-2 mb-2 mt-2">
+              {["Speciality", "Gender"].map((ph) => (
+                <FilterInput key={ph} placeholder={ph} />
+              ))}
             </div>
-            <div className="flex gap-2 mb-4">
-              <Input type="text" placeholder="City" className="w-full" />
-              <Input type="text" placeholder="Thana" className="w-full" />
-            </div>
-            <div className="flex gap-2 mb-4">
-              <Input type="text" placeholder="Gender" className="w-full" />
-              <Input type="text" placeholder="Sort by" className="w-full" />
+            <div className="flex gap-2 mb-2">
+              {["City", "Thana"].map((ph) => (
+                <FilterInput key={ph} placeholder={ph} />
+              ))}
             </div>
           </div>
+
           <DrawerFooter>
-            <div className="flex flex-row gap-2 w-full">
+            <div className="flex gap-2 w-full">
               <Button variant="outline" className="flex-1">
-                Clear Filters
+                Clear
               </Button>
-              <Button variant={"outline"} className="flex-1">
+              <Button variant="outline" className="flex-1">
                 Search
               </Button>
             </div>
