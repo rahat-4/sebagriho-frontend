@@ -1,3 +1,4 @@
+// Improved and optimized version
 "use client";
 import { useState } from "react";
 
@@ -10,100 +11,156 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
 
+import { Plus } from "lucide-react";
+
+const FormSection = ({ title, fields, isGrid = true, isColThree }: any) => (
+  <div className="">
+    <div className="font-semibold text-sm mb-2">{title}</div>
+    <div className="border border-gray-200 rounded p-4">
+      <div
+        className={`${
+          isGrid && isColThree
+            ? "grid grid-cols-1 md:grid-cols-3 gap-4"
+            : isGrid && !isColThree
+            ? "grid grid-cols-1 md:grid-cols-2 gap-4"
+            : "flex flex-col gap-4"
+        }`}
+      >
+        {fields.map((field: any, idx: number) => (
+          <div key={idx}>
+            <Label className="pb-1">{field.label}</Label>
+            <Input
+              placeholder={field.placeholder || field.label}
+              className="w-full text-sm"
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+    <div className="flex items-center justify-end text-xs pt-2">
+      <Button variant="outline" size="sm" className="flex items-center gap-1">
+        <Plus size={14} /> Add More
+      </Button>
+    </div>
+  </div>
+);
+
 const StepOne = ({ onNext }: { onNext: () => void }) => (
   <div className="space-y-4">
-    <div className="font-semibold">Add new doctor</div>
+    <div className="font-semibold text-lg">Add new doctor</div>
     <div>
       <Label className="pb-2">Step 1/2</Label>
       <Progress value={50} />
     </div>
-    <div>
-      <Label className="pb-1">First name</Label>
-      <Input placeholder="First name" className="w-full text-sm" />
-    </div>
-    <div>
-      <Label className="pb-1">Last name</Label>
-      <Input placeholder="Last name" className="w-full text-sm" />
-    </div>
-    <div>
-      <Label className="pb-1">Phone</Label>
-      <Input placeholder="Phone" className="w-full text-sm" />
-    </div>
-    <div>
-      <Label className="pb-1">Email</Label>
-      <Input placeholder="Email" className="w-full text-sm" />
-    </div>
-    <div>
-      <Label className="pb-1">National id</Label>
-      <Input placeholder="National id" className="w-full text-sm" />
-    </div>
-    <div>
-      <Label className="pb-1">Gender</Label>
-      <Input placeholder="Gender" className="w-full text-sm" />
-    </div>
-    <div>
-      <Label className="pb-1">Registration number</Label>
-      <Input placeholder="Registration number" className="w-full text-sm" />
-    </div>
-    <div>
-      <Label className="pb-1">Appointment fee</Label>
-      <Input placeholder="Appointment fee" className="w-full text-sm" />
-    </div>
-    <div>
-      <Label className="pb-1">Followup fee</Label>
-      <Input placeholder="Followup fee" className="w-full text-sm" />
-    </div>
+    {[
+      "First name",
+      "Last name",
+      "Phone",
+      "Email",
+      "National id",
+      "Gender",
+      "Registration number",
+      "Appointment fee",
+      "Followup fee",
+    ].map((label, idx) => (
+      <div key={idx}>
+        <Label className="pb-1">{label}</Label>
+        <Input placeholder={label} className="w-full text-sm" />
+      </div>
+    ))}
     <div className="flex justify-end">
-      <Button onClick={onNext}>Save & Continue</Button>
+      <Button onClick={onNext} className="text-sm" size="lg">
+        Save & Continue
+      </Button>
     </div>
   </div>
 );
 
 const StepTwo = ({ onBack }: { onBack: () => void }) => (
-  <div className="space-y-4">
-    <div className="font-semibold">Add new doctor</div>
+  <div className="space-y-6">
+    <div className="font-semibold text-lg">Add new doctor</div>
     <div>
       <Label className="pb-2">Step 2/2</Label>
       <Progress value={100} />
     </div>
+
+    {/* Department Section */}
     <div>
-      <Label className="pb-1">Department</Label>
-      <Select>
-        <SelectTrigger className="w-full text-sm">
-          <SelectValue placeholder="Select a department" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectGroup className="h-[150px]">
-            <SelectItem value="department-1">Department 1</SelectItem>
-            <SelectItem value="department-2">Department 2</SelectItem>
-            <SelectItem value="department-3">Department 3</SelectItem>
-            <SelectItem value="department-4">Department 4</SelectItem>
-            <SelectItem value="department-5">Department 5</SelectItem>
-            <SelectItem value="department-6">Department 6</SelectItem>
-            <SelectItem value="department-7">Department 7</SelectItem>
-            <SelectItem value="department-8">Department 8</SelectItem>
-          </SelectGroup>
-        </SelectContent>
-      </Select>
+      <div className="font-semibold pb-2 text-sm">Department</div>
+      <div className="border border-gray-200 rounded p-4">
+        <div className="pb-4">
+          <Label className="pb-1">Name</Label>
+          <Select>
+            <SelectTrigger className="w-full text-sm">
+              <SelectValue placeholder="Select a department" />
+            </SelectTrigger>
+            <SelectContent className="max-h-[150px]">
+              <SelectGroup>
+                {[...Array(8)].map((_, i) => (
+                  <SelectItem key={i} value={`department-${i + 1}`}>
+                    Department {i + 1}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <Label className="pb-1">Years of experience</Label>
+            <Input className="w-full text-sm" />
+          </div>
+          <div>
+            <Label className="pb-1">Expertise</Label>
+            <Input className="w-full text-sm" />
+          </div>
+        </div>
+      </div>
+      <div className="flex items-center justify-end text-xs pt-2">
+        <Button variant="outline" size="sm" className="flex items-center gap-1">
+          <Plus size={14} /> Add More
+        </Button>
+      </div>
     </div>
-    <div>
-      <Label className="pb-1">Years of experience</Label>
-      <Input placeholder="Years of experience" className="w-full text-sm" />
-    </div>
-    <div>
-      <Label className="pb-1">Expertise</Label>
-      <Input placeholder="Expertise" className="w-full text-sm" />
-    </div>
-    <div className="flex justify-end gap-2">
-      <Button variant={"outline"} onClick={onBack}>
+
+    {/* Degrees Section */}
+    <FormSection
+      title="Degrees"
+      fields={[
+        { label: "Degree Name" },
+        { label: "Institute" },
+        { label: "Result" },
+        { label: "Year" },
+      ]}
+    />
+
+    {/* Achievements Section */}
+    <FormSection
+      title="Achievements"
+      fields={[{ label: "Title" }, { label: "Source" }, { label: "Year" }]}
+      isGrid={true}
+      isColThree={true}
+    />
+
+    {/* Hospital Affiliation Section */}
+    <FormSection
+      title="Hospital Affiliation"
+      fields={[{ label: "Name" }, { label: "Title" }, { label: "Year" }]}
+      isGrid={true}
+      isColThree={true}
+    />
+
+    <div className="flex justify-end gap-2 pt-4">
+      <Button variant="outline" onClick={onBack} className="text-sm" size="lg">
         Back
       </Button>
-      <Button>Save</Button>
+      <Button className="text-sm" size="lg">
+        Submit
+      </Button>
     </div>
   </div>
 );
@@ -111,9 +168,9 @@ const StepTwo = ({ onBack }: { onBack: () => void }) => (
 const FormPage = () => {
   const [step, setStep] = useState(1);
   return (
-    <div>
-      {step == 1 && <StepOne onNext={() => setStep(2)} />}
-      {step == 2 && <StepTwo onBack={() => setStep(1)} />}
+    <div className="max-w-4xl mx-auto bg-white">
+      {step === 1 && <StepOne onNext={() => setStep(2)} />}
+      {step === 2 && <StepTwo onBack={() => setStep(1)} />}
     </div>
   );
 };

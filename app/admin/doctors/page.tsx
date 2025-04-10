@@ -1,3 +1,7 @@
+"use client";
+
+import { useRouter } from "next/navigation";
+
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -7,6 +11,8 @@ import { Plus, Search } from "lucide-react";
 import DoctorCardList from "@/components/DoctorCardList";
 
 const Page = () => {
+  const router = useRouter();
+
   return (
     <div className="space-y-4">
       {/* Responsive Row for Add + Search */}
@@ -26,7 +32,10 @@ const Page = () => {
 
         {/* Add Doctor Button */}
         <div className="w-full md:w-auto">
-          <Button className="w-full md:w-auto flex items-center justify-center mt-1 md:mt-0">
+          <Button
+            className="w-full md:w-auto flex items-center justify-center mt-1 md:mt-0 cursor-pointer"
+            onClick={() => router.push("/admin/doctors/add-doctor")}
+          >
             <Plus className="h-4 w-4 mr-1" />
             Add Doctor
           </Button>
