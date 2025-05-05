@@ -1,6 +1,7 @@
-// Improved and optimized version
 "use client";
+
 import { useState } from "react";
+import { usePathname } from "next/navigation";
 
 import { Progress } from "@/components/ui/progress";
 import { Label } from "@/components/ui/label";
@@ -16,6 +17,8 @@ import {
 } from "@/components/ui/select";
 
 import { Plus } from "lucide-react";
+
+import UserRegistration from "@/components/Registrations/UserRegistration";
 
 const FormSection = ({ title, fields, isGrid = true, isColThree }: any) => (
   <div className="">
@@ -44,37 +47,6 @@ const FormSection = ({ title, fields, isGrid = true, isColThree }: any) => (
     <div className="flex items-center justify-end text-xs pt-2">
       <Button variant="outline" size="sm" className="flex items-center gap-1">
         <Plus size={14} /> Add More
-      </Button>
-    </div>
-  </div>
-);
-
-const StepOne = ({ onNext }: { onNext: () => void }) => (
-  <div className="space-y-4">
-    <div className="font-semibold text-lg">Add new doctor</div>
-    <div>
-      <Label className="pb-2">Step 1/2</Label>
-      <Progress value={50} />
-    </div>
-    {[
-      "First name",
-      "Last name",
-      "Phone",
-      "Email",
-      "National id",
-      "Gender",
-      "Registration number",
-      "Appointment fee",
-      "Followup fee",
-    ].map((label, idx) => (
-      <div key={idx}>
-        <Label className="pb-1">{label}</Label>
-        <Input placeholder={label} className="w-full text-sm" />
-      </div>
-    ))}
-    <div className="flex justify-end">
-      <Button onClick={onNext} className="text-sm" size="lg">
-        Save & Continue
       </Button>
     </div>
   </div>
@@ -167,9 +139,22 @@ const StepTwo = ({ onBack }: { onBack: () => void }) => (
 
 const FormPage = () => {
   const [step, setStep] = useState(1);
+  const pathname = usePathname();
+
+  console.log("Current Path:", pathname);
+
   return (
     <div className="max-w-4xl mx-auto bg-white">
-      {step === 1 && <StepOne onNext={() => setStep(2)} />}
+      <div className="space-y-2 mb-4">
+        <div className="font-semibold text-lg">Add new Doctor</div>
+        <div>
+          <Label className="pb-2">Step 1/2</Label>
+          <Progress value={50} />
+        </div>
+      </div>
+      {step === 1 && (
+        <UserRegistration pathname={pathname} onNext={() => setStep(2)} />
+      )}
       {step === 2 && <StepTwo onBack={() => setStep(1)} />}
     </div>
   );
