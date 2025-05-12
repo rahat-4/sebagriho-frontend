@@ -11,15 +11,15 @@ const OneTimePassword = ({ onNext }: { onNext: () => void }) => {
   const [timeLeft, setTimeLeft] = useState(120);
 
   useEffect(() => {
-    setInterval(() => {
+    const interval = setInterval(() => {
       setTimeLeft((t) => {
         if (t > 0) return t - 1;
-        clearInterval(timeLeft);
+        clearInterval(interval);
         return 0;
       });
     }, 1000);
 
-    return () => clearInterval(timeLeft);
+    return () => clearInterval(interval);
   }, []);
 
   const minutes = Math.floor(timeLeft / 60);
@@ -29,7 +29,8 @@ const OneTimePassword = ({ onNext }: { onNext: () => void }) => {
   return (
     <div className="space-y-2 justify-center items-center flex flex-col">
       <div className="text-center text-sm text-muted-foreground">
-        {value === "" ? <>Enter your one-time password</> : <></>}
+        Check your phone for the one-time password (OTP) and enter it here to
+        continue.
       </div>
       <InputOTP
         maxLength={6}
