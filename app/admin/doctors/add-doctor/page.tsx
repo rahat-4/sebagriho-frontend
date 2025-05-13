@@ -141,8 +141,6 @@ const FormPage = () => {
   const [step, setStep] = useState(1);
   const pathname = usePathname();
 
-  console.log("Current Path:", pathname);
-
   return (
     <div className="max-w-4xl mx-auto bg-white">
       <div className="space-y-2 mb-4">
