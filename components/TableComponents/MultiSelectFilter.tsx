@@ -57,10 +57,15 @@ const MultiSelectFilter = <T extends object>({
     return counts;
   }, [table, columnId]);
 
+  // Clear all filters for this column
+  const clearFilters = () => {
+    column?.setFilterValue(undefined);
+  };
+
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="outline" className="font-bold">
+        <Button variant="outline" className="font-bold cursor-pointer">
           <LucideFilter className="h-4 w-4" />
           {label} {selected.length > 0 ? `(${selected.length})` : ""}
         </Button>
@@ -96,6 +101,18 @@ const MultiSelectFilter = <T extends object>({
                 </CommandItem>
               ))}
             </CommandGroup>
+            {selected.length > 0 && (
+              <div className="border-t">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="text-xs w-full text-muted-foreground cursor-pointer"
+                  onClick={clearFilters}
+                >
+                  Clear filters
+                </Button>
+              </div>
+            )}
           </CommandList>
         </Command>
       </PopoverContent>

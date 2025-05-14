@@ -5,7 +5,7 @@ export default function multiSelectFilterFn<T>(
   columnId: string,
   filterValue: string[]
 ) {
-  const rowValue = row.getValue(columnId)?.toString().toLowerCase();
+  const value = row.getValue(columnId)?.toString().toLowerCase();
 
-  return filterValue.includes(rowValue);
+  return filterValue.includes(value);
 }
