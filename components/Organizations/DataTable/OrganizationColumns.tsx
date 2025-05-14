@@ -28,8 +28,6 @@ const generateOrganizationColumns = (): ColumnDef<Organization>[] => [
     "name",
     "parent",
     "subdomain",
-    "organizationType",
-    "status",
     "createdAt",
     "billingCycle",
     "paymentStatus",
@@ -38,8 +36,21 @@ const generateOrganizationColumns = (): ColumnDef<Organization>[] => [
     header: ({ column }: any) => (
       <SortableHeader column={column} label={toTitleCase(key)} />
     ),
-    filterFn: key === "status" ? multiSelectFilterFn : undefined,
   })),
+  {
+    accessorKey: "status",
+    header: ({ column }: any) => (
+      <SortableHeader column={column} label="Status" />
+    ),
+    filterFn: multiSelectFilterFn,
+  },
+  {
+    accessorKey: "organizationType",
+    header: ({ column }: any) => (
+      <SortableHeader column={column} label="Organization Type" />
+    ),
+    filterFn: multiSelectFilterFn,
+  },
   {
     accessorKey: "amount",
     header: ({ column }: any) => (

@@ -3,7 +3,6 @@
 import { useState } from "react";
 
 import {
-  ColumnDef,
   ColumnFiltersState,
   SortingState,
   getCoreRowModel,
@@ -18,6 +17,8 @@ import ResetTable from "@/components/TableComponents/ResetTable";
 import Search from "@/components/TableComponents/Search";
 import MultiSelectFilter from "@/components/TableComponents/MultiSelectFilter";
 import PaginationControls from "@/components/TableComponents/PaginationControls";
+
+import { columns } from "./OrganizationColumns";
 
 const statusOptions = [
   { label: "Active", value: "active" },
@@ -39,17 +40,20 @@ const organizationTypes = [
   { label: "Hospital", value: "hospital" },
 ];
 
-interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[];
+interface DataTableProps<TData extends object> {
   data: TData[];
 }
 
-const DataTable = <TData, TValue>({
-  columns,
-  data,
-}: DataTableProps<TData, TValue>) => {
+const DataTable = <TData extends object>({ data }: DataTableProps<TData>) => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [searchValue, setSearchValue] = useState("");
+
+  const handleReset = () => {
+    setSearchValue("");
+    setColumnFilters([]);
+    setSorting([]);
+  };
 
   const table = useReactTable({
     data,
@@ -70,7 +74,12 @@ const DataTable = <TData, TValue>({
       <div className="flex items-center justify-between py-2">
         {/* Left side: Search and Filter */}
         <div className="flex items-center space-x-2">
-          <Search table={table} searchableColumn="name" />
+          <Search
+            table={table}
+            searchableColumn="name"
+            value={searchValue}
+            onChange={setSearchValue}
+          />
           <MultiSelectFilter
             table={table}
             options={statusOptions}
@@ -84,7 +93,7 @@ const DataTable = <TData, TValue>({
             columnId="organizationType"
           />
         </div>
-        <ResetTable table={table} />
+        <ResetTable table={table} onReset={handleReset} />
       </div>
       <TableView table={table} />
       <PaginationControls table={table} />

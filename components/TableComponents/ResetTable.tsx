@@ -1,6 +1,10 @@
 import { Button } from "@/components/ui/button";
 
-const ResetTable = ({ table }: { table: any }) => {
+interface ResetTableProps {
+  table: any;
+  onReset: () => void;
+}
+const ResetTable = ({ table, onReset }: ResetTableProps) => {
   return (
     <div className="flex justify-end pb-2">
       <Button
@@ -8,6 +12,7 @@ const ResetTable = ({ table }: { table: any }) => {
         onClick={() => {
           table.resetColumnFilters();
           table.resetSorting();
+          onReset();
         }}
       >
         Reset all

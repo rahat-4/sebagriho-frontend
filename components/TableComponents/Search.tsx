@@ -3,9 +3,13 @@ import { Input } from "@/components/ui/input";
 const Search = ({
   table,
   searchableColumn,
+  value,
+  onChange,
 }: {
   table: any;
   searchableColumn: string;
+  value: string;
+  onChange: (value: string) => void;
 }) => {
   const column = table.getColumn(searchableColumn);
   const filterValue = column.getFilterValue() as string;
@@ -14,8 +18,12 @@ const Search = ({
     <Input
       placeholder={`Search by ${searchableColumn}`}
       className="max-w-xs"
-      value={filterValue}
-      onChange={(event) => column.setFilterValue(event.target.value)}
+      value={value}
+      onChange={(event) => {
+        const val = event.target.value;
+        onChange(val);
+        column.setFilterValue(val);
+      }}
     />
   );
 };

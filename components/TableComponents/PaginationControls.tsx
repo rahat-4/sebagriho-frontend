@@ -7,7 +7,7 @@ const PaginationControls = ({ table }: { table: any }) => {
   const pageSize = table.getState().pagination.pageSize;
   const totalRows = table.getPrePaginationRowModel().rows.length;
 
-  const from = pageIndex * pageSize + 1;
+  const from = totalRows ? pageIndex * pageSize + 1 : 0;
   const to = Math.min((pageIndex + 1) * pageSize, totalRows);
 
   const visiblePages = [pageIndex - 1, pageIndex, pageIndex + 1].filter(
@@ -63,7 +63,7 @@ const PaginationControls = ({ table }: { table: any }) => {
           variant="outline"
           size="sm"
           onClick={() => table.setPageIndex(pageCount - 1)}
-          disabled={pageIndex === pageCount - 1}
+          disabled={totalRows === 0 || pageIndex === pageCount - 1}
         >
           Last
         </Button>
@@ -73,6 +73,7 @@ const PaginationControls = ({ table }: { table: any }) => {
       <div className="text-sm">
         Rows per page:{" "}
         <select
+          disabled={totalRows === 0}
           className="border rounded px-2 py-1 ml-2"
           value={pageSize}
           onChange={(e) => table.setPageSize(Number(e.target.value))}

@@ -1,8 +1,5 @@
 import CardComponents from "@/components/CardComponents";
-// import DataTable from "@/components/TableView/data-table";
 import DataTable from "@/components/Organizations/DataTable/DataTable";
-
-import { columns } from "@/components/Organizations/DataTable/OrganizationColumns";
 
 import { stats, tableData } from "@/payload/Organization";
 
@@ -17,7 +14,7 @@ const Organizations = () => {
 
       <div className="mt-4">
         <h2 className="text-2xl font-bold mb-4">Organizations List</h2>
-        <DataTable columns={columns} data={tableData} />
+        <DataTable data={tableData} />
       </div>
     </div>
   );
