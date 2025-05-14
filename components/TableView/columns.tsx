@@ -1,6 +1,6 @@
 "use client";
 
-import { ColumnDef } from "@tanstack/react-table";
+import { ColumnDef, filterFns } from "@tanstack/react-table";
 import { MoreHorizontal, ChevronsUpDown } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -10,6 +10,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+
+import multiSelectFilterFn from "./CustomFilter";
 
 // Converts a string to title case by replacing underscores with spaces
 const toTitleCase = (str: string): string => {
@@ -76,6 +78,7 @@ const generateOrganizationColumns = (): ColumnDef<Organization>[] => [
     header: ({ column }: any) => (
       <SortableHeader column={column} label={toTitleCase(key)} />
     ),
+    filterFn: multiSelectFilterFn,
   })),
   {
     accessorKey: "amount",

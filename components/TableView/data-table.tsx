@@ -22,11 +22,18 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
+import Search from "./Search";
 import PaginationControls from "./PaginationControls";
 import MultiSelectFilter from "./MultiSelectFilter";
+
+const statusOptions = [
+  { label: "Active", value: "active" },
+  { label: "Pending", value: "pending" },
+  { label: "Deleted", value: "deleted" },
+  { label: "Suspended", value: "suspended" },
+];
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -57,25 +64,30 @@ const DataTable = <TData, TValue>({
 
   return (
     <div>
-      <div className="flex items-center py-4">
-        <Input
-          placeholder="Search by name"
-          className="max-w-xs"
-          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("name")?.setFilterValue(event.target.value)
-          }
-        />
-        <MultiSelectFilter />
-        <Button
-          variant="outline"
-          onClick={() => {
-            table.resetColumnFilters();
-            table.resetSorting();
-          }}
-        >
-          Reset all
-        </Button>
+      <div className="flex items-center justify-between py-4">
+        {/* Left side: Search and Filter */}
+        <div className="flex items-center space-x-2">
+          <Search table={table} />
+          <MultiSelectFilter
+            table={table}
+            label="Status"
+            options={statusOptions}
+            columnId={"status"}
+          />
+        </div>
+
+        {/* Right side: Reset Button */}
+        <div>
+          <Button
+            variant="outline"
+            onClick={() => {
+              table.resetColumnFilters();
+              table.resetSorting();
+            }}
+          >
+            Reset all
+          </Button>
+        </div>
       </div>
       <div className="rounded border">
         <Table>
