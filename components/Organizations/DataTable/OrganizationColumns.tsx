@@ -15,12 +15,12 @@ type Organization = {
   name: string;
   parent: string;
   subdomain: string;
-  organizationType: string;
+  organization_type: string;
   status: string;
-  createdAt: string;
+  created_at: string;
   amount: number;
-  billingCycle: string;
-  paymentStatus: string;
+  billing_cycle: string;
+  payment_status: string;
 };
 
 const generateOrganizationColumns = (): ColumnDef<Organization>[] => [
@@ -28,9 +28,9 @@ const generateOrganizationColumns = (): ColumnDef<Organization>[] => [
     "name",
     "parent",
     "subdomain",
-    "createdAt",
-    "billingCycle",
-    "paymentStatus",
+    "created at",
+    "billing Cycle",
+    "payment Status",
   ].map((key) => ({
     accessorKey: key,
     header: ({ column }: any) => (
@@ -45,7 +45,7 @@ const generateOrganizationColumns = (): ColumnDef<Organization>[] => [
     filterFn: multiSelectFilterFn,
   },
   {
-    accessorKey: "organizationType",
+    accessorKey: "organization Type",
     header: ({ column }: any) => (
       <SortableHeader column={column} label="Organization Type" />
     ),

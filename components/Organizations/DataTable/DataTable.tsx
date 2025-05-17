@@ -90,7 +90,7 @@ const DataTable = <TData extends object>({ data }: DataTableProps<TData>) => {
             table={table}
             options={organizationTypes}
             label="Organization Type"
-            columnId="organizationType"
+            columnId="organization_type"
           />
         </div>
         <ResetTable table={table} onReset={handleReset} />
