@@ -1,71 +1,114 @@
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { z } from "zod";
 
-const UserRegistration = ({
-  pathname,
-  onNext,
-}: {
-  pathname: string;
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+
+import { cn } from "@/lib/utils";
+
+import { postData } from "@/services/api";
+import { userSchema } from "@/services/schemas";
+
+interface StepProps {
   onNext: () => void;
-}) => {
-  const baseFields = [
-    "Avatar",
-    "First name",
-    "Last name",
-    "Phone",
-    "Email",
-    "Gender",
-    "National id",
-    "Nid Front Image",
-    "Nid Back Image",
+}
+
+interface FieldProps {
+  label: string;
+  name: string;
+  type: string;
+}
+
+type UserFormData = z.infer<typeof userSchema>;
+
+const UserRegistration: React.FC<StepProps> = ({ onNext }) => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<UserFormData>({
+    resolver: zodResolver(userSchema),
+  });
+
+  const fields: FieldProps[] = [
+    { label: "Avatar", name: "avatar", type: "file" },
+    { label: "First Name", name: "firstName", type: "text" },
+    { label: "Last Name", name: "lastName", type: "text" },
+    { label: "Phone", name: "phone", type: "text" },
+    { label: "Email", name: "email", type: "email" },
+    { label: "Gender", name: "gender", type: "text" },
+    { label: "National ID", name: "nid", type: "text" },
+    { label: "NID Front Image", name: "nidFrontImage", type: "file" },
+    { label: "NID Back Image", name: "nidBackImage", type: "file" },
   ];
 
-  const extraDoctorFields =
-    pathname === "/admin/doctors/add-doctor"
-      ? ["Registration number", "Appointment fee", "Followup fee"]
-      : [];
+  const onSubmit = async (data: UserFormData) => {
+    const formData = new FormData();
 
-  const allFields = [...baseFields, ...extraDoctorFields];
+    // Handle file inputs
+    if (data.avatar?.[0]) formData.append("avatar", data.avatar[0]);
+    if (data.nidFrontImage?.[0])
+      formData.append("nidFrontImage", data.nidFrontImage[0]);
+    if (data.nidBackImage?.[0])
+      formData.append("nidBackImage", data.nidBackImage[0]);
 
-  const fileInputLabels = new Set([
-    "Avatar",
-    "Nid Front Image",
-    "Nid Back Image",
-  ]);
+    // Handle text inputs
+    Object.keys(data).forEach((key) => {
+      if (
+        key !== "avatar" &&
+        key !== "nidFrontImage" &&
+        key !== "nidBackImage"
+      ) {
+        formData.append(key, data[key as keyof UserFormData] as string);
+      }
+    });
+
+    try {
+      const response = await postData(
+        "/public/auth/initial-registration",
+        formData
+      );
+
+      if (response?.session_id) {
+        localStorage.setItem("session_id", response.session_id);
+        onNext();
+      }
+    } catch (err) {
+      console.error("Registration error:", err);
+    }
+  };
 
   return (
-    <div className="space-y-4">
-      {allFields.map((label) => {
-        const id = label.toLowerCase().replace(/\s+/g, "-");
-        const isFileInput = fileInputLabels.has(label);
-
-        return (
-          <div key={id}>
-            <Label htmlFor={id} className="pb-1 block">
-              {label}
-            </Label>
-            <Input
-              id={id}
-              type={
-                isFileInput
-                  ? "file"
-                  : label.toLocaleLowerCase() == "email"
-                  ? "email"
-                  : "text"
-              }
-              className="w-full text-sm"
-            />
-          </div>
-        );
-      })}
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      {fields.map(({ label, name, type }) => (
+        <div key={name}>
+          <Label htmlFor={name}>{label}</Label>
+          <Input
+            id={name}
+            type={type}
+            {...register(name as keyof UserFormData)}
+            className={cn(
+              "w-full text-sm",
+              errors[name as keyof UserFormData] && "border-red-500"
+            )}
+          />
+          {errors[name as keyof UserFormData] && (
+            <p className="text-xs text-red-500 mt-1">
+              {errors[name as keyof UserFormData]?.message}
+            </p>
+          )}
+        </div>
+      ))}
 
       <div className="flex justify-end">
-        <Button onClick={onNext} className="text-sm" size="sm">
+        <Button type="submit" className="text-sm cursor-pointer" size="sm">
           Save & Continue
         </Button>
       </div>
-    </div>
+    </form>
   );
 };
 

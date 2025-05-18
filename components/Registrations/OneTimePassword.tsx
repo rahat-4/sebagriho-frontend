@@ -1,71 +1,75 @@
-import {
-  InputOTP,
-  InputOTPGroup,
-  InputOTPSlot,
-} from "@/components/ui/input-otp";
+"use client";
+
+import { z } from "zod";
+
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
+import { postData } from "@/services/api";
 
-const OneTimePassword = ({ onNext }: { onNext: () => void }) => {
-  const [value, setValue] = useState("");
-  const [timeLeft, setTimeLeft] = useState(120);
+import { cn } from "@/lib/utils";
+import { otpSchema } from "@/services/schemas";
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setTimeLeft((t) => {
-        if (t > 0) return t - 1;
-        clearInterval(interval);
-        return 0;
-      });
-    }, 1000);
+interface StepProps {
+  onNext: () => void;
+}
 
-    return () => clearInterval(interval);
-  }, []);
+type OtpFormData = z.infer<typeof otpSchema>;
 
-  const minutes = Math.floor(timeLeft / 60);
-  const seconds = timeLeft % 60;
-  const isResendActive = timeLeft <= 0;
+const OneTimePassword: React.FC<StepProps> = ({ onNext }) => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<OtpFormData>({
+    resolver: zodResolver(otpSchema),
+  });
+
+  const onSubmit = async (data: OtpFormData) => {
+    const sessionId = localStorage.getItem("session_id");
+    if (!sessionId) return alert("Session expired. Please register again.");
+
+    try {
+      const formData = new FormData();
+      formData.append("session_id", sessionId);
+      formData.append("otp", data.otp);
+
+      await postData("/public/auth/otp-verification", formData);
+      onNext();
+    } catch (err) {
+      console.error("OTP verification error:", err);
+    }
+  };
 
   return (
-    <div className="space-y-2 justify-center items-center flex flex-col">
-      <div className="text-center text-sm text-muted-foreground">
-        Check your phone for the one-time password (OTP) and enter it here to
-        continue.
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <div>
+        <Label htmlFor="otp">Enter OTP</Label>
+        <Input
+          id="otp"
+          {...register("otp")}
+          className={cn("w-full text-sm", errors.otp && "border-red-500")}
+          placeholder="Enter OTP sent to your email/phone"
+        />
+        {errors.otp && (
+          <p className="text-xs text-red-500 mt-1">{errors.otp.message}</p>
+        )}
       </div>
-      <InputOTP
-        maxLength={6}
-        value={value}
-        onChange={(value) => setValue(value)}
-      >
-        <InputOTPGroup>
-          <InputOTPSlot index={0} />
-          <InputOTPSlot index={1} />
-          <InputOTPSlot index={2} />
-          <InputOTPSlot index={3} />
-          <InputOTPSlot index={4} />
-          <InputOTPSlot index={5} />
-        </InputOTPGroup>
-      </InputOTP>
-      <p className="text-sm font-semibold">
-        {`${String(minutes).padStart(2, "0")}:${String(seconds).padStart(
-          2,
-          "0"
-        )}`}
-      </p>
-      <div className="flex justify-end gap-2 pt-4">
+
+      <div className="flex justify-end">
         <Button
-          variant="outline"
-          className="text-sm"
+          type="submit"
+          className="text-sm cursor-pointer"
           size="sm"
-          disabled={!isResendActive}
+          disabled={isSubmitting}
         >
-          Resend Password
-        </Button>
-        <Button className="text-sm" size="sm" onClick={onNext}>
-          Verify Password
+          {isSubmitting ? "Verifying..." : "Verify & Continue"}
         </Button>
       </div>
-    </div>
+    </form>
   );
 };
 

@@ -45,7 +45,7 @@ const generateOrganizationColumns = (): ColumnDef<Organization>[] => [
     filterFn: multiSelectFilterFn,
   },
   {
-    accessorKey: "organization Type",
+    accessorKey: "organization_type",
     header: ({ column }: any) => (
       <SortableHeader column={column} label="Organization Type" />
     ),
