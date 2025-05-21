@@ -61,7 +61,7 @@ const data = {
     {
       title: "Patients",
       icon: User,
-      url: "/admin/patients",
+      url: "/patients",
     },
   ],
 };
