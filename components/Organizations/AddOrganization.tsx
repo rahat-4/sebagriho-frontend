@@ -11,10 +11,10 @@ import { Button } from "@/components/ui/button";
 import { postData } from "@/services/api";
 
 import { cn } from "@/lib/utils";
-import { organizationSchema } from "@/services/schemas";
+import { organizationSchema } from "@/schemas/OrganizationOnboard";
 
 interface OrganizationProps {
-  onComplete?: () => void;
+  onComplete: () => void;
 }
 
 interface FieldProps {
@@ -73,11 +73,7 @@ const AddOrganization: React.FC<OrganizationProps> = ({ onComplete }) => {
       await postData("/admin/organizations/members", formData);
       localStorage.removeItem("session_id");
 
-      if (onComplete) {
-        onComplete();
-      } else {
-        router.push("/admin/organizations");
-      }
+      onComplete();
     } catch (error) {
       console.error("Organization submission error:", error);
     }

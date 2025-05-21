@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 
 import { postData } from "@/services/api";
-import { userSchema } from "@/services/schemas";
+import { userSchema } from "@/schemas/OrganizationOnboard";
 
 interface StepProps {
   onNext: () => void;

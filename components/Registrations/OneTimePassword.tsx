@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { postData } from "@/services/api";
 
 import { cn } from "@/lib/utils";
-import { otpSchema } from "@/services/schemas";
+import { otpSchema } from "@/schemas/OrganizationOnboard";
 
 interface StepProps {
   onNext: () => void;
@@ -52,7 +52,7 @@ const OneTimePassword: React.FC<StepProps> = ({ onNext }) => {
           id="otp"
           {...register("otp")}
           className={cn("w-full text-sm", errors.otp && "border-red-500")}
-          placeholder="Enter OTP sent to your email/phone"
+          placeholder="Enter OTP sent to your one"
         />
         {errors.otp && (
           <p className="text-xs text-red-500 mt-1">{errors.otp.message}</p>

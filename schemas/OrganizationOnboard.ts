@@ -15,7 +15,7 @@ export const userSchema = z.object({
 
 // OTP Schema
 export const otpSchema = z.object({
-  otp: z.string().min(4, { message: "OTP is required" }),
+  otp: z.string().min(6, { message: "OTP is required" }),
 });
 
 // Organization Schema
