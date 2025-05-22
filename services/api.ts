@@ -12,11 +12,12 @@ const request = async (endpoint: string, method: string, data?: any) => {
   });
 
   const json = await res.json();
-  if (!res.ok) {
-    throw new Error(json.detail || "Something went wrong.");
-  }
+  // console.log("Response JSON:", json);
+  // if (!res.ok) {
+  //   throw new Error(json.detail || "Something went wrong.");
+  // }
 
-  return json;
+  return [res.status, json];
 };
 
 // POST request

@@ -17,8 +17,14 @@ import {
   ActivitySquare,
 } from "lucide-react";
 
+interface InfoItemProps {
+  icon: React.ElementType;
+  label: string;
+  value: string;
+}
+
 // Info item component to reduce repetitive code
-const InfoItem = ({ icon: Icon, label, value }) => (
+const InfoItem = ({ icon: Icon, label, value }: InfoItemProps) => (
   <div className="flex items-center gap-1 text-sm text-gray-600 bg-gray-50 px-3 rounded-lg">
     <Icon className="h-3 w-3 text-blue-500" />
     <div>

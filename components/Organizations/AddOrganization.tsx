@@ -59,6 +59,8 @@ const AddOrganization: React.FC<OrganizationProps> = ({ onComplete }) => {
     const formData = new FormData();
     formData.append("session_id", sessionId);
 
+    console.log("Form data before submission:", data);
+
     // Handle file input
     if (data.logo?.[0]) formData.append("organization.logo", data.logo[0]);
 

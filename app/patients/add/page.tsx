@@ -1,5 +1,11 @@
+import AddHomeoPatient from "@/components/Patients/AddHomeoPatient";
+
 const AddPatient = () => {
-  return <div>Add patient</div>;
+  return (
+    <div>
+      <AddHomeoPatient />
+    </div>
+  );
 };
 
 export default AddPatient;
