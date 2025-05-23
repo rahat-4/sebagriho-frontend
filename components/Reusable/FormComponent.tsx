@@ -59,7 +59,10 @@ export interface FormConfig {
   title?: string;
   onSuccess?: (response: any) => void;
   onError?: (error: any) => void;
-  transformData?: (data: any) => any; // Transform data before sending to API
+  transformData?: (data: any) => any;
+  setStep?: () => void;
+  responseData?: string;
+  setResponseData?: (data: any) => void;
   className?: string;
 }
 
@@ -185,6 +188,8 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
         setFormKey((prev) => prev + 1);
       }
 
+      //
+
       // Show success message
       setMessage({
         type: "success",
@@ -203,6 +208,21 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
         setTimeout(() => {
           handleRedirect();
         }, 2000);
+      }
+
+      console.log("Form submitted successfully:", response);
+
+      if (config.setResponseData) {
+        config.setResponseData(response.serial_number.toString());
+      }
+
+      // Go to next step if provided
+      if (config.setStep) {
+        config.setStep();
+      }
+
+      if (config.responseData && config.setResponseData) {
+        config.setResponseData(null);
       }
     } catch (error) {
       console.error("Form submission error:", error);
@@ -229,7 +249,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
       case "select":
         return (
           <Select onValueChange={field.onChange} value={field.value}>
-            <SelectTrigger className="text-sm">
+            <SelectTrigger className="text-sm w-full">
               <SelectValue placeholder={placeholder || "Select an option..."} />
             </SelectTrigger>
             <SelectContent>
@@ -270,7 +290,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
   return (
     <div className={config.className}>
       {config.title && (
-        <h2 className="text-xl font-semibold mb-4">{config.title}</h2>
+        <h2 className="text-lg font-semibold mb-4">{config.title}</h2>
       )}
 
       <Form {...form} key={formKey}>

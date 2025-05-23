@@ -1,9 +1,10 @@
 import { z } from "zod";
 
-export const homeoPatientSchema = z.object({
+export const homeoPatientSchemaStepOne = z.object({
   avatar: z.any().optional(),
-  name: z.string().min(1, { message: "Name is required." }),
   oldSerialNumber: z.string().optional(),
+  name: z.string().min(1, { message: "Name is required." }),
+  age: z.number().optional(),
   phone: z
     .string()
     .min(1, { message: "Phone number is required." })
@@ -16,5 +17,26 @@ export const homeoPatientSchema = z.object({
     .refine((val) => !val || /^(\+8801|8801|01)[3-9]\d{8}$/.test(val), {
       message: "Invalid relative phone number.",
     }),
+});
+
+export const homeoPatientSchemaStepTwo = z.object({
+  gender: z.enum(["MALE", "FEMALE", "OTHER"]).optional(),
+  miasm: z
+    .enum([
+      "ACUTE",
+      "TYPHOID",
+      "MALARIAL",
+      "RINGWORM",
+      "PSORIC",
+      "SYCOTIC",
+      "CANCER",
+      "TUBERCULAR",
+      "LEPROSY",
+      "SYPHILITIC",
+      "AIDS",
+    ])
+    .optional(),
+  caseHistory: z.string().optional(),
+  habits: z.string().optional(),
   address: z.string().optional(),
 });
