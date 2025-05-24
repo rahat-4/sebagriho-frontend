@@ -4,7 +4,7 @@ export const homeoPatientSchemaStepOne = z.object({
   avatar: z.any().optional(),
   oldSerialNumber: z.string().optional(),
   name: z.string().min(1, { message: "Name is required." }),
-  age: z.number().optional(),
+  address: z.string().optional(),
   phone: z
     .string()
     .min(1, { message: "Phone number is required." })
@@ -20,8 +20,9 @@ export const homeoPatientSchemaStepOne = z.object({
 });
 
 export const homeoPatientSchemaStepTwo = z.object({
+  age: z.string().optional(),
   gender: z.enum(["MALE", "FEMALE", "OTHER"]).optional(),
-  miasm: z
+  miasmType: z
     .enum([
       "ACUTE",
       "TYPHOID",
@@ -38,5 +39,4 @@ export const homeoPatientSchemaStepTwo = z.object({
     .optional(),
   caseHistory: z.string().optional(),
   habits: z.string().optional(),
-  address: z.string().optional(),
 });

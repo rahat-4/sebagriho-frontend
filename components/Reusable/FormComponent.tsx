@@ -26,8 +26,36 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
+import { CalendarIcon } from "lucide-react";
+import { format } from "date-fns";
+import { cn } from "@/lib/utils";
 
 import { postData, putData } from "@/services/api";
+
+// Convert single camelCase string to snake_case
+const camelToSnake = (str: string): string => {
+  return str.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`);
+};
+
+// Convert object keys from camelCase to snake_case
+const convertKeysToSnakeCase = (
+  obj: Record<string, any>
+): Record<string, any> => {
+  const converted: Record<string, any> = {};
+
+  for (const [key, value] of Object.entries(obj)) {
+    const snakeKey = camelToSnake(key);
+    converted[snakeKey] = value;
+  }
+
+  return converted;
+};
 
 export interface FieldConfig {
   label: string;
@@ -40,12 +68,14 @@ export interface FieldConfig {
     | "password"
     | "file"
     | "textarea"
-    | "select";
+    | "select"
+    | "date";
   required?: boolean;
   placeholder?: string;
   options?: { value: string; label: string }[]; // For select fields
   accept?: string; // For file inputs
   validation?: z.ZodTypeAny;
+  rows?: number; // For textarea
 }
 
 export interface FormConfig {
@@ -92,6 +122,10 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
         defaults[field.name] = undefined;
       } else if (field.type === "number") {
         defaults[field.name] = initialData[field.name] || 0;
+      } else if (field.type === "date") {
+        defaults[field.name] = initialData[field.name]
+          ? new Date(initialData[field.name])
+          : undefined;
       } else {
         defaults[field.name] = initialData[field.name] || "";
       }
@@ -111,12 +145,26 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
   };
 
   const onSubmit = async (data: any) => {
+    console.log("-----data------->", data);
     try {
-      let processedData = data;
+      let processedData = { ...data };
+
+      // Convert dates to ISO strings for API
+      config.fields.forEach((field) => {
+        if (
+          field.type === "date" &&
+          processedData[field.name] instanceof Date
+        ) {
+          processedData[field.name] = processedData[field.name].toISOString();
+        }
+      });
 
       // Apply custom data transformation if provided
       if (config.transformData) {
-        processedData = config.transformData(data);
+        processedData = config.transformData(processedData);
+      } else {
+        // Default: Convert camelCase keys to snake_case for backend
+        processedData = convertKeysToSnakeCase(processedData);
       }
 
       // Check if we need to use FormData (for file uploads)
@@ -138,8 +186,10 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
         });
 
         requestData = formData;
+        console.log("Form data to be submitted----------->:", requestData);
       } else {
         requestData = processedData;
+        console.log("Form data to be submitted>>>>>>>>>>>>>>>:", requestData);
       }
 
       // Choose API method
@@ -188,8 +238,6 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
         setFormKey((prev) => prev + 1);
       }
 
-      //
-
       // Show success message
       setMessage({
         type: "success",
@@ -209,8 +257,6 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
           handleRedirect();
         }, 2000);
       }
-
-      console.log("Form submitted successfully:", response);
 
       if (config.setResponseData) {
         config.setResponseData(response.serial_number.toString());
@@ -238,17 +284,55 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
   };
 
   const renderField = (fieldConfig: FieldConfig, field: any) => {
-    const { type, options, accept, placeholder } = fieldConfig;
+    const { type, options, accept, placeholder, rows = 3 } = fieldConfig;
 
     switch (type) {
       case "textarea":
         return (
-          <Textarea placeholder={placeholder} {...field} className="text-sm" />
+          <Textarea
+            placeholder={placeholder}
+            {...field}
+            rows={rows}
+            className="text-sm resize-none"
+            // Ensure the value is always a string and handle undefined/null
+            value={field.value || ""}
+            onChange={(e) => field.onChange(e.target.value)}
+          />
+        );
+
+      case "date":
+        return (
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button
+                variant="outline"
+                className={cn(
+                  "w-full justify-start text-left font-normal text-sm",
+                  !field.value && "text-muted-foreground"
+                )}
+              >
+                <CalendarIcon className="mr-2 h-4 w-4" />
+                {field.value ? (
+                  format(field.value, "PPP")
+                ) : (
+                  <span>{placeholder || "Pick a date"}</span>
+                )}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0">
+              <Calendar
+                mode="single"
+                selected={field.value}
+                onSelect={field.onChange}
+                initialFocus
+              />
+            </PopoverContent>
+          </Popover>
         );
 
       case "select":
         return (
-          <Select onValueChange={field.onChange} value={field.value}>
+          <Select onValueChange={field.onChange} value={field.value || ""}>
             <SelectTrigger className="text-sm w-full">
               <SelectValue placeholder={placeholder || "Select an option..."} />
             </SelectTrigger>
@@ -282,6 +366,9 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
             placeholder={placeholder}
             {...field}
             className="text-sm"
+            // Ensure proper value handling for text inputs
+            value={field.value || ""}
+            onChange={(e) => field.onChange(e.target.value)}
           />
         );
     }
