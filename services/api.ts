@@ -9,13 +9,14 @@ const request = async (endpoint: string, method: string, data?: any) => {
     method,
     headers: isFormData ? {} : { "Content-Type": "application/json" },
     body: isFormData ? data : data ? JSON.stringify(data) : undefined,
+    credentials: "include", // Include cookies for authentication
   });
 
   const json = await res.json();
-  // console.log("Response JSON:", json);
-  // if (!res.ok) {
-  //   throw new Error(json.detail || "Something went wrong.");
-  // }
+
+  if (!res.ok) {
+    throw new Error(json.detail || "Something went wrong.");
+  }
 
   return [res.status, json];
 };
