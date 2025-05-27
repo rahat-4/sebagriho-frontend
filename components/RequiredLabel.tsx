@@ -18,11 +18,13 @@ import { Label } from "@/components/ui/label";
 export const RequiredLabel = ({
   children,
   htmlFor,
+  required,
 }: {
   children: string;
   htmlFor: string;
+  required?: boolean;
 }) => (
   <Label htmlFor={htmlFor} className="text-sm font-medium">
-    {children} <span className="text-destructive">*</span>
+    {children} {required && <span className="text-destructive">*</span>}
   </Label>
 );

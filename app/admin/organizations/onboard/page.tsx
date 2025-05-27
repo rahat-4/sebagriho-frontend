@@ -25,7 +25,7 @@ const OrganizationRegistration = () => {
 
   const steps: StepType[] = [
     {
-      title: "User Registration",
+      title: "Organization user registration",
       component: <UserRegistration onNext={() => setStep(2)} />,
     },
     {
@@ -39,9 +39,8 @@ const OrganizationRegistration = () => {
   ];
 
   return (
-    <div className="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-sm">
+    <div className="max-w-4xl mx-auto bg-white p-4 rounded-lg shadow-sm">
       <div className="space-y-2 mb-6">
-        <h1 className="font-semibold text-xl">Organization onboarding</h1>
         <div>
           <Label className="text-sm">
             Step {step} of {steps.length}: {steps[step - 1].title}
