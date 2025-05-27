@@ -57,8 +57,23 @@ const fields: FieldProps[] = [
   {
     label: "Organization Type",
     name: "organizationType",
-    type: "text",
-    placeholder: "Enter organization type",
+    type: "select",
+    options: [
+      { value: "CHAMBER", label: "Chamber" },
+      { value: "HOSPITAL", label: "Hospital" },
+      { value: "CLINIC", label: "Clinic" },
+      { value: "LABORATORY", label: "Laboratory" },
+      { value: "PHARMACY", label: "Pharmacy" },
+      { value: "DIAGNOSTIC_CENTER", label: "Diagnostic Center" },
+      { value: "BLOOD_BANK", label: "Blood Bank" },
+      { value: "AMBULANCE_SERVICE", label: "Ambulance Service" },
+      { value: "HOMEOPATHY", label: "Homeopathy" },
+      { value: "AYURVEDIC", label: "Ayurvedic" },
+      { value: "DENTAL", label: "Dental" },
+      { value: "VETERINARY", label: "Veterinary" },
+    ],
+
+    placeholder: "Select a type",
     required: true,
   },
   {

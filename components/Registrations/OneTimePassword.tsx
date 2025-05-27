@@ -42,59 +42,56 @@ const OneTimePassword: React.FC<StepProps> = ({ onNext }) => {
     defaultValues: { otp: "" },
   });
 
-  const onSubmit = useCallback(
-    async (data: OtpFormData) => {
-      setIsLoading(true);
-      setMessage(null);
+  const onSubmit = useCallback(async (data: OtpFormData) => {
+    setIsLoading(true);
+    setMessage(null);
 
-      const formData = new FormData();
-      const sessionId = localStorage.getItem("session_id");
-      if (!sessionId) {
-        setMessage({
-          type: "error",
-          text: "Session expired. Please try again.",
+    const formData = new FormData();
+    const sessionId = localStorage.getItem("session_id");
+    if (!sessionId) {
+      setMessage({
+        type: "error",
+        text: "Session expired. Please try again.",
+      });
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      formData.append("session_id", sessionId);
+      formData.append("otp", data.otp);
+
+      const [status, response] = await postData(
+        "/public/auth/otp-verification",
+        formData
+      );
+
+      if (status !== 201) {
+        Object.entries(response).forEach(([field, errorMessage]: any) => {
+          form.setError(field as keyof OtpFormData, {
+            type: "manual",
+            message: errorMessage,
+          });
         });
         setIsLoading(false);
         return;
       }
+      onNext();
+      setMessage({
+        type: "success",
+        text: "OTP verified successfully.",
+      });
 
-      try {
-        formData.append("session_id", sessionId);
-        formData.append("otp", data.otp);
-
-        const [status, response] = await postData(
-          "/public/auth/otp-verification",
-          formData
-        );
-
-        if (status !== 201) {
-          Object.entries(response).forEach(([field, errorMessage]: any) => {
-            form.setError(field as keyof OtpFormData, {
-              type: "manual",
-              message: errorMessage,
-            });
-          });
-          setIsLoading(false);
-          return;
-        }
-        onNext();
-        setMessage({
-          type: "success",
-          text: "Successfully add organization user.",
-        });
-
-        setTimeout(() => setMessage(null), 2000);
-      } catch {
-        setMessage({
-          type: "error",
-          text: "Something went wrong. Please try again.",
-        });
-      } finally {
-        setIsLoading(false);
-      }
-    },
-    [onNext, form]
-  );
+      setTimeout(() => setMessage(null), 2000);
+    } catch {
+      setMessage({
+        type: "error",
+        text: "Something went wrong. Please try again.",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
 
   return (
     <Form {...form}>

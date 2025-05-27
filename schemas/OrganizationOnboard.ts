@@ -23,24 +23,32 @@ export const otpSchema = z.object({
   }),
 });
 
-// Organization Schema
+const optionalUrl = z.string().url("Invalid URL").or(z.literal("")).optional();
+const optionalEmail = z
+  .string()
+  .email("Invalid email")
+  .or(z.literal(""))
+  .optional();
+const optionalPhone = z
+  .string()
+  .min(11, "Phone number must be at least 11 digits")
+  .max(11, "Phone number must be exactly 11 digits")
+  .regex(/^[0-9]+$/, "Phone number must contain only digits")
+  .or(z.literal(""))
+  .optional();
+
 export const organizationSchema = z.object({
   name: z.string().min(1, "Organization name is required"),
   logo: z.any().optional(),
   organizationType: z.string().min(1, "Organization type is required"),
   description: z.string().optional(),
-  phone: z
-    .string()
-    .min(11, "Phone number must be at least 11 digits")
-    .max(11, "Phone number must be exactly 11 digits")
-    .regex(/^[0-9]+$/, "Phone number must contain only digits")
-    .optional(),
-  email: z.string().email("Invalid email").optional(),
-  website: z.string().url("Invalid URL").optional(),
+  phone: optionalPhone,
+  email: optionalEmail,
+  website: optionalUrl,
   address: z.string().min(1, "Address is required"),
-  facebook: z.string().url("Invalid URL").optional(),
-  twitter: z.string().url("Invalid URL").optional(),
-  linkedin: z.string().url("Invalid URL").optional(),
-  instagram: z.string().url("Invalid URL").optional(),
-  youtube: z.string().url("Invalid URL").optional(),
+  facebook: optionalUrl,
+  twitter: optionalUrl,
+  linkedin: optionalUrl,
+  instagram: optionalUrl,
+  youtube: optionalUrl,
 });

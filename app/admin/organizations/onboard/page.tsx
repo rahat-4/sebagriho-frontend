@@ -11,7 +11,7 @@ import OneTimePassword from "@/components/Registrations/OneTimePassword";
 import AddOrganization from "@/components/Organizations/AddOrganization";
 
 const OrganizationRegistration = () => {
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(3);
   const router = useRouter();
 
   const completeRegistration = () => {
