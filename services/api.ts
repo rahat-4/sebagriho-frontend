@@ -14,9 +14,9 @@ const request = async (endpoint: string, method: string, data?: any) => {
 
   const json = await res.json();
 
-  if (!res.ok) {
-    throw new Error(json.detail || "Something went wrong.");
-  }
+  // if (!res.ok) {
+  //   throw new Error(json.detail || "Something went wrong.");
+  // }
 
   return [res.status, json];
 };

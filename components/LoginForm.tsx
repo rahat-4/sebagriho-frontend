@@ -1,11 +1,11 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
+import { useForm, Controller } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -25,15 +25,9 @@ import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { loginSchema } from "@/schemas/LoginSchema";
 import { RequiredLabel } from "@/components/RequiredLabel";
 
-type LoginFormData = z.infer<typeof loginSchema>;
+import { postData } from "@/services/api";
 
-interface LoginFormProps extends React.ComponentProps<"div"> {
-  onLogin?: (data: {
-    phone: string;
-    password: string;
-    remember: boolean;
-  }) => Promise<void>;
-}
+type LoginFormData = z.infer<typeof loginSchema>;
 
 // Memoized Bangladeshi Flag Component
 const BangladeshiFlag = () => (
@@ -94,7 +88,9 @@ const socialLogins = [
   },
 ];
 
-const LoginForm = ({ className, onLogin, ...props }: LoginFormProps) => {
+const LoginForm = () => {
+  const router = useRouter();
+  // State management for form fields and UI states
   const [showPassword, setShowPassword] = useState(false);
   const [remember, setRemember] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -130,32 +126,41 @@ const LoginForm = ({ className, onLogin, ...props }: LoginFormProps) => {
       setIsLoading(true);
       setMessage(null);
 
+      const formData = new FormData();
+
       try {
         const fullPhoneNumber = `${countryCode}${data.phone.replace(
           /\D/g,
           ""
         )}`;
 
-        if (onLogin) {
-          await onLogin({
-            phone: fullPhoneNumber,
-            password: data.password,
-            remember,
+        formData.append("phone", fullPhoneNumber);
+        formData.append("password", data.password);
+        formData.append("rememberMe", String(remember));
+
+        const [status, response] = await postData(
+          "/public/auth/login",
+          formData
+        );
+
+        if (status !== 200) {
+          Object.entries(response).map(([field, errorMessage]: any) => {
+            form.setError(field as keyof LoginFormData, {
+              type: "manual",
+              message: errorMessage,
+            });
           });
-        } else {
-          // Simulate API call
-          await new Promise((resolve) => setTimeout(resolve, 1500));
-          console.log("Login attempt:", {
-            phone: fullPhoneNumber,
-            password: data.password,
-            remember,
-          });
+          return;
         }
 
         setMessage({
           type: "success",
-          text: "Login successful! Redirecting...",
+          text: "Login successful!",
         });
+
+        setTimeout(() => {
+          router.push(`/patients`);
+        }, 2000);
       } catch (error) {
         setMessage({
           type: "error",
@@ -168,7 +173,7 @@ const LoginForm = ({ className, onLogin, ...props }: LoginFormProps) => {
         setIsLoading(false);
       }
     },
-    [countryCode, remember, onLogin]
+    [countryCode, remember]
   );
 
   const handleSocialLogin = useCallback((provider: string) => {
@@ -184,7 +189,7 @@ const LoginForm = ({ className, onLogin, ...props }: LoginFormProps) => {
   }, []);
 
   return (
-    <div className={cn("flex flex-col gap-6", className)} {...props}>
+    <div className="flex flex-col gap-6">
       <Card className="overflow-hidden shadow-lg">
         <CardContent className="grid p-0 md:grid-cols-2">
           <Form {...form}>
@@ -240,21 +245,71 @@ const LoginForm = ({ className, onLogin, ...props }: LoginFormProps) => {
                               {countryCode}
                             </span>
                           </div>
-                          <Input
-                            {...field}
-                            id="phone"
-                            type="tel"
-                            placeholder="0123 456 7890"
-                            className="rounded-l-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 bg-transparent"
-                            maxLength={13}
-                            onChange={(e) => {
-                              const formatted = formatPhoneNumber(
-                                e.target.value
-                              );
-                              field.onChange(formatted.replace(/\s/g, ""));
-                              e.target.value = formatted;
-                            }}
-                            disabled={isLoading}
+                          <Controller
+                            name="phone"
+                            control={form.control}
+                            render={({ field }) => (
+                              <Input
+                                {...field}
+                                id="phone"
+                                type="tel"
+                                placeholder="0123 456 7890"
+                                className="rounded-l-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 bg-transparent text-sm"
+                                maxLength={13}
+                                value={
+                                  field.value
+                                    ? formatPhoneNumber(field.value)
+                                    : ""
+                                }
+                                onChange={(e) => {
+                                  const input = e.target;
+                                  const prevRaw = field.value || "";
+                                  const prevFormatted =
+                                    formatPhoneNumber(prevRaw);
+                                  const prevCursor = input.selectionStart ?? 0;
+
+                                  // Only allow digits and handle deletion
+                                  const lastChar = e.nativeEvent.data;
+                                  if (lastChar && /\D/.test(lastChar)) {
+                                    // If not a digit, ignore the change and keep cursor
+                                    input.value = prevFormatted;
+                                    input.setSelectionRange(
+                                      prevCursor - 1,
+                                      prevCursor - 1
+                                    );
+                                    return;
+                                  }
+
+                                  const rawValue = input.value.replace(
+                                    /\D/g,
+                                    ""
+                                  );
+                                  const newFormatted =
+                                    formatPhoneNumber(rawValue);
+
+                                  let nextCursor = prevCursor;
+                                  if (
+                                    rawValue.length > prevRaw.length &&
+                                    newFormatted.length >
+                                      prevFormatted.length &&
+                                    newFormatted[prevCursor - 1] === " " &&
+                                    prevFormatted[prevCursor - 2] !== " "
+                                  ) {
+                                    nextCursor = prevCursor + 1;
+                                  }
+
+                                  field.onChange(rawValue);
+
+                                  requestAnimationFrame(() => {
+                                    input.setSelectionRange(
+                                      nextCursor,
+                                      nextCursor
+                                    );
+                                  });
+                                }}
+                                disabled={isLoading}
+                              />
+                            )}
                           />
                         </div>
                       </FormControl>
@@ -278,7 +333,7 @@ const LoginForm = ({ className, onLogin, ...props }: LoginFormProps) => {
                             id="password"
                             type={showPassword ? "text" : "password"}
                             placeholder="Enter your password"
-                            className="pr-10"
+                            className="pr-10 text-sm"
                             disabled={isLoading}
                           />
                           <Button
