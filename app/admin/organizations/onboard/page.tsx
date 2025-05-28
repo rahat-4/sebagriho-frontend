@@ -1,6 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useAuth } from "@/context/AuthContext";
+
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { Label } from "@/components/ui/label";
@@ -11,8 +13,19 @@ import OneTimePassword from "@/components/Registrations/OneTimePassword";
 import AddOrganization from "@/components/Organizations/AddOrganization";
 
 const OrganizationRegistration = () => {
-  const [step, setStep] = useState(3);
+  const [step, setStep] = useState(1);
   const router = useRouter();
+  const { isAuthenticated, user, isLoading } = useAuth();
+
+  useEffect(() => {
+    if (!isLoading && (!isAuthenticated || user?.is_admin !== true)) {
+      router.replace("/login"); // Replace this later
+    }
+  }, [isAuthenticated, isLoading, user, router]);
+
+  // ⛔ Prevent rendering before auth status is known
+  if (isLoading) return <p>Checking authentication...</p>; // Add loading animation later
+  if (!isAuthenticated || user?.is_admin !== true) return null;
 
   const completeRegistration = () => {
     router.push("/admin/organizations");

@@ -1,5 +1,7 @@
 "use client";
 
+import { useAuth } from "@/context/AuthContext";
+
 import { useState, useEffect } from "react";
 
 import { useRouter } from "next/navigation";
@@ -15,16 +17,29 @@ import { stats } from "@/payload/Organization";
 import { getData } from "@/services/api";
 
 const Organizations = () => {
+  const { isAuthenticated, user, isLoading } = useAuth();
   const router = useRouter();
   const [tableData, setTableData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    if (!isLoading && (!isAuthenticated || user?.is_admin !== true)) {
+      router.replace("/login"); // Replace this later
+    }
+  }, [isAuthenticated, isLoading, user, router]);
+
+  useEffect(() => {
     const fetchOrganizations = async () => {
       try {
-        const data = await getData("/admin/organizations");
-        setTableData(data);
+        const [status, response] = await getData("/admin/organizations");
+
+        console.log("response", response);
+
+        if (status !== 200) {
+          // console.log("")
+        }
+        setTableData(response);
       } catch (error: any) {
         setError(error.message || "Failed to fetch organizations");
       } finally {
@@ -34,6 +49,10 @@ const Organizations = () => {
 
     fetchOrganizations();
   }, []);
+
+  // ⛔ Prevent rendering before auth status is known
+  if (isLoading) return <p>Checking authentication...</p>; // Add loading animation later
+  if (!isAuthenticated || user?.is_admin !== true) return null;
 
   return (
     <div className="container mx-auto p-2">

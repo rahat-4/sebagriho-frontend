@@ -1,5 +1,7 @@
 "use client";
 
+import { useAuth } from "@/context/AuthContext";
+
 import { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -26,8 +28,6 @@ import { loginSchema } from "@/schemas/LoginSchema";
 import { RequiredLabel } from "@/components/RequiredLabel";
 
 import PhoneNumber from "./PhoneNumber";
-
-import { postData } from "@/services/api";
 
 type LoginFormData = z.infer<typeof loginSchema>;
 
@@ -81,7 +81,9 @@ const socialLogins = [
 ];
 
 const LoginForm = () => {
+  const { login, user } = useAuth();
   const router = useRouter();
+
   // State management for form fields and UI states
   const [showPassword, setShowPassword] = useState(false);
   const [remember, setRemember] = useState(false);
@@ -107,55 +109,60 @@ const LoginForm = () => {
       setIsLoading(true);
       setMessage(null);
 
-      const formData = new FormData();
-
       try {
-        const fullPhoneNumber = `${countryCode}${data.phone.replace(
-          /\D/g,
-          ""
-        )}`;
+        const result = await login({
+          phone: data.phone,
+          password: data.password,
+          rememberMe: remember,
+        });
 
-        formData.append("phone", fullPhoneNumber);
-        formData.append("password", data.password);
-        formData.append("rememberMe", String(remember));
+        if (!result.success) {
+          // Handle validation errors
+          if (result.errors) {
+            Object.entries(result.errors).forEach(
+              ([field, errorMessage]: any) => {
+                form.setError(field as keyof LoginFormData, {
+                  type: "manual",
+                  message: errorMessage,
+                });
+              }
+            );
+          }
 
-        const [status, response] = await postData(
-          "/public/auth/login",
-          formData
-        );
-
-        if (status !== 200) {
-          Object.entries(response).map(([field, errorMessage]: any) => {
-            form.setError(field as keyof LoginFormData, {
-              type: "manual",
-              message: errorMessage,
+          // Handle general error message
+          if (result.message) {
+            setMessage({
+              type: "error",
+              text: result.message,
             });
-          });
+          }
           return;
         }
 
+        // Success
         setMessage({
           type: "success",
-          text: "Login successful!",
+          text: result.message || "Login successful!",
         });
 
         setTimeout(() => {
-          router.push(`/patients`);
+          if (user?.is_admin === true) router.push(`/admin`);
         }, 2000);
       } catch (error) {
         setMessage({
           type: "error",
-          text:
-            error instanceof Error
-              ? error.message
-              : "Login failed. Please check your credentials.",
+          text: "An unexpected error occurred. Please try again.",
         });
       } finally {
         setIsLoading(false);
       }
     },
-    [countryCode, remember]
+    [login, remember, form, router]
   );
+
+  const handleForgetPassword = () => {
+    router.push("/forget-password");
+  };
 
   const handleSocialLogin = useCallback((provider: string) => {
     console.log(`Login with ${provider} - Feature coming soon!`);
@@ -293,6 +300,7 @@ const LoginForm = () => {
                     size="sm"
                     className="px-0 text-sm text-primary hover:underline"
                     type="button"
+                    onClick={handleForgetPassword}
                   >
                     Forgot password?
                   </Button>
