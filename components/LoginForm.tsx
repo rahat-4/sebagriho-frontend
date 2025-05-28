@@ -146,7 +146,7 @@ const LoginForm = () => {
         });
 
         setTimeout(() => {
-          if (user?.is_admin === true) router.push(`/admin`);
+          router.push(`/admin`);
         }, 2000);
       } catch (error) {
         setMessage({
@@ -161,7 +161,7 @@ const LoginForm = () => {
   );
 
   const handleForgetPassword = () => {
-    router.push("/forget-password");
+    router.push("/forgot-password");
   };
 
   const handleSocialLogin = useCallback((provider: string) => {

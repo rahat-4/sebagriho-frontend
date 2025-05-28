@@ -12,3 +12,11 @@ export const loginSchema = z.object({
     .max(100, "Password is too long"),
   rememberMe: z.boolean().optional(),
 });
+
+export const forgotPasswordSchema = z.object({
+  phone: z
+    .string()
+    .min(11, "Phone number must be at least 11 digits")
+    .max(11, "Phone number must be exactly 11 digits")
+    .regex(/^[0-9]+$/, "Phone number must contain only digits"),
+});
