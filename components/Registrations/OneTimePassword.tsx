@@ -20,12 +20,12 @@ import {
   InputOTPSeparator,
 } from "@/components/ui/input-otp";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Loader2 } from "lucide-react";
+import { ArrowLeft, Loader2 } from "lucide-react";
 import { postData } from "@/services/api";
 import { otpSchema } from "@/schemas/OrganizationOnboard";
 
 interface StepProps {
-  onNext: () => void;
+  onNext?: () => void;
 }
 
 type OtpFormData = z.infer<typeof otpSchema>;
@@ -76,7 +76,7 @@ const OneTimePassword: React.FC<StepProps> = ({ onNext }) => {
         setIsLoading(false);
         return;
       }
-      onNext();
+      if (onNext) onNext();
       setMessage({
         type: "success",
         text: "OTP verified successfully.",
@@ -152,6 +152,21 @@ const OneTimePassword: React.FC<StepProps> = ({ onNext }) => {
           )}
         </Button>
       </form>
+      {/* Back to Login Link */}
+      {/* Button not working */}
+      <div className="flex items-center justify-center">
+        <Button
+          variant="link"
+          size="sm"
+          className="px-0 text-sm text-primary hover:underline"
+          type="button"
+          // onClick={navigateToLogin}
+          disabled
+        >
+          <ArrowLeft className="h-4 w-4 transition-transform duration-200 group-hover:-translate-x-1" />
+          Verify phone number
+        </Button>
+      </div>
     </Form>
   );
 };

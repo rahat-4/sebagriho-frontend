@@ -144,9 +144,13 @@ const LoginForm = () => {
           type: "success",
           text: result.message || "Login successful!",
         });
-
+        console.log("kk", user);
         setTimeout(() => {
-          router.push(`/admin`);
+          if (user?.is_admin === true) {
+            router.push(`/admin`);
+          } else {
+            router.push(`/organizations`);
+          }
         }, 2000);
       } catch (error) {
         setMessage({
