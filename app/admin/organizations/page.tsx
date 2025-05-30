@@ -34,8 +34,6 @@ const Organizations = () => {
       try {
         const [status, response] = await getData("/admin/organizations");
 
-        console.log("response", response);
-
         if (status !== 200) {
           // console.log("")
         }

@@ -144,7 +144,6 @@ const LoginForm = () => {
           type: "success",
           text: result.message || "Login successful!",
         });
-        console.log("kk", user);
         setTimeout(() => {
           if (user?.is_admin === true) {
             router.push(`/admin`);
@@ -169,7 +168,6 @@ const LoginForm = () => {
   };
 
   const handleSocialLogin = useCallback((provider: string) => {
-    console.log(`Login with ${provider} - Feature coming soon!`);
     setMessage({
       type: "success",
       text: `${provider} login will be available soon.`,

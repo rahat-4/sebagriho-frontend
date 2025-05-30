@@ -145,7 +145,6 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
   };
 
   const onSubmit = async (data: any) => {
-    console.log("-----data------->", data);
     try {
       let processedData = { ...data };
 
@@ -186,10 +185,8 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
         });
 
         requestData = formData;
-        console.log("Form data to be submitted----------->:", requestData);
       } else {
         requestData = processedData;
-        console.log("Form data to be submitted>>>>>>>>>>>>>>>:", requestData);
       }
 
       // Choose API method

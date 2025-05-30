@@ -61,9 +61,6 @@ const PhoneVerification = ({ onNext }: StepProps) => {
         formData
       );
 
-      console.log("-----status-------", status);
-      console.log("-----response-------", response);
-
       if (status !== 200) {
         // Handle field-specific validation errors
         if (response.errors) {

@@ -77,8 +77,6 @@ const StepOne = ({ onNext, setSerialNumber }: StepProps) => {
       }
     });
 
-    console.log("Form data before conversion:", Object.fromEntries(formData));
-
     try {
       const [status, response] = await postData(
         "/organization/homeopathy/patients",

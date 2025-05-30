@@ -83,10 +83,7 @@ const ResetPassword = () => {
           formData
         );
 
-        console.log("-----status-------", status);
-        console.log("-----response-------", response);
         if (status !== 201) {
-          console.log("-----ffff---");
           // Handle validation errors
           Object.entries(response).forEach(([field, errorMessage]: any) => {
             field = snakeToCamel(field);

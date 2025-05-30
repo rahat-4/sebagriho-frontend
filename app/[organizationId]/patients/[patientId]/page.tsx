@@ -21,7 +21,6 @@ const PatientProfile = () => {
           `/organization/homeopathy/patients/${serialNumber}`
         );
 
-        console.log("Patient Profile Data:", response);
         if (status !== 200) {
           console.error("Failed to fetch patient data");
           return;

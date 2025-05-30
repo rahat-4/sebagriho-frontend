@@ -70,8 +70,6 @@ const StepTwo = ({ serialNumber }: StepProps) => {
       }
     });
 
-    console.log("Form data before conversion:", Object.fromEntries(formData));
-
     try {
       const [status, response] = await putData(
         `/organization/homeopathy/patients/${serialNumber}`,

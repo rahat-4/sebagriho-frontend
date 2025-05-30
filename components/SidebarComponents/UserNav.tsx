@@ -32,8 +32,6 @@ const UserNav = () => {
   const { isMobile } = useSidebar();
   const { logout, user } = useAuth();
 
-  console.log("-----ffffffffff----------", user);
-
   return (
     <SidebarMenu>
       <SidebarMenuItem>
