@@ -2,7 +2,7 @@
 
 import { useAuth } from "@/context/AuthContext";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -81,13 +81,14 @@ const socialLogins = [
 ];
 
 const LoginForm = () => {
-  const { login, user } = useAuth();
+  const { login, user, isAuthenticated } = useAuth();
   const router = useRouter();
 
   // State management for form fields and UI states
   const [showPassword, setShowPassword] = useState(false);
   const [remember, setRemember] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [loginSuccess, setLoginSuccess] = useState(false); // ✅ Add this flag
   const [message, setMessage] = useState<{
     type: "success" | "error";
     text: string;
@@ -104,10 +105,27 @@ const LoginForm = () => {
     mode: "onBlur",
   });
 
+  // ✅ Handle navigation when user state updates
+  useEffect(() => {
+    if (loginSuccess && isAuthenticated && user) {
+      const timer = setTimeout(() => {
+        if (user.is_admin === true) {
+          router.push(`/admin`);
+        } else {
+          router.push(`/organizations`);
+        }
+        setLoginSuccess(false); // Reset flag
+      }, 1500);
+
+      return () => clearTimeout(timer);
+    }
+  }, [loginSuccess, isAuthenticated, user, router]);
+
   const onSubmit = useCallback(
     async (data: LoginFormData) => {
       setIsLoading(true);
       setMessage(null);
+      setLoginSuccess(false); // Reset flag
 
       try {
         const result = await login({
@@ -144,13 +162,9 @@ const LoginForm = () => {
           type: "success",
           text: result.message || "Login successful!",
         });
-        setTimeout(() => {
-          if (user?.is_admin === true) {
-            router.push(`/admin`);
-          } else {
-            router.push(`/organizations`);
-          }
-        }, 2000);
+
+        // ✅ Set flag to trigger navigation when user updates
+        setLoginSuccess(true);
       } catch (error) {
         setMessage({
           type: "error",
@@ -160,7 +174,7 @@ const LoginForm = () => {
         setIsLoading(false);
       }
     },
-    [login, remember, form, router]
+    [login, remember, form]
   );
 
   const handleForgetPassword = () => {

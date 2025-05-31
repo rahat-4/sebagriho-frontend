@@ -12,10 +12,20 @@ import { useRouter } from "next/navigation";
 import { getData, postData } from "../services/api";
 
 interface User {
-  id: number;
+  uid: string;
+  first_name: string | null;
+  last_name: string | null;
   phone: string;
-  // Add other user properties as needed
-  [key: string]: any;
+  email: string | null;
+  gender: "MALE" | "FEMALE" | null;
+  nid: string | null;
+  nid_front: string | null;
+  nid_back: string | null;
+  avatar: string | null;
+  blood_group: string | null;
+  date_of_birth: string | null;
+  is_admin: boolean;
+  role: string;
 }
 
 interface LoginCredentials {
@@ -48,9 +58,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const checkAuth = async () => {
     try {
       const [status, response] = await getData("/public/auth/me");
-
-      console.log("---status---", status);
-      console.log("---response---", response);
 
       if (status === 200) {
         setUser(response);
