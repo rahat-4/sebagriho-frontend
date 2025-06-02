@@ -1,7 +1,7 @@
-import React from "react";
+import { redirect } from "next/navigation";
 
-const Organization = () => {
-  return <div>Organization page</div>;
+const Organization = ({ params }: { params: { organizationId: string } }) => {
+  redirect(`/${params.organizationId}/dashboard`);
 };
 
 export default Organization;

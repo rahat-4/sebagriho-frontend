@@ -11,6 +11,44 @@ import { useRouter } from "next/navigation";
 
 import { getData, postData } from "../services/api";
 
+type OrganizationType =
+  | "CHAMBER"
+  | "HOSPITAL"
+  | "CLINIC"
+  | "LABORATORY"
+  | "PHARMACY"
+  | "DIAGNOSTIC_CENTER"
+  | "BLOOD_BANK"
+  | "AMBULANCE_SERVICE"
+  | "HOMEOPATHY"
+  | "AYURVEDIC"
+  | "DENTAL"
+  | "VETERINARY";
+
+type OrganizationStatus =
+  | "ACTIVE"
+  | "PENDING"
+  | "INACTIVE"
+  | "DELETED"
+  | "SUSPENDED";
+
+interface Organization {
+  uid: string;
+  slug: string;
+  name: string;
+  title: string | null;
+  logo: string | null;
+  subdomain: string | null;
+  organization_type: OrganizationType;
+  status: OrganizationStatus;
+  address: string;
+  phone: string | null;
+  email: string | null;
+  website: string | null;
+  facebook: string | null;
+  description: string | null;
+}
+
 interface User {
   uid: string;
   first_name: string | null;
@@ -25,7 +63,8 @@ interface User {
   blood_group: string | null;
   date_of_birth: string | null;
   is_admin: boolean;
-  role: string;
+  is_owner: boolean;
+  organization: Organization;
 }
 
 interface LoginCredentials {
@@ -36,6 +75,7 @@ interface LoginCredentials {
 
 interface AuthContextType {
   user: User | null;
+  organization: Organization | null;
   isAuthenticated: boolean;
   isLoading: boolean;
   login: (credentials: LoginCredentials) => Promise<{
@@ -51,6 +91,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [organization, setOrganization] = useState<Organization | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
@@ -60,7 +101,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const [status, response] = await getData("/public/auth/me");
 
       if (status === 200) {
-        setUser(response);
+        const { organization, ...userOnly } = response;
+        setUser(userOnly);
+        setOrganization(organization);
+
         setIsAuthenticated(true);
       } else {
         setUser(null);
@@ -134,7 +178,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <AuthContext.Provider
-      value={{ user, isAuthenticated, isLoading, login, logout, checkAuth }}
+      value={{
+        user,
+        organization,
+        isAuthenticated,
+        isLoading,
+        login,
+        logout,
+        checkAuth,
+      }}
     >
       {children}
     </AuthContext.Provider>

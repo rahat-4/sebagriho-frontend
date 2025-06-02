@@ -81,7 +81,7 @@ const socialLogins = [
 ];
 
 const LoginForm = () => {
-  const { login, user, isAuthenticated } = useAuth();
+  const { login, user, organization, isAuthenticated } = useAuth();
   const router = useRouter();
 
   // State management for form fields and UI states
@@ -112,7 +112,7 @@ const LoginForm = () => {
         if (user.is_admin === true) {
           router.push(`/admin`);
         } else {
-          router.push(`/organizations`);
+          router.replace(`/${organization.uid}`);
         }
         setLoginSuccess(false); // Reset flag
       }, 1500);

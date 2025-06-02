@@ -215,7 +215,7 @@ const AddOrganization: React.FC<OrganizationProps> = ({ onComplete }) => {
           });
           return;
         }
-        localStorage.removeItem("session_id");
+        localStorage.removeItem("sessionid");
 
         onComplete();
         setMessage({

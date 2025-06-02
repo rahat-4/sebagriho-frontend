@@ -1,3 +1,4 @@
+import { getUser } from "@/context/Auth";
 import {
   Hospital,
   LayoutDashboard,
@@ -19,6 +20,8 @@ import AppSidebar from "@/components/SidebarComponents/AppSidebar";
 
 import SiteHeader from "@/components/SidebarComponents/SiteHeader";
 
+import { beautifyTitle } from "@/components/Converter";
+
 const data = {
   user: {
     name: "shadcn",
@@ -28,7 +31,7 @@ const data = {
   company: {
     name: "Sebagriho",
     logo: SebagrihoLogo.src,
-    plan: "Healthcare Everywhere",
+    title: "Healthcare Everywhere",
   },
   navMain: [
     {
@@ -59,12 +62,19 @@ const data = {
   ],
 };
 
-const Layout = ({ children }: { children: React.ReactNode }) => {
+const Layout = async ({ children }: { children: React.ReactNode }) => {
+  const user = await getUser();
+  console.log("------------user-------------", user);
+  // const path = usePathname();
+  // const segments = path.split("/").filter(Boolean);
+  // const displayTitle =
+  //   segments.length > 0 ? segments.slice(1).map(beautifyTitle).join(" > ") : "";
+
   return (
     <SidebarProvider>
-      <AppSidebar data={data} />
+      <AppSidebar data={data} company={data.company} user={user} />
       <SidebarInset>
-        <SiteHeader />
+        <SiteHeader displayTitle={"Dashboard"} />
 
         <main className="flex-1 p-4">{children}</main>
       </SidebarInset>

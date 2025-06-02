@@ -15,11 +15,11 @@ import { useAuth } from "@/context/AuthContext";
 import { TeamSwitcher } from "./TeamSwitcher";
 import UserNav from "./UserNav";
 
-const AppSidebar = ({ data }: any) => {
+const AppSidebar = ({ data, company, user }: any) => {
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader>
-        <TeamSwitcher company={data.company} />
+        <TeamSwitcher company={company} />
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
@@ -39,7 +39,7 @@ const AppSidebar = ({ data }: any) => {
       </SidebarContent>
 
       <SidebarFooter>
-        <UserNav />
+        <UserNav user={user} />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
