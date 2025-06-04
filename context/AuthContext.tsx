@@ -51,8 +51,7 @@ interface Organization {
 
 interface User {
   uid: string;
-  first_name: string | null;
-  last_name: string | null;
+  name: string;
   phone: string;
   email: string | null;
   gender: "MALE" | "FEMALE" | null;

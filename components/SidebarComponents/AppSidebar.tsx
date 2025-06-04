@@ -10,12 +10,10 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 
-import { useAuth } from "@/context/AuthContext";
-
 import { TeamSwitcher } from "./TeamSwitcher";
 import UserNav from "./UserNav";
 
-const AppSidebar = ({ data, company, user }: any) => {
+const AppSidebar = ({ data, company }: any) => {
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader>
@@ -39,7 +37,7 @@ const AppSidebar = ({ data, company, user }: any) => {
       </SidebarContent>
 
       <SidebarFooter>
-        <UserNav user={user} />
+        <UserNav />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

@@ -1,11 +1,11 @@
 // Convert full name string to { first_name, last_name }
 export const splitFullNameToParts = (
   fullName: string
-): { first_name: string; last_name: string } => {
+): { firstName: string; lastName: string } => {
   const parts = fullName.trim().split(/\s+/);
-  const [first_name, ...rest] = parts;
-  const last_name = rest.join(" ");
-  return { first_name, last_name };
+  const [firstName, ...rest] = parts;
+  const lastName = rest.join(" ");
+  return { firstName, lastName };
 };
 
 // Convert { first_name, last_name } to full name string

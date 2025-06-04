@@ -1,7 +1,7 @@
 "use client";
 
-import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
 
 import { getData } from "@/services/api";
 import PatientDetail from "./components.tsx/PatientDetail";
@@ -10,15 +10,14 @@ import { convertKeysToCamelCase } from "@/services/caseConverters";
 import { combineNamePartsToFullName } from "@/services/nameConverter";
 
 const PatientProfile = () => {
-  const params = useParams();
-  const serialNumber = params?.id;
+  const { organizationId, patientId } = useParams();
   const [patient, setPatient] = useState(null);
 
   useEffect(() => {
     const fetchPatientData = async () => {
-      if (serialNumber) {
+      if (patientId) {
         const [status, response] = await getData(
-          `/organization/homeopathy/patients/${serialNumber}`
+          `/organization/homeopathy/patients/${patientId}`
         );
 
         if (status !== 200) {
@@ -44,7 +43,7 @@ const PatientProfile = () => {
     };
 
     fetchPatientData();
-  }, [serialNumber]);
+  }, [organizationId, patientId]);
 
   return (
     <div>

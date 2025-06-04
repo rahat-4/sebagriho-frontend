@@ -1,3 +1,7 @@
+"use client";
+
+import React, { useState, useEffect } from "react";
+import { getData } from "@/services/api";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,6 +21,11 @@ import {
   ActivitySquare,
 } from "lucide-react";
 
+interface PatientsProps {
+  organizationId: string;
+  patientId: string;
+}
+
 interface InfoItemProps {
   icon: React.ElementType;
   label: string;
@@ -33,7 +42,31 @@ const InfoItem = ({ icon: Icon, label, value }: InfoItemProps) => (
     </div>
   </div>
 );
-const PatientCard = () => {
+const PatientCard = ({ organizationId, patientId }: PatientsProps) => {
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const fetchPatients = async () => {
+      try {
+        const [status, response] = await getData(
+          `/organization/homeopathy/${organizationId}/patients`
+        );
+
+        if (status !== 200) {
+          setError("Failed to fetch organizations");
+          return;
+        }
+        console.log("response", response);
+      } catch (error: any) {
+        setError(error.message || "Failed to fetch organizations");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPatients();
+  }, [organizationId, patientId]);
+
   return (
     <Card className="gap-4 p-2 w-full max-w-md mx-auto rounded shadow border-0">
       <CardHeader className="pb-0 gap-0">

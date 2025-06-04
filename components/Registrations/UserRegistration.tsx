@@ -21,14 +21,13 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
-import { cn } from "@/lib/utils";
-
 import { postData } from "@/services/api";
 import { userSchema } from "@/schemas/OrganizationOnboard";
 
 import { RequiredLabel } from "@/components/RequiredLabel";
 
 import PhoneNumber from "@/components/PhoneNumber";
+import { splitFullNameToParts } from "@/services/nameConverter";
 
 interface StepProps {
   onNext: () => void;
@@ -136,6 +135,10 @@ const UserRegistration: React.FC<StepProps> = ({ onNext }) => {
     const fullPhoneNumber = `${countryCode}${data.phone.replace(/\D/g, "")}`;
     formData.append("phone", fullPhoneNumber);
 
+    const { firstName, lastName } = splitFullNameToParts(data.name);
+    formData.append("first_name", firstName);
+    formData.append("last_name", lastName);
+
     // Handle file inputs
     if (data.avatar?.[0]) formData.append("avatar", data.avatar[0]);
     if (data.nidFrontImage?.[0])
@@ -149,7 +152,8 @@ const UserRegistration: React.FC<StepProps> = ({ onNext }) => {
         key !== "avatar" &&
         key !== "nidFrontImage" &&
         key !== "nidBackImage" &&
-        key !== "phone"
+        key !== "phone" &&
+        key !== "name"
       ) {
         formData.append(key, data[key as keyof UserFormData] as string);
       }
@@ -309,18 +313,6 @@ const UserRegistration: React.FC<StepProps> = ({ onNext }) => {
             "Add organization user"
           )}
         </Button>
-        {/* <div className="flex justify-end">
-          <Button
-            type="submit"
-            disabled={form.formState.isSubmitting}
-            className="cursor-pointer text-sm"
-            size="sm"
-          >
-            {form.formState.isSubmitting
-              ? "Adding organization user..."
-              : "Add organization user"}
-          </Button>
-        </div> */}
       </form>
     </Form>
   );

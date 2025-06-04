@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { Outfit, Ovo } from "next/font/google";
 import "./globals.css";
-
-import { AuthProvider } from "@/context/AuthContext";
+import ClientLayout from "./ClientLayout";
 
 const getOutfit = Outfit({
   subsets: ["latin"],
@@ -26,13 +25,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${getOutfit.className} ${getOvo.className} antialiased`}
-      >
-        <AuthProvider>
-
-        {children}
-        </AuthProvider>
+      <body className={`${getOutfit.className} ${getOvo.className}`}>
+        <ClientLayout>{children}</ClientLayout>
       </body>
     </html>
   );

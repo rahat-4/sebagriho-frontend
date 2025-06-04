@@ -1,4 +1,7 @@
-import { getUser } from "@/context/Auth";
+"use client";
+
+import { usePathname } from "next/navigation";
+// import { useAuth } from "@/context/AuthContext";
 import {
   Hospital,
   LayoutDashboard,
@@ -62,19 +65,17 @@ const data = {
   ],
 };
 
-const Layout = async ({ children }: { children: React.ReactNode }) => {
-  const user = await getUser();
-  console.log("------------user-------------", user);
-  // const path = usePathname();
-  // const segments = path.split("/").filter(Boolean);
-  // const displayTitle =
-  //   segments.length > 0 ? segments.slice(1).map(beautifyTitle).join(" > ") : "";
+const Layout = ({ children }: { children: React.ReactNode }) => {
+  // const { organization } = useAuth();
+  const path = usePathname();
+  const segments = path.split("/").filter(Boolean);
 
+  const displayTitle = segments.slice(1).map(beautifyTitle).join(" > ");
   return (
     <SidebarProvider>
-      <AppSidebar data={data} company={data.company} user={user} />
+      <AppSidebar data={data} company={data.company} />
       <SidebarInset>
-        <SiteHeader displayTitle={"Dashboard"} />
+        <SiteHeader displayTitle={displayTitle} />
 
         <main className="flex-1 p-4">{children}</main>
       </SidebarInset>

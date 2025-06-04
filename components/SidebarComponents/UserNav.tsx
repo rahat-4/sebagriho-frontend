@@ -1,5 +1,3 @@
-"use client";
-
 import { useAuth } from "@/context/AuthContext";
 
 import {
@@ -27,11 +25,12 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { use } from "react";
 
-const UserNav = ({ user }: { user: any }) => {
+import UserImage from "@/public/user_image.jpg";
+
+const UserNav = () => {
   const { isMobile } = useSidebar();
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
 
   return (
     <SidebarMenu>
@@ -43,8 +42,10 @@ const UserNav = ({ user }: { user: any }) => {
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground cursor-pointer"
             >
               <Avatar className="h-8 w-8 rounded-lg">
-                <AvatarImage src={user?.avatar} alt={user.name} />
-                <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                <AvatarImage src={user?.avatar} alt={user?.name} />
+                <AvatarFallback className="rounded-lg">
+                  <AvatarImage src={UserImage.src} alt={user?.name} />
+                </AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-semibold">{user?.name}</span>
@@ -62,7 +63,7 @@ const UserNav = ({ user }: { user: any }) => {
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage src={user?.avatar} alt={user.name} />
+                  <AvatarImage src={user?.avatar} alt={user?.name} />
                   <AvatarFallback className="rounded-lg">CN</AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">

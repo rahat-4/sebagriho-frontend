@@ -4,7 +4,6 @@ import { jwtVerify } from "jose";
 function isUser(payload: any): payload is User {
   return (
     typeof payload.user_uid === "string" &&
-    typeof payload.name === "string" &&
     typeof payload.is_admin === "boolean" &&
     typeof payload.is_owner === "boolean" &&
     typeof payload.exp === "number"
@@ -13,7 +12,6 @@ function isUser(payload: any): payload is User {
 
 interface User {
   user_uid: string;
-  name: string;
   is_admin: boolean;
   is_owner: boolean;
   organization_uid?: string;

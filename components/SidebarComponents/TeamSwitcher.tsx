@@ -1,7 +1,3 @@
-"use client";
-
-import * as React from "react";
-
 import {
   SidebarMenu,
   SidebarMenuButton,
@@ -10,15 +6,7 @@ import {
 
 import Image from "next/image";
 
-export function TeamSwitcher({
-  company,
-}: {
-  company: {
-    name: string;
-    logo: string;
-    title: string;
-  };
-}) {
+export function TeamSwitcher({ company }: any) {
   return (
     <SidebarMenu>
       <SidebarMenuItem>

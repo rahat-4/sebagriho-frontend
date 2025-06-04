@@ -16,8 +16,6 @@ const Dashboard = async ({
     return notFound();
   }
 
-  console.log(response);
-
   return <div>Organization dashboard: {response.organization.name}</div>;
 };
 

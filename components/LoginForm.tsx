@@ -112,7 +112,7 @@ const LoginForm = () => {
         if (user.is_admin === true) {
           router.push(`/admin`);
         } else {
-          router.replace(`/${organization.uid}`);
+          router.replace(`/${organization?.uid}`);
         }
         setLoginSuccess(false); // Reset flag
       }, 1500);

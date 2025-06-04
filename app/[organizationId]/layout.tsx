@@ -1,62 +1,49 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 
-import { usePathname } from "next/navigation";
+import { Pill, LayoutDashboard, CalendarPlus2, User } from "lucide-react";
 
-import {
-  Pill,
-  LayoutDashboard,
-  CalendarPlus2,
-  BriefcaseMedical,
-  User,
-} from "lucide-react";
-
-import UserImage from "@/public/user_image.jpg";
-import SebagrihoLogo from "@/public/sebagriho_logo.png";
-
-import {
-  SidebarProvider,
-  SidebarInset,
-  SidebarTrigger,
-} from "@/components/ui/sidebar";
-
+import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import AppSidebar from "@/components/SidebarComponents/AppSidebar";
+import SiteHeader from "@/components/SidebarComponents/SiteHeader";
 
 import { beautifyTitle } from "@/components/Converter";
 
-import SiteHeader from "@/components/SidebarComponents/SiteHeader";
-const data = {
-  navMain: [
-    {
-      title: "Dashboard",
-      icon: LayoutDashboard,
-      url: "/admin/dashboard",
-    },
-    {
-      title: "Patients",
-      icon: User,
-      url: "/[organizationId]/patients",
-    },
-    {
-      title: "Appointments",
-      icon: CalendarPlus2,
-      url: "/admin/appointments",
-    },
-    {
-      title: "Medicines",
-      icon: Pill,
-      url: "/[organizationId]/patients",
-    },
-  ],
-};
+import SebagrihoLogo from "@/public/sebagriho_logo.png";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
-  const { user, organization } = useAuth();
+  const { organization } = useAuth();
   const path = usePathname();
   const segments = path.split("/").filter(Boolean);
 
   const displayTitle = segments.slice(1).map(beautifyTitle).join(" > ");
+
+  const data = {
+    navMain: [
+      {
+        title: "Dashboard",
+        icon: LayoutDashboard,
+        url: `/${organization?.uid}/dashboard`,
+      },
+      {
+        title: "Patients",
+        icon: User,
+        url: `/${organization?.uid}/patients`,
+      },
+      {
+        title: "Appointments",
+        icon: CalendarPlus2,
+        url: `${organization?.uid}/appointments`,
+      },
+      {
+        title: "Medicines",
+        icon: Pill,
+        url: `/${organization?.uid}/patients`,
+      },
+    ],
+  };
 
   const company = organization || {
     name: "Sebagriho",
