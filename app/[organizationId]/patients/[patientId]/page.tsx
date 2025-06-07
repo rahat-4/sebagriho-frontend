@@ -15,9 +15,9 @@ const PatientProfile = () => {
 
   useEffect(() => {
     const fetchPatientData = async () => {
-      if (patientId) {
+      if (organizationId && patientId) {
         const [status, response] = await getData(
-          `/organization/homeopathy/patients/${patientId}`
+          `/organization/homeopathy/${organizationId}/patients/${patientId}`
         );
 
         if (status !== 200) {

@@ -81,12 +81,12 @@ const PatientDetail = ({ patient }: { patient: PatientData }) => {
   return (
     <div className="container mx-auto px-4 py-6 max-w-7xl">
       {/* Back button - visible on all screens */}
-      <Link href="/patients" className="inline-block mb-6">
-        <Button variant="ghost" size="sm" className="gap-1">
-          <ChevronLeft className="h-4 w-4" />
-          Back to Patients
-        </Button>
-      </Link>
+      {/* <Link href="/patients" className="inline-block mb-6"> */}
+      <Button variant="ghost" size="sm" className="gap-1" onClick={() => {}}>
+        <ChevronLeft className="h-4 w-4" />
+        Back to Patients
+      </Button>
+      {/* </Link> */}
 
       {/* Patient header - responsive design */}
       <div className="flex flex-col md:flex-row items-start md:items-center gap-4 mb-6">
