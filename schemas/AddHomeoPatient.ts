@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const homeoPatientSchemaStepOne = z.object({
+export const homeoPatientSchema = z.object({
   avatar: z.any().optional(),
   oldSerialNumber: z.string().optional(),
   name: z.string().min(1, { message: "Name is required." }),
@@ -19,7 +19,7 @@ export const homeoPatientSchemaStepOne = z.object({
     }),
 });
 
-export const homeoPatientSchemaStepTwo = z.object({
+export const homeoPatientAdditionalInformationSchema = z.object({
   age: z.string().optional(),
   gender: z.enum(["MALE", "FEMALE", "OTHER"]).optional(),
   miasmType: z

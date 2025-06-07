@@ -218,71 +218,70 @@ const PatientCard = ({ patient }: { patient: Patient }) => {
   );
 };
 
+import { useAuth } from "@/context/AuthContext";
+import {
+  AddHomeoPatient,
+  HomeoPatientAdditonalInformations,
+} from "@/components/HomeoPatients/AddHomeopatient";
+
 // Enhanced Add Patient Dialog Component
-const AddPatientDialog = () => (
-  <Dialog>
-    <DialogTrigger asChild>
-      <Button
-        size={"sm"}
-        className="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-semibold px-6 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 hover:-translate-y-0.5"
-      >
-        <Plus className="h-8 w-8" />
-        Add Patient
-      </Button>
-    </DialogTrigger>
-    <DialogContent className="sm:max-w-[500px] rounded-2xl border-0 shadow-2xl">
-      <DialogHeader className="space-y-3">
-        <DialogTitle className="text-2xl font-bold text-slate-900">
-          Add New Patient
-        </DialogTitle>
-        <DialogDescription className="text-slate-600">
-          Enter patient information to create a new record in the system.
-        </DialogDescription>
-      </DialogHeader>
-      <div className="grid gap-6 py-6">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <Input
-            placeholder="First Name"
-            className="rounded-xl border-slate-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200"
-          />
-          <Input
-            placeholder="Last Name"
-            className="rounded-xl border-slate-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200"
-          />
+const AddPatientDialog = () => {
+  const router = useRouter();
+  const { organization } = useAuth();
+
+  const [currentStep, setCurrentStep] = useState(1);
+  const [patientUid, setPatientUid] = useState<any>(null);
+
+  const completeRegistration = () => {
+    if (organization && patientUid) {
+      router.replace(`/${organization?.uid}/patients/${patientUid}`);
+    } else {
+      console.error("Organization or patientUid is null");
+    }
+  };
+  const handleNextStep = () => {
+    setCurrentStep((prev) => prev + 1);
+  };
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button
+          size={"sm"}
+          className="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-semibold px-6 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 hover:-translate-y-0.5"
+        >
+          <Plus className="h-8 w-8" />
+          Add Patient
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[500px] rounded-2xl border-0 shadow-2xl">
+        <DialogHeader className="space-y-3">
+          <DialogTitle className="text-2xl font-bold text-slate-900">
+            Add Homeopathic Patient
+          </DialogTitle>
+          <DialogDescription className="text-slate-600">
+            Enter patient information to create a new record in the system.
+          </DialogDescription>
+        </DialogHeader>
+        <div className="grid gap-6 py-6">
+          {currentStep === 1 && (
+            <AddHomeoPatient
+              onNext={handleNextStep}
+              organizationId={organization?.uid}
+              setPatientUid={setPatientUid}
+            />
+          )}
+          {currentStep === 2 && (
+            <HomeoPatientAdditonalInformations
+              organizationId={organization?.uid}
+              patientUid={patientUid}
+              onComplete={completeRegistration}
+            />
+          )}
         </div>
-        <Input
-          placeholder="Phone Number"
-          className="rounded-xl border-slate-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200"
-        />
-        <Input
-          placeholder="Email Address"
-          className="rounded-xl border-slate-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200"
-        />
-        <Select>
-          <SelectTrigger className="rounded-xl border-slate-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200">
-            <SelectValue placeholder="Select Miasm Type" />
-          </SelectTrigger>
-          <SelectContent className="rounded-xl">
-            <SelectItem value="psora">Psora</SelectItem>
-            <SelectItem value="syphilis">Syphilis</SelectItem>
-            <SelectItem value="sycosis">Sycosis</SelectItem>
-          </SelectContent>
-        </Select>
-        <div className="flex flex-col sm:flex-row justify-end gap-3 pt-4">
-          <Button
-            variant="outline"
-            className="rounded-xl border-slate-200 hover:bg-slate-50"
-          >
-            Cancel
-          </Button>
-          <Button className="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 rounded-xl shadow-sm">
-            Create Patient
-          </Button>
-        </div>
-      </div>
-    </DialogContent>
-  </Dialog>
-);
+      </DialogContent>
+    </Dialog>
+  );
+};
 
 const Patients = () => {
   const router = useRouter();
