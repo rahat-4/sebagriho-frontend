@@ -40,7 +40,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       {
         title: "Medicines",
         icon: Pill,
-        url: `/${organization?.uid}/patients`,
+        url: `/${organization?.uid}/medicines`,
       },
     ],
   };
