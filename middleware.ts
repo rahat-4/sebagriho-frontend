@@ -42,7 +42,7 @@ async function refreshAccessToken(
 }> {
   try {
     const response = await fetch(
-      `${process.env.BACKEND_URL}/public/auth/token/refresh/`,
+      `${process.env.BACKEND_URL}/public/auth/token/refresh`,
       {
         method: "POST",
         headers: {
