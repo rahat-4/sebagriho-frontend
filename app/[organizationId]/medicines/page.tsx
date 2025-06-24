@@ -72,10 +72,10 @@ const Medicines = () => {
 
       <div className="">
         <div className="flex items-center justify-between my-4">
-          <h2 className="text-2xl font-bold">Midicines List</h2>
+          <h2 className="text-2xl font-bold">Medicines List</h2>
           <Button
             className="h-9 text-sm cursor-pointer"
-            onClick={() => router.push("/admin/organizations/onboard")}
+            onClick={() => router.push(`/${organization?.uid}/medicines/add`)}
           >
             Add Medicine <PlusCircle />
           </Button>

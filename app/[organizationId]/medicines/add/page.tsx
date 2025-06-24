@@ -42,7 +42,7 @@ const initialFormData: CreateMedicineForm = {
   batch_number: "",
 };
 
-export default function CreateMedicine = () => {
+const CreateMedicine = () => {
   const router = useRouter();
   const [formData, setFormData] = useState<CreateMedicineForm>(initialFormData);
   const [isLoading, setIsLoading] = useState(false);
@@ -290,7 +290,7 @@ export default function CreateMedicine = () => {
             <div className="flex gap-4 pt-6">
               <Button
                 type="submit"
-                disabled={isLoading || !formData.name || !formData.organization}
+                disabled={isLoading || !formData.name}
                 className="flex-1 md:flex-none"
               >
                 {isLoading ? (
@@ -320,4 +320,11 @@ export default function CreateMedicine = () => {
       </Card>
     </div>
   );
-}
+};
+
+export default CreateMedicine;
+
+// export const metadata = {
+//   title: "Create Medicine",
+//   description: "Add a new homeopathic medicine to your inventory",
+// };

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 
 import { getData } from "@/services/api";
-import PatientDetail from "./components.tsx/PatientDetail";
+import PatientDetail from "./components/PatientDetail";
 
 import { convertKeysToCamelCase } from "@/services/caseConverters";
 import { combineNamePartsToFullName } from "@/services/nameConverter";
