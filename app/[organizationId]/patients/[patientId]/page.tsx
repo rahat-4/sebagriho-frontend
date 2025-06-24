@@ -47,11 +47,7 @@ const PatientProfile = () => {
 
   return (
     <div>
-      {patient ? (
-        <PatientDetail patient={patient} />
-      ) : (
-        <p>Loading patient data...</p>
-      )}
+      <PatientDetail />
     </div>
   );
 };

@@ -25,6 +25,10 @@ import {
   Stethoscope,
   Shield,
   AlertCircle,
+  Trash2,
+  Venus,
+  Syringe,
+  Cake,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -40,6 +44,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
+import LoadingComponent from "@/components/LoadingComponent";
+
 // Enhanced Patient Interface
 interface Patient {
   uid: string;
@@ -51,6 +57,9 @@ interface Patient {
   avatar?: string;
   address?: string;
   phone: string;
+  gender?: string;
+  age?: string;
+  blood_group?: string;
   relative_phone?: string;
   case_history?: string;
   presentCause?: string;
@@ -75,61 +84,17 @@ const InfoItem = ({
   className = "",
 }: InfoItemProps) => (
   <div
-    className={`flex items-start gap-4 p-4 bg-gradient-to-r from-slate-50 to-slate-100/50 rounded-xl border border-slate-200/60 hover:shadow-sm transition-all duration-200 ${className}`}
+    className={`flex justify-start items-center gap-2 p-1  rounded-xl  hover:shadow-sm transition-all duration-200 ${className}`}
   >
-    <div className="flex-shrink-0 bg-gradient-to-br from-blue-500 to-indigo-600 p-2.5 rounded-lg shadow-sm">
-      <Icon className="h-4 w-4 text-white" />
+    <div className="flex flex-row gap-1 ">
+      <div className="bg-gradient-to-br from-blue-500 to-indigo-600 p-[5px] rounded-lg shadow-sm">
+        <Icon className="h-3 w-3 text-white" />
+      </div>
+      <div className="text-slate-500 text-sm font-medium">{label}</div>
     </div>
-    <div className="flex flex-col min-w-0 flex-1">
-      <span className="text-slate-500 text-xs font-medium uppercase tracking-wide mb-1">
-        {label}
-      </span>
-      <div className="text-slate-900 text-sm font-semibold">{value}</div>
-    </div>
+    <div className="text-slate-900 text-sm font-semibold">{value}</div>
   </div>
 );
-
-// Quick Stats Card Component
-const QuickStatsCard = ({
-  icon: Icon,
-  label,
-  value,
-  color = "blue",
-}: {
-  icon: React.ElementType;
-  label: string;
-  value: string;
-  color?: string;
-}) => {
-  const colorClasses = {
-    blue: "from-blue-500 to-indigo-600",
-    green: "from-emerald-500 to-teal-600",
-    purple: "from-purple-500 to-violet-600",
-    orange: "from-orange-500 to-red-500",
-  };
-
-  return (
-    <Card className="bg-gradient-to-br bg-white border-0 shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5 rounded-xl">
-      <CardContent className="p-4">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-slate-500 text-xs font-medium uppercase tracking-wide">
-              {label}
-            </p>
-            <p className="text-slate-900 text-lg font-bold mt-1">{value}</p>
-          </div>
-          <div
-            className={`bg-gradient-to-br ${
-              colorClasses[color as keyof typeof colorClasses]
-            } p-3 rounded-xl shadow-sm`}
-          >
-            <Icon className="h-5 w-5 text-white" />
-          </div>
-        </div>
-      </CardContent>
-    </Card>
-  );
-};
 
 // Timeline Item Component
 const TimelineItem = ({
@@ -206,30 +171,7 @@ const PatientDetail = () => {
   }, [organizationId, patientId]);
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-indigo-50/30 flex items-center justify-center">
-        <div className="text-center space-y-6">
-          <div className="relative">
-            <div className="animate-spin rounded-full h-16 w-16 border-4 border-indigo-200 border-t-indigo-600 mx-auto"></div>
-            <div
-              className="absolute inset-0 rounded-full h-16 w-16 border-4 border-transparent border-r-purple-400 animate-spin mx-auto"
-              style={{
-                animationDirection: "reverse",
-                animationDuration: "1.5s",
-              }}
-            ></div>
-          </div>
-          <div className="space-y-2">
-            <p className="text-slate-700 font-semibold text-lg">
-              Loading patient details...
-            </p>
-            <p className="text-slate-500 text-sm">
-              Please wait while we fetch the information
-            </p>
-          </div>
-        </div>
-      </div>
-    );
+    return <LoadingComponent name="Loading Patient Details..." />;
   }
 
   if (error || !patient) {
@@ -267,22 +209,16 @@ const PatientDetail = () => {
     });
   };
 
-  // const getInitials = (name: string) => {
-  //   return name
-  //     .split(" ")
-  //     .map((n) => n[0])
-  //     .join("")
-  //     .toUpperCase();
-  // };
+  console.log("Patient Data:", patient);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-indigo-50/30">
-      <div className="container mx-auto px-4 py-6 max-w-7xl">
+      <div className="container mx-auto px-4 max-w-7xl">
         {/* Enhanced Back Button */}
         <Button
           variant="ghost"
           size="sm"
-          className="mb-6 hover:bg-slate-100 transition-colors duration-200"
+          className="mb-2 hover:bg-slate-100 transition-colors duration-200"
           onClick={() => router.back()}
         >
           <ChevronLeft className="h-4 w-4 mr-2" />
@@ -290,8 +226,8 @@ const PatientDetail = () => {
         </Button>
 
         {/* Enhanced Patient Header */}
-        <div className="bg-white rounded-2xl border-0 shadow-lg p-6 mb-6 hover:shadow-xl transition-all duration-300">
-          <div className="flex flex-col lg:flex-row items-start lg:items-center gap-6">
+        <div className="bg-white rounded-2xl border-0 shadow-lg px-6 pb-4 pt-2 mb-2 hover:shadow-xl transition-all duration-300">
+          <div className="flex flex-col lg:flex-row items-start lg:items-center gap-2">
             <Avatar className="h-20 w-20 lg:h-24 lg:w-24 ring-4 ring-white shadow-xl border-4 border-slate-100">
               <AvatarImage
                 src={patient.avatar || "/placeholder.svg"}
@@ -305,7 +241,7 @@ const PatientDetail = () => {
 
             <div className="flex-1 space-y-3">
               <div className="flex flex-col sm:flex-row sm:items-center gap-3">
-                <h1 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                <h1 className="text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
                   {patient.name}
                 </h1>
                 <Badge className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white border-0 font-medium px-3 py-1 rounded-full shadow-sm w-fit">
@@ -313,18 +249,16 @@ const PatientDetail = () => {
                 </Badge>
               </div>
 
-              {patient.old_serial_number && (
-                <p className="text-slate-500 text-sm font-medium">
-                  Previous ID: {patient.old_serial_number}
-                </p>
-              )}
+              <p className="text-slate-500 text-sm font-medium">
+                Old Serial Number: {patient.old_serial_number}
+              </p>
 
-              <div className="flex flex-wrap items-center gap-4 text-sm">
-                <div className="flex items-center gap-2 text-slate-600">
+              <div className="flex flex-wrap items-center gap-1 text-sm">
+                <div className="flex items-center gap-1 text-slate-600">
                   <Calendar className="h-4 w-4 text-slate-400" />
                   <span>Created: {formatDate(patient.created_at)}</span>
                 </div>
-                <div className="flex items-center gap-2 text-slate-600">
+                <div className="flex items-center gap-1 text-slate-600">
                   <Clock className="h-4 w-4 text-slate-400" />
                   <span>Last updated: {formatDate(patient.updated_at)}</span>
                 </div>
@@ -332,56 +266,25 @@ const PatientDetail = () => {
             </div>
 
             {/* Quick Action Buttons */}
-            <div className="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
+            <div className="flex flex-col sm:flex-row gap-1 w-full lg:w-auto pt-2">
               <Button className="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-medium px-6 py-2.5 rounded-xl shadow-sm hover:shadow-md transition-all duration-200">
                 <Edit className="h-4 w-4 mr-2" />
                 Edit Patient
               </Button>
               <Button
                 variant="outline"
-                className="border-slate-200 text-slate-700 hover:bg-slate-50 font-medium px-6 py-2.5 rounded-xl transition-all duration-200"
+                className="border-red-200 bg-red-600 text-white hover:bg-red-50 font-medium px-6 py-2.5 rounded-xl transition-all duration-200"
               >
-                <Calendar className="h-4 w-4 mr-2" />
-                Schedule Visit
+                <Trash2 className="h-4 w-4 mr-2" />
+                Delete Patient
               </Button>
             </div>
           </div>
         </div>
 
-        {/* Quick Stats */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-          <QuickStatsCard
-            icon={Calendar}
-            label="Days Since Created"
-            value={Math.floor(
-              (new Date().getTime() - new Date(patient.created_at).getTime()) /
-                (1000 * 60 * 60 * 24)
-            ).toString()}
-            color="blue"
-          />
-          <QuickStatsCard
-            icon={Phone}
-            label="Contact Available"
-            value={patient.phone ? "Yes" : "No"}
-            color="green"
-          />
-          <QuickStatsCard
-            icon={Dna}
-            label="Miasm Type"
-            value={patient.miasm_type || "Not Set"}
-            color="purple"
-          />
-          <QuickStatsCard
-            icon={ActivitySquare}
-            label="Status"
-            value="Active"
-            color="orange"
-          />
-        </div>
-
         {/* Enhanced Tabs */}
         <Tabs defaultValue="overview" className="w-full">
-          <div className="bg-white rounded-2xl border-0 shadow-lg p-1 mb-6">
+          <div className="bg-white rounded-2xl border-0 shadow-lg p-1">
             <TabsList className="w-full max-w-2xl mx-auto grid grid-cols-3 bg-slate-50 rounded-xl p-1">
               <TabsTrigger
                 value="overview"
@@ -408,200 +311,116 @@ const PatientDetail = () => {
           <TabsContent value="overview" className="space-y-6">
             <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
               {/* Contact Information */}
-              <Card className="bg-white border-0 shadow-lg rounded-2xl hover:shadow-xl transition-all duration-300">
-                <CardHeader className="pb-4">
-                  <CardTitle className="text-xl font-bold text-slate-900 flex items-center gap-3">
+              <Card className="gap-2 px-0 py-3 bg-white border-0 shadow-lg rounded-2xl hover:shadow-xl transition-all duration-300">
+                <CardHeader>
+                  <CardTitle className="text-lg font-bold text-slate-900 flex items-center gap-3">
                     <div className="bg-gradient-to-br from-blue-500 to-indigo-600 p-2 rounded-lg">
-                      <Users className="h-5 w-5 text-white" />
+                      <Users className="h-3 w-3 text-white" />
                     </div>
-                    Contact Information
+                    General Information
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4">
+                <CardContent>
                   <InfoItem
                     icon={Phone}
-                    label="Primary Phone"
+                    label="Primary Phone: "
                     value={patient.phone}
                   />
-                  {patient.relative_phone && (
-                    <InfoItem
-                      icon={Users}
-                      label="Emergency Contact"
-                      value={patient.relative_phone}
-                    />
-                  )}
-                  {patient.address && (
-                    <InfoItem
-                      icon={MapPin}
-                      label="Address"
-                      value={patient.address}
-                    />
-                  )}
-                </CardContent>
-              </Card>
-
-              {/* Current Treatment */}
-              <Card className="bg-white border-0 shadow-lg rounded-2xl hover:shadow-xl transition-all duration-300">
-                <CardHeader className="pb-4">
-                  <CardTitle className="text-xl font-bold text-slate-900 flex items-center gap-3">
-                    <div className="bg-gradient-to-br from-emerald-500 to-teal-600 p-2 rounded-lg">
-                      <Stethoscope className="h-5 w-5 text-white" />
-                    </div>
-                    Current Treatment
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
                   <InfoItem
-                    icon={Calendar}
-                    label="Last Visit"
-                    value={formatDate(patient.updated_at)}
+                    icon={Venus}
+                    label="Gender: "
+                    value={patient.gender}
                   />
-                  {patient.miasm_type && (
-                    <InfoItem
-                      icon={Dna}
-                      label="Miasm Selection"
-                      value={
-                        <Badge className="bg-purple-100 text-purple-800 border-purple-200">
-                          {patient.miasm_type}
-                        </Badge>
-                      }
-                    />
-                  )}
+                  <InfoItem icon={Venus} label="Age: " value={patient.age} />
                   <InfoItem
-                    icon={ActivitySquare}
-                    label="Treatment Status"
-                    value={
-                      <Badge className="bg-green-100 text-green-800 border-green-200">
-                        Active
-                      </Badge>
-                    }
+                    icon={Syringe}
+                    label="Blood Group: "
+                    value={patient.blood_group}
+                  />
+                  <InfoItem
+                    icon={Users}
+                    label="Emergency Contact: "
+                    value={patient.relative_phone}
+                  />
+                  <InfoItem
+                    icon={MapPin}
+                    label="Address: "
+                    value={patient.address}
                   />
                 </CardContent>
               </Card>
             </div>
-
-            {/* Patient Habits */}
-            {/* {patient.habits && patient.habits.length > 0 && (
-              <Card className="bg-white border-0 shadow-lg rounded-2xl hover:shadow-xl transition-all duration-300">
-                <CardHeader className="pb-4">
-                  <CardTitle className="text-xl font-bold text-slate-900 flex items-center gap-3">
-                    <div className="bg-gradient-to-br from-orange-500 to-red-500 p-2 rounded-lg">
-                      <Heart className="h-5 w-5 text-white" />
-                    </div>
-                    Patient Habits
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                    {patient.habits.map((habit, index) => (
-                      <div
-                        key={index}
-                        className="flex items-center gap-3 p-3 bg-gradient-to-r from-slate-50 to-slate-100/50 rounded-xl border border-slate-200/60 hover:shadow-sm transition-all duration-200"
-                      >
-                        <div className="bg-gradient-to-br from-orange-500 to-red-500 p-2 rounded-lg shadow-sm">
-                          <Heart className="h-3 w-3 text-white" />
-                        </div>
-                        <span className="text-sm font-medium text-slate-900">
-                          {habit}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            )} */}
           </TabsContent>
 
           {/* Medical Tab */}
           <TabsContent value="medical" className="space-y-6">
-            {/* Present Condition */}
-            {patient.presentCause && (
-              <Card className="bg-white border-0 shadow-lg rounded-2xl hover:shadow-xl transition-all duration-300">
-                <CardHeader className="pb-4">
-                  <CardTitle className="text-xl font-bold text-slate-900 flex items-center gap-3">
-                    <div className="bg-gradient-to-br from-red-500 to-pink-600 p-2 rounded-lg">
-                      <AlertCircle className="h-5 w-5 text-white" />
-                    </div>
-                    Present Condition
-                  </CardTitle>
-                  <CardDescription className="text-slate-600">
-                    Current symptoms and primary concerns
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="bg-gradient-to-r from-slate-50 to-slate-100/50 rounded-xl p-6 border border-slate-200/60">
-                    <p className="text-slate-700 leading-relaxed whitespace-pre-wrap">
-                      {patient.presentCause}
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
-            )}
-
             {/* Treatment Analysis */}
             <Card className="bg-white border-0 shadow-lg rounded-2xl hover:shadow-xl transition-all duration-300">
-              <CardHeader className="pb-4">
+              {/* <CardHeader className="pb-4">
                 <CardTitle className="text-xl font-bold text-slate-900 flex items-center gap-3">
-                  <div className="bg-gradient-to-br from-purple-500 to-violet-600 p-2 rounded-lg">
-                    <Dna className="h-5 w-5 text-white" />
-                  </div>
                   Treatment Analysis
                 </CardTitle>
-                <CardDescription className="text-slate-600">
-                  Detailed miasm analysis and treatment approach
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-6">
+              </CardHeader> */}
+              <CardContent>
                 {patient.miasm_type && (
-                  <div>
-                    <h4 className="font-semibold mb-3 flex items-center gap-2 text-slate-900">
-                      <Shield className="h-4 w-4 text-purple-600" />
-                      Miasm Classification
-                    </h4>
-                    <div className="bg-gradient-to-r from-purple-50 to-violet-50 p-4 rounded-xl border border-purple-200/60">
-                      <div className="flex items-center justify-between mb-3">
-                        <span className="text-sm text-purple-600 font-medium">
-                          Selected Miasm
-                        </span>
-                        <Badge className="bg-purple-100 text-purple-800 border-purple-200">
-                          {patient.miasm_type}
-                        </Badge>
-                      </div>
-                      <Separator className="my-3 bg-purple-200/50" />
-                      <p className="text-sm text-slate-600 leading-relaxed">
-                        This miasm selection indicates a constitutional tendency
-                        that helps guide the homeopathic treatment approach for
-                        optimal therapeutic results.
-                      </p>
+                  <div className="flex justify-center font-semibold items-center gap-1">
+                    <div className="bg-gradient-to-br from-purple-500 to-violet-600 p-1 rounded-lg">
+                      <Dna className="h-4 w-4 text-white" />
                     </div>
+                    <span className="text-sm text-purple-600 font-medium">
+                      Miasm Type:
+                    </span>
+                    <Badge className="bg-purple-100 text-purple-800 border-purple-200 p-[5px]">
+                      {patient.miasm_type}
+                    </Badge>
                   </div>
                 )}
-
-                <div>
-                  <h4 className="font-semibold mb-3 flex items-center gap-2 text-slate-900">
-                    <Calendar className="h-4 w-4 text-blue-600" />
-                    Treatment Timeline
-                  </h4>
-                  <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 rounded-xl border border-blue-200/60">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
-                      <div>
-                        <p className="text-blue-600 font-medium mb-1">
-                          Treatment Started
-                        </p>
-                        <p className="text-slate-900 font-semibold">
-                          {formatDate(patient.created_at)}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-blue-600 font-medium mb-1">
-                          Last Updated
-                        </p>
-                        <p className="text-slate-900 font-semibold">
-                          {formatDate(patient.updated_at)}
-                        </p>
-                      </div>
-                    </div>
+              </CardContent>
+            </Card>
+            {/* Patient Habits */}
+            <Card className="bg-white border-0 shadow-lg rounded-2xl hover:shadow-xl transition-all duration-300">
+              <CardHeader className="pb-4">
+                <CardTitle className="text-lg font-bold text-slate-900 flex items-center gap-3">
+                  <div className="bg-gradient-to-br from-orange-500 to-red-500 p-[5px] rounded-lg">
+                    <Heart className="h-4 w-4 text-white" />
                   </div>
+                  Patient Habits
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                  {/* {patient.habits.map((habit, index) => ( */}
+                  <div
+                    // key={index}
+                    className="flex items-center gap-3 p-3 bg-gradient-to-r from-slate-50 to-slate-100/50 rounded-xl border border-slate-200/60 hover:shadow-sm transition-all duration-200"
+                  >
+                    <div className="bg-gradient-to-br from-orange-500 to-red-500 p-2 rounded-lg shadow-sm">
+                      <Heart className="h-3 w-3 text-white" />
+                    </div>
+                    <span className="text-sm font-medium text-slate-900">
+                      {patient.habits}
+                    </span>
+                  </div>
+                  {/* ))} */}
+                </div>
+              </CardContent>
+            </Card>
+            {/* Case History */}
+
+            <Card className="bg-white border-0 shadow-lg rounded-2xl hover:shadow-xl transition-all duration-300">
+              <CardHeader className="pb-4">
+                <CardTitle className="text-lg font-bold text-slate-900 flex items-center gap-3">
+                  <div className="bg-gradient-to-br from-red-500 to-pink-600 p-[5px] rounded-lg">
+                    <AlertCircle className="h-4 w-4 text-white" />
+                  </div>
+                  Case History
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="bg-gradient-to-r from-slate-50 to-slate-100/50 rounded-xl p-6 border border-slate-200/60">
+                  <p className="text-slate-700 leading-relaxed whitespace-pre-wrap">
+                    {patient.presentCause}
+                  </p>
                 </div>
               </CardContent>
             </Card>
@@ -636,15 +455,12 @@ const PatientDetail = () => {
             {/* Treatment Timeline */}
             <Card className="bg-white border-0 shadow-lg rounded-2xl hover:shadow-xl transition-all duration-300">
               <CardHeader className="pb-4">
-                <CardTitle className="text-xl font-bold text-slate-900 flex items-center gap-3">
-                  <div className="bg-gradient-to-br from-green-500 to-emerald-600 p-2 rounded-lg">
-                    <TrendingUp className="h-5 w-5 text-white" />
+                <CardTitle className="text-lg font-bold text-slate-900 flex items-center gap-3">
+                  <div className="bg-gradient-to-br from-green-500 to-emerald-600 p-[5px] rounded-lg">
+                    <TrendingUp className="h-4 w-4 text-white" />
                   </div>
-                  Treatment Timeline
+                  Appointment History
                 </CardTitle>
-                <CardDescription className="text-slate-600">
-                  Record of consultations and treatment progress
-                </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
