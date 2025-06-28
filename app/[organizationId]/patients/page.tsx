@@ -49,7 +49,7 @@ const Patients = () => {
         console.log("------response----", response);
         // Convert keys from snake_case to camelCase
         // const convertedResponse: any = convertKeysToCamelCase(response);
-        setPatients(response || []);
+        setPatients(response.results || []);
         setFilteredPatients(response || []);
       } catch (error: any) {
         setError(error.message || "Failed to fetch patients");

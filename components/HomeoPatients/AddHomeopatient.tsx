@@ -16,6 +16,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Form,
   FormControl,
@@ -103,6 +104,22 @@ const additionalFields: FieldProps[] = [
       { value: "OTHER", label: "Other" },
     ],
     placeholder: "Select a gender",
+  },
+  {
+    label: "Blood Group",
+    name: "bloodGroup",
+    type: "select",
+    options: [
+      { value: "A+", label: "A+" },
+      { value: "A-", label: "A-" },
+      { value: "B+", label: "B+" },
+      { value: "B-", label: "B-" },
+      { value: "AB+", label: "AB+" },
+      { value: "AB-", label: "AB-" },
+      { value: "O+", label: "O+" },
+      { value: "O-", label: "O-" },
+    ],
+    placeholder: "Select blood group",
   },
   {
     label: "Miasm",
@@ -237,7 +254,7 @@ export const AddHomeoPatient: React.FC<HomeoPatientProps> = ({
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-4 max-w-md"
+        className="space-y-3 max-w-md"
       >
         {/* Display message */}
         {message && (
@@ -285,6 +302,12 @@ export const AddHomeoPatient: React.FC<HomeoPatientProps> = ({
                         onChange={field.onChange}
                         isLoading={isLoading}
                         countryCode={countryCode}
+                      />
+                    ) : type === "textarea" ? (
+                      <Textarea
+                        placeholder={placeholder}
+                        {...field}
+                        className="text-sm"
                       />
                     ) : (
                       <Input
@@ -413,7 +436,7 @@ export const HomeoPatientAdditonalInformations: React.FC<
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-4 max-w-md"
+        className="space-y-3 max-w-md"
       >
         {/* Display message */}
         {message && (
@@ -469,6 +492,12 @@ export const HomeoPatientAdditonalInformations: React.FC<
                           </option>
                         ))}
                       </select>
+                    ) : type === "textarea" ? (
+                      <Textarea
+                        placeholder={placeholder}
+                        {...field}
+                        className="text-sm"
+                      />
                     ) : (
                       <Input
                         placeholder={placeholder}

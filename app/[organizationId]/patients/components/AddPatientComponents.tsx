@@ -46,16 +46,17 @@ const AddPatientDialog = () => {
           Add Patient
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[500px] rounded-2xl border-0 shadow-2xl">
-        <DialogHeader className="space-y-3">
-          <DialogTitle className="text-2xl font-bold text-slate-900">
+      <DialogContent className="max-w-[330px] max-h-[650px] sm:max-w-[500px] rounded-2xl border-0 shadow-2xl">
+        <DialogHeader>
+          <DialogTitle className="text-xl font-bold text-slate-900">
             Add Homeopathic Patient
           </DialogTitle>
-          <DialogDescription className="text-slate-600">
-            Enter patient information to create a new record in the system.
+          <DialogDescription className="text-slate-600 text-xs">
+            Enter patient information to create a new record.
           </DialogDescription>
         </DialogHeader>
-        <div className="grid gap-6 py-6">
+
+        <div className="grid gap-6 py-4">
           {currentStep === 1 && (
             <AddHomeoPatient
               onNext={handleNextStep}

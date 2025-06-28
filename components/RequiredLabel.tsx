@@ -19,12 +19,15 @@ export const RequiredLabel = ({
   children,
   htmlFor,
   required,
+  icon,
 }: {
   children: string;
   htmlFor: string;
   required?: boolean;
+  icon?: React.ReactNode;
 }) => (
-  <Label htmlFor={htmlFor} className="text-sm font-medium">
+  <Label htmlFor={htmlFor} className="text-sm font-semibold text-slate-700">
+    {icon}
     {children} {required && <span className="text-destructive">*</span>}
   </Label>
 );

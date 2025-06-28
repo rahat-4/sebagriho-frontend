@@ -44,6 +44,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
+import { PatientAppointment } from "../../components/Appointment";
 import LoadingComponent from "@/components/LoadingComponent";
 
 // Enhanced Patient Interface
@@ -353,7 +354,7 @@ const PatientDetail = () => {
           </TabsContent>
 
           {/* Medical Tab */}
-          <TabsContent value="medical" className="space-y-6">
+          <TabsContent value="medical" className="space-y-1">
             {/* Treatment Analysis */}
             <Card className="bg-white border-0 shadow-lg rounded-2xl hover:shadow-xl transition-all duration-300">
               {/* <CardHeader className="pb-4">
@@ -378,48 +379,38 @@ const PatientDetail = () => {
               </CardContent>
             </Card>
             {/* Patient Habits */}
-            <Card className="bg-white border-0 shadow-lg rounded-2xl hover:shadow-xl transition-all duration-300">
-              <CardHeader className="pb-4">
-                <CardTitle className="text-lg font-bold text-slate-900 flex items-center gap-3">
+            <Card className="gap-3 p-2 bg-white border-0 shadow-lg rounded-2xl hover:shadow-xl transition-all duration-300">
+              <CardHeader className="gap-0">
+                <CardTitle className="text-md font-bold text-slate-900 flex items-center justify-center gap-2">
                   <div className="bg-gradient-to-br from-orange-500 to-red-500 p-[5px] rounded-lg">
-                    <Heart className="h-4 w-4 text-white" />
+                    <Heart className="h-3 w-3 text-white" />
                   </div>
                   Patient Habits
                 </CardTitle>
               </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                  {/* {patient.habits.map((habit, index) => ( */}
-                  <div
-                    // key={index}
-                    className="flex items-center gap-3 p-3 bg-gradient-to-r from-slate-50 to-slate-100/50 rounded-xl border border-slate-200/60 hover:shadow-sm transition-all duration-200"
-                  >
-                    <div className="bg-gradient-to-br from-orange-500 to-red-500 p-2 rounded-lg shadow-sm">
-                      <Heart className="h-3 w-3 text-white" />
-                    </div>
-                    <span className="text-sm font-medium text-slate-900">
-                      {patient.habits}
-                    </span>
-                  </div>
-                  {/* ))} */}
+              <CardContent className="px-2">
+                <div className="bg-gradient-to-r from-slate-50 to-slate-100/50 rounded-xl p-3 border border-slate-200/60">
+                  <p className="text-slate-700 leading-relaxed whitespace-pre-wrap">
+                    {patient.habits}
+                  </p>
                 </div>
               </CardContent>
             </Card>
             {/* Case History */}
 
-            <Card className="bg-white border-0 shadow-lg rounded-2xl hover:shadow-xl transition-all duration-300">
-              <CardHeader className="pb-4">
-                <CardTitle className="text-lg font-bold text-slate-900 flex items-center gap-3">
+            <Card className="gap-3 p-2 bg-white border-0 shadow-lg rounded-2xl hover:shadow-xl transition-all duration-300">
+              <CardHeader className="gap-0">
+                <CardTitle className="text-md font-bold text-slate-900 flex items-center justify-center gap-2">
                   <div className="bg-gradient-to-br from-red-500 to-pink-600 p-[5px] rounded-lg">
-                    <AlertCircle className="h-4 w-4 text-white" />
+                    <AlertCircle className="h-3 w-3 text-white" />
                   </div>
                   Case History
                 </CardTitle>
               </CardHeader>
-              <CardContent>
-                <div className="bg-gradient-to-r from-slate-50 to-slate-100/50 rounded-xl p-6 border border-slate-200/60">
+              <CardContent className="px-2">
+                <div className="bg-gradient-to-r from-slate-50 to-slate-100/50 rounded-xl p-3 border border-slate-200/60">
                   <p className="text-slate-700 leading-relaxed whitespace-pre-wrap">
-                    {patient.presentCause}
+                    {patient.case_history}
                   </p>
                 </div>
               </CardContent>
@@ -428,30 +419,6 @@ const PatientDetail = () => {
 
           {/* History Tab */}
           <TabsContent value="history" className="space-y-6">
-            {/* Case History */}
-            {patient.case_history && (
-              <Card className="bg-white border-0 shadow-lg rounded-2xl hover:shadow-xl transition-all duration-300">
-                <CardHeader className="pb-4">
-                  <CardTitle className="text-xl font-bold text-slate-900 flex items-center gap-3">
-                    <div className="bg-gradient-to-br from-indigo-500 to-blue-600 p-2 rounded-lg">
-                      <BookOpen className="h-5 w-5 text-white" />
-                    </div>
-                    Case History
-                  </CardTitle>
-                  <CardDescription className="text-slate-600">
-                    Comprehensive medical background and previous treatments
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="bg-gradient-to-r from-slate-50 to-slate-100/50 rounded-xl p-6 border border-slate-200/60">
-                    <p className="text-slate-700 leading-relaxed whitespace-pre-wrap">
-                      {patient.case_history}
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
-            )}
-
             {/* Treatment Timeline */}
             <Card className="bg-white border-0 shadow-lg rounded-2xl hover:shadow-xl transition-all duration-300">
               <CardHeader className="pb-4">
@@ -484,13 +451,10 @@ const PatientDetail = () => {
 
       {/* Enhanced Floating Action Button */}
       <div className="fixed bottom-6 right-6 flex flex-col gap-3">
-        <Button
-          size="lg"
-          className="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-semibold px-6 py-3 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-200 hover:-translate-y-1"
-        >
-          <Plus className="h-5 w-5 mr-2" />
-          Add Visit
-        </Button>
+        <PatientAppointment
+          organizationId={organizationId}
+          patientId={patientId}
+        />
       </div>
     </div>
   );
