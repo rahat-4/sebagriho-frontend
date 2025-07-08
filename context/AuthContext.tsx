@@ -145,7 +145,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       return {
         success: true,
-        message: "Login successful",
+        message: `Welcome to Sebagriho!`, // This message is shown after successful login
       };
     } catch (error) {
       console.error("Login failed:", error);

@@ -160,7 +160,7 @@ const LoginForm = () => {
         // Success
         setMessage({
           type: "success",
-          text: result.message || "Login successful!",
+          text: result.message || `Welcome to Sebagriho, ${user?.name}!`,
         });
 
         // ✅ Set flag to trigger navigation when user updates

@@ -46,7 +46,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 
 import { PatientAppointment } from "../../components/Appointment";
 import LoadingComponent from "@/components/LoadingComponent";
-
+import AppointmentHistory from "./History";
 // Enhanced Patient Interface
 interface Patient {
   uid: string;
@@ -75,6 +75,18 @@ interface InfoItemProps {
   label: string;
   value: string | React.ReactNode;
   className?: string;
+}
+
+// Add these interfaces at the top of your file with other interfaces
+interface Appointment {
+  id: string;
+  date: string;
+  symptoms: string;
+  treatment_effectiveness?: string;
+  appointment_files?: string[];
+  medicines: string[];
+  status: "completed" | "upcoming" | "cancelled";
+  notes?: string;
 }
 
 // Enhanced InfoItem component
@@ -145,6 +157,7 @@ const PatientDetail = () => {
   const [patient, setPatient] = useState<Patient | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [appointments, setAppointments] = useState<Appointment[] | null>(null);
 
   useEffect(() => {
     const fetchPatient = async () => {
@@ -229,16 +242,33 @@ const PatientDetail = () => {
         {/* Enhanced Patient Header */}
         <div className="bg-white rounded-2xl border-0 shadow-lg px-6 pb-4 pt-2 mb-2 hover:shadow-xl transition-all duration-300">
           <div className="flex flex-col lg:flex-row items-start lg:items-center gap-2">
-            <Avatar className="h-20 w-20 lg:h-24 lg:w-24 ring-4 ring-white shadow-xl border-4 border-slate-100">
-              <AvatarImage
-                src={patient.avatar || "/placeholder.svg"}
-                alt={patient.name}
-              />
-              <AvatarFallback className="bg-gradient-to-br from-indigo-500 to-purple-600 text-white font-bold text-xl">
-                {/* {getInitials(patient.name)} */}
-                {patient.name}
-              </AvatarFallback>
-            </Avatar>
+            <div className="flex flex-row justify-between items-center gap-4 w-full lg:w-auto">
+              <Avatar className="h-20 w-20 lg:h-24 lg:w-24 ring-4 ring-white shadow-xl border-4 border-slate-100">
+                <AvatarImage
+                  src={patient.avatar || "/placeholder.svg"}
+                  alt={patient.name}
+                />
+                <AvatarFallback className="bg-gradient-to-br from-indigo-500 to-purple-600 text-white font-bold text-xl">
+                  {/* {getInitials(patient.name)} */}
+                  {patient.name}
+                </AvatarFallback>
+              </Avatar>
+              <div className="grid grid-cols-1 md:grid-cols-3">
+                <Card className="p-2 gap-2 bg-gradient-to-br from-purple-50 to-violet-50 border-purple-200 shadow-sm hover:shadow-md transition-all duration-200">
+                  <CardContent className="px-1">
+                    <div className="flex flex-col items-center">
+                      <div className="bg-gradient-to-br from-purple-500 to-violet-600 p-2 rounded-lg">
+                        <Calendar className="h-3 w-3 text-white" />
+                      </div>
+                      <p className="text-xs font-medium text-purple-600">
+                        Total visited
+                      </p>
+                      <p className="text-sm font-bold text-purple-800">0</p>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
 
             <div className="flex-1 space-y-3">
               <div className="flex flex-col sm:flex-row sm:items-center gap-3">
@@ -419,43 +449,19 @@ const PatientDetail = () => {
 
           {/* History Tab */}
           <TabsContent value="history" className="space-y-6">
-            {/* Treatment Timeline */}
-            <Card className="bg-white border-0 shadow-lg rounded-2xl hover:shadow-xl transition-all duration-300">
-              <CardHeader className="pb-4">
-                <CardTitle className="text-lg font-bold text-slate-900 flex items-center gap-3">
-                  <div className="bg-gradient-to-br from-green-500 to-emerald-600 p-[5px] rounded-lg">
-                    <TrendingUp className="h-4 w-4 text-white" />
-                  </div>
-                  Appointment History
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <TimelineItem
-                    date={formatDate(patient.updated_at)}
-                    title="Latest Update"
-                    description="Patient record was last updated with current treatment status and progress notes."
-                  />
-                  <TimelineItem
-                    date={formatDate(patient.created_at)}
-                    title="Initial Assessment"
-                    description="Patient was first registered in the system. Initial consultation completed and treatment plan established."
-                    isLast={true}
-                  />
-                </div>
-              </CardContent>
-            </Card>
+            {/* Appointment Statistics */}
+            <AppointmentHistory appointments={appointments} />
           </TabsContent>
         </Tabs>
       </div>
 
       {/* Enhanced Floating Action Button */}
-      <div className="fixed bottom-6 right-6 flex flex-col gap-3">
+      {/* <div className="fixed bottom-6 right-6 flex flex-col gap-3">
         <PatientAppointment
           organizationId={organizationId}
           patientId={patientId}
         />
-      </div>
+      </div> */}
     </div>
   );
 };
