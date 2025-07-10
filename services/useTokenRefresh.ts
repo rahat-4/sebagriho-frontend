@@ -15,14 +15,10 @@ export function useTokenRefresh() {
         });
 
         if (!response.ok) {
-          console.log("Token refresh failed, redirecting to login");
           router.push("/login");
           return;
         }
-
-        console.log("Token refreshed successfully");
       } catch (error) {
-        console.error("Token refresh error:", error);
         router.push("/login");
       }
     };

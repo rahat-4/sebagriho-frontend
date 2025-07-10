@@ -112,7 +112,6 @@ const MedicineMultiSelect = ({
           query ? `?search=${encodeURIComponent(query)}` : ""
         }`;
 
-        console.log("API URL:", url);
         const [status, response] = await getData(url);
 
         if (status === 200) {
@@ -147,7 +146,6 @@ const MedicineMultiSelect = ({
 
   // Initial fetch
   useEffect(() => {
-    console.log("Initial fetch triggered for organization:", organizationId);
     if (organizationId) {
       fetchMedicines();
     }
@@ -162,13 +160,11 @@ const MedicineMultiSelect = ({
       return;
     }
 
-    console.log("Setting up search timer for:", searchQuery);
     const timer = setTimeout(() => {
       fetchMedicines(searchQuery.trim());
     }, 300);
 
     return () => {
-      console.log("Clearing search timer");
       clearTimeout(timer);
     };
   }, [searchQuery, fetchMedicines, organizationId]);
@@ -189,12 +185,10 @@ const MedicineMultiSelect = ({
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
-    console.log("Search query changed to:", newValue);
     setSearchQuery(newValue);
   };
 
   const toggleDropdown = () => {
-    console.log("Toggling dropdown, current state:", open);
     setOpen(!open);
   };
 
@@ -384,8 +378,6 @@ export const PatientAppointment = ({
 
           if (key === "medicines" && Array.isArray(value)) {
             // Append each medicine UID separately instead of JSON stringifying
-
-            console.log("Appending medicines to formData:", value);
 
             value.forEach((medicine) => {
               if (typeof medicine === "string") {

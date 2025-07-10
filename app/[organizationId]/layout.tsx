@@ -57,7 +57,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       <SidebarInset>
         <SiteHeader displayTitle={displayTitle} />
 
-        <main className="flex-1 p-4">{children}</main>
+        <main className="">{children}</main>
       </SidebarInset>
     </SidebarProvider>
   );

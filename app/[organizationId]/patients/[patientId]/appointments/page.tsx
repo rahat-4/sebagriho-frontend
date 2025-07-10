@@ -134,9 +134,6 @@ const PatientAppointmentList = () => {
         setPatientName(userResponse.name);
       }
 
-      console.log("=========status========", status);
-      console.log("=========response========", response);
-
       if (status === 200) {
         let appointmentData;
         if (response.results) {

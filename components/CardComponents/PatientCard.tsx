@@ -56,7 +56,6 @@ const PatientCard = ({ organizationId, patientId }: PatientsProps) => {
           setError("Failed to fetch organizations");
           return;
         }
-        console.log("response", response);
       } catch (error: any) {
         setError(error.message || "Failed to fetch organizations");
       } finally {

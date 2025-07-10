@@ -13,7 +13,7 @@ import FilterComponents from "./components/FilterComponents";
 import AddPatientDialog from "./components/AddPatientComponents";
 import PatientCard from "./components/PatientCard";
 import { Patient } from "./components/PatientCard";
-import LoadingComponent from "@/components/LoadingComponent";
+import { LoadingComponent } from "@/components/LoadingComponent";
 
 const Patients = () => {
   const router = useRouter();
@@ -35,18 +35,15 @@ const Patients = () => {
         // setPatients(mockPatients);
         // setFilteredPatients(mockPatients);
 
-        console.log("organizationId", organizationId);
         // Uncomment for real API call
         const [status, response] = await getData(
           `/organization/homeopathy/${organizationId}/patients`
         );
 
-        console.log("------status----", status);
         if (status !== 200) {
           setError("Failed to fetch patients");
           return;
         }
-        console.log("------response----", response);
         // Convert keys from snake_case to camelCase
         // const convertedResponse: any = convertKeysToCamelCase(response);
         setPatients(response.results || []);

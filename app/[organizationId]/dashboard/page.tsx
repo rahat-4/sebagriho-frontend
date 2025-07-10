@@ -5,7 +5,7 @@ const Dashboard = async ({
 }: {
   params: { organizationId: string };
 }) => {
-  const organizationId = await params.organizationId;
+  const organizationId = params.organizationId;
 
   const [status, response] = await getData(
     `/organization/homeopathy/profile/${organizationId}`
@@ -13,7 +13,7 @@ const Dashboard = async ({
 
   if (status !== 200) {
     console.error("Failed to fetch organization data");
-    return notFound();
+    // return notFound();
   }
 
   return <div>Organization dashboard: {response.organization.name}</div>;
