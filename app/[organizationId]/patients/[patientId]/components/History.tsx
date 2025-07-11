@@ -1,9 +1,12 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { ParamValue } from "next/dist/server/request/params";
+
+import Link from "next/link";
+
 import {
-  BookOpen,
   FileText,
-  Dna,
   Calendar,
   Pill,
   Plus,
@@ -11,19 +14,15 @@ import {
   AlertCircle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
+import { getData } from "@/services/api";
 import { formatDate, formatTime } from "@/lib/utils";
-
-import { ParamValue } from "next/dist/server/request/params";
+import {
+  ErrorLoadingComponent,
+  LoadingComponent,
+} from "@/components/LoadingComponent";
 
 import { Appointment } from "./interface";
 
@@ -132,12 +131,48 @@ const AppointmentTimelineItem = ({
 };
 
 interface HistoryProps {
-  appointment: Appointment;
   patientId: ParamValue;
   organizationId: ParamValue;
 }
 
-const History = ({ appointment, patientId, organizationId }: HistoryProps) => {
+const History = ({ patientId, organizationId }: HistoryProps) => {
+  const [appointment, setAppointment] = useState<Appointment | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchCurrentAppointment = async () => {
+      try {
+        const [status, response] = await getData(
+          `/organization/homeopathy/${organizationId}/patients/${patientId}/appointments?recent=true`
+        );
+
+        if (status !== 200) {
+          setError("Failed to fetch appointment details");
+          return;
+        }
+
+        setAppointment(response);
+      } catch (error: any) {
+        setError(error.message || "Failed to fetch appointment details");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (organizationId && patientId) {
+      fetchCurrentAppointment();
+    }
+  }, [organizationId, patientId]);
+
+  if (loading) {
+    return <LoadingComponent name="Loading recent appointment..." />;
+  }
+
+  if (error) {
+    return <ErrorLoadingComponent message={"Appointment not found"} />;
+  }
+
   return (
     <div>
       {/* Appointment History */}
@@ -150,14 +185,19 @@ const History = ({ appointment, patientId, organizationId }: HistoryProps) => {
               </div>
               Recent
             </CardTitle>
-            <Button
-              variant="outline"
-              size="sm"
-              className="border-indigo-200 text-indigo-600 hover:bg-indigo-50 font-medium rounded-lg transition-all duration-200"
+            <Link
+              href={`/${organizationId}/patients/${patientId}/appointments`}
+              passHref
             >
-              <Calendar className="h-3 w-3" />
-              All Appointments
-            </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                className="border-indigo-200 text-indigo-600 hover:bg-indigo-50 font-medium rounded-lg transition-all duration-200"
+              >
+                <Calendar className="h-3 w-3" />
+                All Appointments
+              </Button>
+            </Link>
           </div>
         </CardHeader>
         <CardContent>

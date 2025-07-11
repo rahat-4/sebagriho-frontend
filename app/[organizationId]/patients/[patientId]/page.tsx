@@ -20,13 +20,11 @@ import Overview from "./components/Overview";
 import Medical from "./components/Medical";
 import History from "./components/History";
 
-import { Appointment } from "./components/interface";
 const PatientProfile = () => {
   const { organizationId, patientId } = useParams();
   const [patient, setPatient] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [appointment, setAppointment] = useState<Appointment | null>(null);
 
   const router = useRouter();
 
@@ -36,19 +34,6 @@ const PatientProfile = () => {
         const [status, response] = await getData(
           `/organization/homeopathy/${organizationId}/patients/${patientId}`
         );
-
-        const [appointmentStatus, appointmentResponse] = await getData(
-          `/organization/homeopathy/${organizationId}/patients/${patientId}/appointments?recent=true`
-        );
-
-        console.log(
-          "====================appointment=====================",
-          appointmentResponse
-        );
-
-        if (appointmentStatus === 200) {
-          setAppointment(appointmentResponse.results[0]);
-        }
 
         if (status !== 200) {
           setError("Failed to fetch patient details");
@@ -128,13 +113,7 @@ const PatientProfile = () => {
           {/* History Tab */}
           <TabsContent value="history" className="space-y-6">
             {/* Appointment Statistics */}
-            {appointment && (
-              <History
-                appointment={appointment}
-                patientId={patientId}
-                organizationId={organizationId}
-              />
-            )}
+            <History patientId={patientId} organizationId={organizationId} />
           </TabsContent>
         </Tabs>
       </div>

@@ -1,10 +1,18 @@
 "use client";
 
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
+
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { useParams } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
@@ -22,13 +30,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import {
   Search,
   Calendar,
@@ -245,13 +246,10 @@ const PatientAppointmentList = () => {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 mx-4">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-800">
-            Patient Appointments
-          </h1>
           {patientName && (
             <p className="text-slate-600 text-sm mt-1">
               Showing appointments for {patientName}
@@ -398,31 +396,19 @@ const PatientAppointmentList = () => {
               key={appointment.uid}
               className="hover:shadow-lg transition-shadow"
             >
-              <CardHeader className="pb-4">
+              <CardHeader>
                 <div className="flex items-start justify-between">
                   <div className="flex items-center gap-3">
                     <div className="p-2 bg-emerald-100 rounded-lg">
-                      <Calendar className="h-5 w-5 text-emerald-600" />
+                      <Calendar className="h-4 w-4 text-emerald-600" />
                     </div>
                     <div>
-                      <CardTitle className="text-lg">
+                      <CardTitle className="text-md">
                         {formatDate(appointment.created_at)}
                       </CardTitle>
-                      <p className="text-sm text-slate-600 flex items-center gap-1">
-                        <Clock className="h-3 w-3" />
-                        Last updated: {formatDate(appointment.updated_at)}
-                      </p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Badge
-                      className={cn(
-                        "text-xs",
-                        getStatusColor(appointment.status)
-                      )}
-                    >
-                      {appointment.status || "Active"}
-                    </Badge>
+                  <div className="flex items-center">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button
