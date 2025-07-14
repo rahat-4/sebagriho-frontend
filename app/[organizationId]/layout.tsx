@@ -32,11 +32,11 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         icon: User,
         url: `/${organization?.uid}/patients`,
       },
-      {
-        title: "Appointments",
-        icon: CalendarPlus2,
-        url: `${organization?.uid}/appointments`,
-      },
+      // {
+      //   title: "Appointments",
+      //   icon: CalendarPlus2,
+      //   url: `${organization?.uid}/appointments`,
+      // },
       {
         title: "Medicines",
         icon: Pill,
