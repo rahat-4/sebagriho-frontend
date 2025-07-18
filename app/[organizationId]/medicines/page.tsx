@@ -18,6 +18,8 @@ import {
 import { HomeopathicMedicine } from "./components/medicineinterface";
 import MedicineCard from "./components/MedicineCard";
 
+import AddHomeopathicMedicine from "./components/AddMedicine";
+
 interface FilterState {
   search: string;
   availability: "all" | "available" | "unavailable";
@@ -368,6 +370,9 @@ const HomeopathicMedicineList: React.FC = () => {
             ))
           )}
         </div>
+      </div>
+      <div className="fixed bottom-6 right-6 flex flex-col gap-3 md:hidden">
+        <AddHomeopathicMedicine />
       </div>
     </div>
   );

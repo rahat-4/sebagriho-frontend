@@ -23,19 +23,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import {
   Loader2,
   Plus,
   Check,
@@ -45,7 +32,7 @@ import {
   Pill,
   Activity,
 } from "lucide-react";
-import { useCallback, useState, useEffect } from "react";
+import { useCallback, useState, useEffect, useMemo } from "react";
 import { patientAppointmentSchema } from "@/schemas/PatientAppointment";
 import { RequiredLabel } from "@/components/RequiredLabel";
 import { camelToSnake } from "@/services/caseConverters";
@@ -66,10 +53,9 @@ type HomeoPatientAppointmentFormData = z.infer<typeof patientAppointmentSchema>;
 interface PatientAppointmentProps {
   organizationId: string;
   patientId: string;
-  onAppointmentCreated?: () => void; // Callback for redirect
+  onAppointmentCreated?: () => void;
 }
 
-// Updated Multi-select medicines component
 const MedicineMultiSelect = ({
   value = [],
   onChange,
@@ -85,25 +71,14 @@ const MedicineMultiSelect = ({
   const [searchQuery, setSearchQuery] = useState("");
   const [error, setError] = useState<string | null>(null);
 
-  // Close dropdown when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as Element;
-      if (!target.closest("[data-medicine-dropdown]")) {
-        setOpen(false);
-      }
-    };
+  // Memoize selected UIDs for performance
+  const selectedUids = useMemo(() => new Set(value.map((m) => m.uid)), [value]);
 
-    if (open) {
-      document.addEventListener("mousedown", handleClickOutside);
-      return () =>
-        document.removeEventListener("mousedown", handleClickOutside);
-    }
-  }, [open]);
-
-  // Fetch medicines from API with better error handling
+  // Optimized fetch function
   const fetchMedicines = useCallback(
-    async (query: string = "") => {
+    async (query = "") => {
+      if (!organizationId) return;
+
       setLoading(true);
       setError(null);
 
@@ -111,25 +86,13 @@ const MedicineMultiSelect = ({
         const url = `/organization/homeopathy/${organizationId}/medicines${
           query ? `?search=${encodeURIComponent(query)}` : ""
         }`;
-
         const [status, response] = await getData(url);
 
         if (status === 200) {
-          // Try different possible data structures
-          let medicineData;
-          if (response.results) {
-            medicineData = response.results;
-          } else if (response.data) {
-            medicineData = response.data;
-          } else if (Array.isArray(response)) {
-            medicineData = response;
-          } else {
-            medicineData = [];
-          }
-
+          const medicineData =
+            response.results || response.data || response || [];
           setMedicines(Array.isArray(medicineData) ? medicineData : []);
         } else {
-          console.error("Failed to fetch medicines:", status, response);
           setError(`Failed to load medicines (Status: ${status})`);
           setMedicines([]);
         }
@@ -144,159 +107,146 @@ const MedicineMultiSelect = ({
     [organizationId]
   );
 
-  // Initial fetch
+  // Debounced search effect
   useEffect(() => {
-    if (organizationId) {
-      fetchMedicines();
-    }
-  }, [fetchMedicines, organizationId]);
+    const timer = setTimeout(
+      () => {
+        fetchMedicines(searchQuery.trim());
+      },
+      searchQuery ? 300 : 0
+    );
 
-  // Debounced search with cleanup
+    return () => clearTimeout(timer);
+  }, [searchQuery, fetchMedicines]);
+
+  // Close dropdown on outside click
   useEffect(() => {
-    if (!organizationId) return;
+    if (!open) return;
 
-    if (!searchQuery.trim()) {
-      fetchMedicines();
-      return;
-    }
-
-    const timer = setTimeout(() => {
-      fetchMedicines(searchQuery.trim());
-    }, 300);
-
-    return () => {
-      clearTimeout(timer);
+    const handleClickOutside = (event: MouseEvent) => {
+      if (!(event.target as Element).closest("[data-medicine-dropdown]")) {
+        setOpen(false);
+      }
     };
-  }, [searchQuery, fetchMedicines, organizationId]);
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [open]);
 
   const handleSelect = (medicine: Medicine) => {
-    const isSelected = value.some((m) => m.uid === medicine.uid);
+    const isSelected = selectedUids.has(medicine.uid);
     if (isSelected) {
       onChange(value.filter((m) => m.uid !== medicine.uid));
     } else {
       onChange([...value, medicine]);
     }
-    // Keep dropdown open for multiple selections
   };
 
   const removeMedicine = (medicineId: string) => {
     onChange(value.filter((m) => m.uid !== medicineId));
   };
 
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = e.target.value;
-    setSearchQuery(newValue);
-  };
-
-  const toggleDropdown = () => {
-    setOpen(!open);
-  };
+  const displayText =
+    value.length === 0
+      ? "Select medicines..."
+      : `${value.length} medicine(s) selected`;
 
   return (
-    <div className="space-y-2" data-medicine-dropdown>
+    <div className="relative space-y-2" data-medicine-dropdown>
       {/* Dropdown trigger */}
-      <div className="relative">
-        <Button
-          type="button"
-          variant="outline"
-          onClick={toggleDropdown}
-          className="w-full justify-between min-h-[40px] h-auto rounded-lg"
-          aria-expanded={open}
+      <Button
+        type="button"
+        variant="outline"
+        onClick={() => setOpen(!open)}
+        className="w-full justify-between min-h-[40px] rounded-lg"
+        aria-expanded={open}
+      >
+        <span
+          className={cn(
+            "text-sm",
+            value.length === 0 && "text-muted-foreground"
+          )}
         >
-          <div className="flex flex-wrap gap-1">
-            {value.length === 0 ? (
-              <span className="text-muted-foreground text-sm">
-                Select medicines...
-              </span>
+          {displayText}
+        </span>
+        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+      </Button>
+
+      {/* Dropdown content */}
+      {open && (
+        <div className="absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-hidden">
+          {/* Search input */}
+          <div className="p-2 border-b border-gray-200">
+            <Input
+              type="text"
+              placeholder="Search medicines..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="h-8 text-sm"
+              autoFocus
+            />
+          </div>
+
+          {/* Results */}
+          <div className="max-h-48 overflow-y-auto">
+            {loading ? (
+              <div className="flex items-center justify-center p-4">
+                <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                <span className="text-sm">Loading medicines...</span>
+              </div>
+            ) : error ? (
+              <div className="p-4 text-center text-sm text-red-600">
+                {error}
+                <Button
+                  variant="link"
+                  size="sm"
+                  onClick={() => fetchMedicines(searchQuery)}
+                  className="ml-2 h-auto p-0"
+                >
+                  Retry
+                </Button>
+              </div>
+            ) : medicines.length === 0 ? (
+              <div className="p-4 text-center text-sm text-muted-foreground">
+                {searchQuery
+                  ? `No medicines found for "${searchQuery}"`
+                  : "No medicines available"}
+              </div>
             ) : (
-              <span className="text-sm">
-                {value.length} medicine(s) selected
-              </span>
+              <div className="py-1">
+                {medicines.map((medicine) => {
+                  const isSelected = selectedUids.has(medicine.uid);
+                  return (
+                    <button
+                      key={medicine.uid}
+                      type="button"
+                      onClick={() => handleSelect(medicine)}
+                      className="w-full px-3 py-2 text-left hover:bg-gray-100 flex items-center transition-colors"
+                    >
+                      <Check
+                        className={cn(
+                          "mr-2 h-4 w-4",
+                          isSelected ? "opacity-100 text-blue-600" : "opacity-0"
+                        )}
+                      />
+                      <div className="flex flex-col flex-1 min-w-0">
+                        <span className="font-medium text-sm truncate">
+                          {medicine.name}
+                        </span>
+                        {medicine.power && (
+                          <span className="text-xs text-muted-foreground">
+                            Power: {medicine.power}
+                          </span>
+                        )}
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
             )}
           </div>
-          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-        </Button>
-
-        {/* Dropdown content */}
-        {open && (
-          <div className="absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-hidden">
-            {/* Search input */}
-            <div className="p-2 border-b border-gray-200">
-              <Input
-                type="text"
-                placeholder="Search medicines..."
-                value={searchQuery}
-                onChange={handleSearchChange}
-                className="h-8 text-sm"
-                autoFocus
-              />
-            </div>
-
-            {/* Results */}
-            <div className="max-h-48 overflow-y-auto">
-              {loading ? (
-                <div className="flex items-center justify-center p-4">
-                  <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                  <span className="text-sm">Loading medicines...</span>
-                </div>
-              ) : error ? (
-                <div className="p-4 text-center text-sm text-red-600">
-                  {error}
-                  <Button
-                    variant="link"
-                    size="sm"
-                    onClick={() => fetchMedicines(searchQuery)}
-                    className="ml-2 h-auto p-0"
-                  >
-                    Retry
-                  </Button>
-                </div>
-              ) : medicines.length === 0 ? (
-                <div className="p-4 text-center text-sm text-muted-foreground">
-                  {searchQuery
-                    ? `No medicines found for "${searchQuery}"`
-                    : "No medicines available"}
-                </div>
-              ) : (
-                <div className="py-1">
-                  {medicines.map((medicine) => {
-                    const isSelected = value.some(
-                      (m) => m.uid === medicine.uid
-                    );
-                    return (
-                      <button
-                        key={medicine.uid}
-                        type="button"
-                        onClick={() => handleSelect(medicine)}
-                        className="w-full px-3 py-2 text-left hover:bg-gray-100 flex items-center cursor-pointer transition-colors"
-                      >
-                        <Check
-                          className={cn(
-                            "mr-2 h-4 w-4",
-                            isSelected
-                              ? "opacity-100 text-blue-600"
-                              : "opacity-0"
-                          )}
-                        />
-                        <div className="flex flex-col flex-1 min-w-0">
-                          <span className="font-medium text-sm truncate">
-                            {medicine.name}
-                          </span>
-                          {medicine.power && (
-                            <span className="text-xs text-muted-foreground">
-                              Power: {medicine.power}
-                            </span>
-                          )}
-                        </div>
-                      </button>
-                    );
-                  })}
-                </div>
-              )}
-            </div>
-          </div>
-        )}
-      </div>
+        </div>
+      )}
 
       {/* Selected medicines display */}
       {value.length > 0 && (
@@ -332,6 +282,37 @@ const MedicineMultiSelect = ({
   );
 };
 
+// Form field configuration
+const FORM_FIELDS = [
+  {
+    name: "symptoms" as const,
+    label: "Symptoms",
+    icon: <Activity className="w-4 h-4 text-red-500" />,
+    required: true,
+    type: "textarea",
+    placeholder: "Describe the patient's symptoms in detail...",
+    rows: 4,
+  },
+  {
+    name: "treatmentEffectiveness" as const,
+    label: "Treatment Effectiveness",
+    icon: <Activity className="w-4 h-4 text-blue-500" />,
+    required: false,
+    type: "textarea",
+    placeholder:
+      "Describe the effectiveness of previous treatments (optional)...",
+    rows: 3,
+  },
+  {
+    name: "appointmentFile" as const,
+    label: "Appointment Files",
+    icon: <FileText className="w-4 h-4 text-orange-500" />,
+    required: false,
+    type: "file",
+    accept: "image/*,.pdf,.doc,.docx",
+  },
+] as const;
+
 export const PatientAppointment = ({
   organizationId,
   patientId,
@@ -354,11 +335,10 @@ export const PatientAppointment = ({
     },
   });
 
-  // Reset form and message when dialog closes
+  // Reset form when dialog closes
   const handleDialogChange = (open: boolean) => {
     setIsOpen(open);
     if (!open) {
-      // Reset form when dialog closes
       form.reset();
       setMessage(null);
     }
@@ -371,31 +351,23 @@ export const PatientAppointment = ({
 
       const formData = new FormData();
 
-      // Handle form data conversion
+      // Process form data
       Object.entries(data).forEach(([key, value]) => {
-        if (value !== "" && value !== null && value !== undefined) {
-          const snakeCaseKey = camelToSnake(key);
+        if (value === "" || value === null || value === undefined) return;
 
-          if (key === "medicines" && Array.isArray(value)) {
-            // Append each medicine UID separately instead of JSON stringifying
+        const snakeCaseKey = camelToSnake(key);
 
-            value.forEach((medicine) => {
-              if (typeof medicine === "string") {
-                // If it's already transformed to UID string by Zod
-                formData.append(snakeCaseKey, medicine);
-              } else if (medicine && medicine.uid) {
-                // If it's still a medicine object
-                formData.append(snakeCaseKey, medicine.uid);
-              }
-            });
-          } else if (key === "appointmentFile" && value instanceof FileList) {
-            // Handle file upload
-            if (value.length > 0) {
-              formData.append(snakeCaseKey, value[0]);
-            }
-          } else {
-            formData.append(snakeCaseKey, String(value));
+        if (key === "medicines" && Array.isArray(value)) {
+          value.forEach((medicine) => {
+            const uid = typeof medicine === "string" ? medicine : medicine?.uid;
+            if (uid) formData.append(snakeCaseKey, uid);
+          });
+        } else if (key === "appointmentFile" && value instanceof FileList) {
+          if (value.length > 0) {
+            formData.append(snakeCaseKey, value[0]);
           }
+        } else {
+          formData.append(snakeCaseKey, String(value));
         }
       });
 
@@ -406,28 +378,15 @@ export const PatientAppointment = ({
         );
 
         if (status === 200 || status === 201) {
-          // Success
           setMessage({
             type: "success",
             text: "Appointment created successfully!",
           });
+          form.reset();
 
-          // Reset form
-          form.reset({
-            symptoms: "",
-            treatmentEffectiveness: "",
-            appointmentFile: null,
-            medicines: [],
-          });
-
-          // Close dialog and redirect after a short delay
           setTimeout(() => {
             setIsOpen(false);
-
-            // Call the redirect callback if provided
-            if (onAppointmentCreated) {
-              onAppointmentCreated();
-            }
+            onAppointmentCreated?.();
             setMessage(null);
           }, 1500);
         } else {
@@ -473,7 +432,7 @@ export const PatientAppointment = ({
       </DialogTrigger>
 
       <DialogContent className="max-w-[95vw] sm:max-w-[600px] max-h-[90vh] rounded-2xl border-0 shadow-2xl bg-gradient-to-br from-white to-slate-50">
-        <DialogHeader className="pb-2">
+        <DialogHeader className="gap-0">
           <DialogTitle className="text-lg font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent">
             Patient Appointment
           </DialogTitle>
@@ -484,7 +443,10 @@ export const PatientAppointment = ({
 
         <div className="overflow-y-auto max-h-[calc(90vh-180px)] pr-2">
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="space-y-4 pb-2"
+            >
               {/* Message Alert */}
               {message && (
                 <Alert
@@ -509,84 +471,53 @@ export const PatientAppointment = ({
                 </Alert>
               )}
 
-              {/* Symptoms Field */}
-              <FormField
-                control={form.control}
-                name="symptoms"
-                render={({ field }) => (
-                  <FormItem>
-                    <RequiredLabel
-                      htmlFor="symptoms"
-                      required={true}
-                      icon={<Activity className="w-4 h-4 text-red-500" />}
-                    >
-                      Symptoms
-                    </RequiredLabel>
-                    <FormControl>
-                      <Textarea
-                        placeholder="Describe the patient's symptoms in detail..."
-                        id="symptoms"
-                        rows={4}
-                        {...field}
-                        value={field.value || ""}
-                        className="text-sm resize-none border-slate-200 focus:border-emerald-500 focus:ring-emerald-500 rounded-lg"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              {/* Effectiveness Field */}
-              <FormField
-                control={form.control}
-                name="treatmentEffectiveness"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="flex items-center text-sm font-semibold text-slate-700">
-                      <Activity className="w-4 h-4 text-blue-500" />
-                      Treatment Effectiveness
-                    </FormLabel>
-                    <FormControl>
-                      <Textarea
-                        placeholder="Describe the effectiveness of previous treatments (optional)..."
-                        id="effectiveness"
-                        rows={3}
-                        {...field}
-                        value={field.value || ""}
-                        className="text-sm resize-none border-slate-200 focus:border-blue-500 focus:ring-blue-500 rounded-lg"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              {/* File Upload Field */}
-              <FormField
-                control={form.control}
-                name="appointmentFile"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="flex items-center text-sm font-semibold text-slate-700">
-                      <FileText className="w-4 h-4 text-orange-500" />
-                      Appointment Files
-                    </FormLabel>
-                    <FormControl>
-                      <div className="relative">
-                        <Input
-                          id="appointmentFile"
-                          type="file"
-                          accept="image/*,.pdf,.doc,.docx"
-                          onChange={(e) => field.onChange(e.target.files)}
-                          className="text-sm border-slate-200 focus:border-orange-500 focus:ring-orange-500 rounded-lg file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-orange-50 file:text-orange-700 hover:file:bg-orange-100"
-                        />
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              {/* Dynamic form fields */}
+              {FORM_FIELDS.map((fieldConfig) => (
+                <FormField
+                  key={fieldConfig.name}
+                  control={form.control}
+                  name={fieldConfig.name}
+                  render={({ field }) => (
+                    <FormItem>
+                      {fieldConfig.required ? (
+                        <RequiredLabel
+                          htmlFor={fieldConfig.name}
+                          required={true}
+                          icon={fieldConfig.icon}
+                        >
+                          {fieldConfig.label}
+                        </RequiredLabel>
+                      ) : (
+                        <FormLabel className="flex items-center text-sm font-semibold text-slate-700">
+                          {fieldConfig.icon}
+                          {fieldConfig.label}
+                        </FormLabel>
+                      )}
+                      <FormControl>
+                        {fieldConfig.type === "textarea" ? (
+                          <Textarea
+                            placeholder={fieldConfig.placeholder}
+                            id={fieldConfig.name}
+                            rows={fieldConfig.rows}
+                            {...field}
+                            value={field.value || ""}
+                            className="text-sm resize-none border-slate-200 rounded-lg"
+                          />
+                        ) : (
+                          <Input
+                            id={fieldConfig.name}
+                            type="file"
+                            accept={fieldConfig.accept}
+                            onChange={(e) => field.onChange(e.target.files)}
+                            className="text-sm border-slate-200 rounded-lg file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-orange-50 file:text-orange-700 hover:file:bg-orange-100"
+                          />
+                        )}
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              ))}
 
               {/* Medicines Field */}
               <FormField
@@ -615,16 +546,16 @@ export const PatientAppointment = ({
                 <Button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-semibold py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-semibold py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50"
                 >
                   {isLoading ? (
                     <>
-                      <Loader2 className="h-5 w-5 animate-spin" />
+                      <Loader2 className="h-5 w-5 animate-spin mr-2" />
                       Creating Appointment...
                     </>
                   ) : (
                     <>
-                      <Plus className="h-5 w-5" />
+                      <Plus className="h-5 w-5 mr-2" />
                       Create Appointment
                     </>
                   )}

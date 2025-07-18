@@ -15,7 +15,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Calendar as CalendarIcon, X } from "lucide-react";
+import { Calendar as CalendarIcon, X, ArrowUpDown } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 
@@ -66,7 +66,7 @@ export const AppointmentFilters = ({
   return (
     <div>
       {/* Filters */}
-      <div className="flex flex-row justify-between gap-2">
+      <div className="flex flex-row justify-between">
         {/* Date Range Picker */}
         <Popover open={showDatePicker} onOpenChange={setShowDatePicker}>
           <PopoverTrigger asChild>
@@ -122,9 +122,7 @@ export const AppointmentFilters = ({
           value={sortOrder}
           onValueChange={(value) => setSortOrder(value as "asc" | "desc")}
         >
-          <SelectTrigger className="w-40" size="sm">
-            <SelectValue placeholder="Sort by" />
-          </SelectTrigger>
+          <SelectTrigger size="sm">Sort by</SelectTrigger>
           <SelectContent>
             <SelectItem value="desc">Newest First</SelectItem>
             <SelectItem value="asc">Oldest First</SelectItem>

@@ -20,6 +20,8 @@ import Overview from "./components/Overview";
 import Medical from "./components/Medical";
 import History from "./components/History";
 
+import { PatientAppointment } from "../components/AddAppointment";
+
 const PatientProfile = () => {
   const { organizationId, patientId } = useParams();
   const [patient, setPatient] = useState(null);
@@ -116,6 +118,12 @@ const PatientProfile = () => {
             <History patientId={patientId} organizationId={organizationId} />
           </TabsContent>
         </Tabs>
+      </div>
+      <div className="fixed bottom-6 right-6 flex flex-col gap-3 md:hidden">
+        <PatientAppointment
+          organizationId={organizationId}
+          patientId={patientId}
+        />
       </div>
     </div>
   );

@@ -165,7 +165,7 @@ const PatientAppointmentList = () => {
   }
 
   return (
-    <div className="space-y-3 mx-4">
+    <div className="space-y-3 mx-8">
       {/* Patient Information Header */}
       {patient && <PatientInfoCard patient={patient} />}
 

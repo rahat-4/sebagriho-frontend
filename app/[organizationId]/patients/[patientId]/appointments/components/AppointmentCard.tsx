@@ -53,7 +53,7 @@ export const AppointmentCard = ({
               <CalendarIcon className="h-4 w-4 text-emerald-600" />
             </div>
             <div>
-              <CardTitle className="text-md">
+              <CardTitle className="text-[15px]">
                 {formatDate(appointment.created_at)}
               </CardTitle>
             </div>

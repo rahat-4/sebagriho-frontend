@@ -31,11 +31,6 @@ const Patients = () => {
   useEffect(() => {
     const fetchPatients = async () => {
       try {
-        // // Using mock data for demonstration
-        // setPatients(mockPatients);
-        // setFilteredPatients(mockPatients);
-
-        // Uncomment for real API call
         const [status, response] = await getData(
           `/organization/homeopathy/${organizationId}/patients`
         );
@@ -44,8 +39,6 @@ const Patients = () => {
           setError("Failed to fetch patients");
           return;
         }
-        // Convert keys from snake_case to camelCase
-        // const convertedResponse: any = convertKeysToCamelCase(response);
         setPatients(response.results || []);
         setFilteredPatients(response || []);
       } catch (error: any) {
