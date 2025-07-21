@@ -9,7 +9,6 @@ import {
   Hash,
   Calendar,
   Clock,
-  ShoppingCart,
   Pill,
   Info,
 } from "lucide-react";
@@ -30,7 +29,7 @@ interface InfoItemProps {
 const InfoItem = ({ label, value, icon, className }: InfoItemProps) => (
   <div
     className={clsx(
-      "flex items-center gap-3 px-3 p-1 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors duration-200",
+      "flex items-center gap-3 px-3 p-[3px] bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors duration-200",
       className
     )}
   >
@@ -42,7 +41,7 @@ const InfoItem = ({ label, value, icon, className }: InfoItemProps) => (
       <p className="text-xs text-gray-500 uppercase tracking-wide font-medium">
         {label}
       </p>
-      <p className="text-sm text-gray-900 font-medium">{value}</p>
+      <p className="text-xs text-gray-900 font-medium">{value}</p>
     </div>
   </div>
 );
@@ -50,7 +49,31 @@ const InfoItem = ({ label, value, icon, className }: InfoItemProps) => (
 const MedicineCard: React.FC<{ medicine: HomeopathicMedicine }> = ({
   medicine,
 }) => {
-  const expirationStatus = "tt";
+  const isExpired = (date: string): boolean => {
+    return new Date(date) < new Date();
+  };
+
+  const isExpiringSoon = (date: string): boolean => {
+    const expirationDate = new Date(date);
+    const today = new Date();
+    const thirtyDaysFromNow = new Date(
+      today.getTime() + 30 * 24 * 60 * 60 * 1000
+    );
+    return expirationDate <= thirtyDaysFromNow && expirationDate >= today;
+  };
+
+  // Determine expiration status
+  const getExpirationStatus = () => {
+    if (isExpired(medicine.expiration_date)) {
+      return "expired";
+    }
+    if (isExpiringSoon(medicine.expiration_date)) {
+      return "expiring_soon";
+    }
+    return "valid";
+  };
+
+  const expirationStatus = getExpirationStatus();
 
   const getStatusBadge = () => {
     if (!medicine.is_available) {
@@ -101,36 +124,62 @@ const MedicineCard: React.FC<{ medicine: HomeopathicMedicine }> = ({
     return "text-emerald-600 font-semibold";
   };
 
+  // Format dates
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+  };
+
   return (
     <Card className="gap-2 group hover:shadow-xl transition-all duration-300 border-0 shadow-md bg-gradient-to-br from-white to-gray-50/50 overflow-hidden">
       <CardHeader>
         <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
           <div className="flex items-start gap-3">
-            <div className="p-2 bg-blue-100 rounded-lg group-hover:bg-blue-200 transition-colors duration-200">
-              <Pill className="w-4 h-4 text-blue-600" />
+            {/* Avatar or Medicine Icon */}
+            <div className="relative">
+              {medicine.avatar ? (
+                <img
+                  src={medicine.avatar}
+                  alt={medicine.name}
+                  className="w-12 h-12 rounded-lg object-cover border-2 border-blue-100 group-hover:border-blue-200 transition-colors duration-200"
+                />
+              ) : (
+                <div className="p-2 bg-blue-100 rounded-lg group-hover:bg-blue-200 transition-colors duration-200">
+                  <Pill className="w-8 h-8 text-blue-600" />
+                </div>
+              )}
             </div>
+
             <div className="flex-1 min-w-0">
-              <h3 className="text-lg font-bold text-gray-900 group-hover:text-blue-600 transition-colors duration-200">
+              <h3 className="text-md font-bold text-gray-900 group-hover:text-blue-600 transition-colors duration-200">
                 {medicine.name}
               </h3>
-              <p className="text-sm font-medium text-blue-600 bg-blue-50 px-2 rounded-md inline-block">
+              <p className="text-xs font-medium text-blue-600 bg-blue-50 px-2 py-1 rounded-md inline-block">
                 Power: {medicine.power}
               </p>
             </div>
-          </div>
-          <div className="flex items-center gap-2 flex-shrink-0">
-            {getStatusBadge()}
+            <div className="flex items-center flex-shrink-0">
+              {getStatusBadge()}
+            </div>
           </div>
         </div>
       </CardHeader>
 
-      <CardContent className="space-y-1">
+      <CardContent className="space-y-2 pt-0">
         {/* Description */}
-        <p className="text-gray-700 leading-relaxed text-xs">
-          {medicine.description}
-        </p>
-
-        <Separator className="bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
+        {medicine.description && (
+          <div className="bg-blue-50 p-2 rounded-lg">
+            <div className="flex items-start gap-1.5">
+              <Info className="w-3 h-3 text-blue-600 mt-0.5 flex-shrink-0" />
+              <p className="text-gray-700 leading-relaxed text-xs">
+                {medicine.description}
+              </p>
+            </div>
+          </div>
+        )}
 
         {/* Details Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-1">
@@ -145,30 +194,52 @@ const MedicineCard: React.FC<{ medicine: HomeopathicMedicine }> = ({
               label="Quantity"
               value={`${medicine.total_quantity} units`}
               icon={Package}
-            />
-          </div>
-
-          <div className="space-y-1">
-            <InfoItem
-              label="Unit Price"
-              value={`$${medicine.unit_price}`}
-              icon={DollarSign}
-              className="bg-emerald-50 hover:bg-emerald-100"
+              className={
+                medicine.total_quantity === 0
+                  ? "bg-red-50 hover:bg-red-100"
+                  : ""
+              }
             />
 
             <InfoItem label="Batch" value={medicine.batch_number} icon={Hash} />
           </div>
+
+          <div className="space-y-1">
+            <InfoItem
+              label="Price"
+              value={`${medicine.unit_price}`}
+              icon={DollarSign}
+              className="bg-emerald-50 hover:bg-emerald-100"
+            />
+
+            <InfoItem
+              label="Expires"
+              value={formatDate(medicine.expiration_date)}
+              icon={Calendar}
+              className={
+                expirationStatus === "expired"
+                  ? "bg-red-50 hover:bg-red-100"
+                  : expirationStatus === "expiring_soon"
+                  ? "bg-amber-50 hover:bg-amber-100"
+                  : ""
+              }
+            />
+
+            <InfoItem
+              label="Added"
+              value={formatDate(medicine.created_at)}
+              icon={Clock}
+            />
+          </div>
         </div>
 
-        <Separator className="bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
-
-        {/* Footer */}
-        <div className="text-sm text-gray-600 flex items-center gap-2">
-          <Calendar className="w-4 h-4" />
-          <span>
-            Expires: {new Date(medicine.expiration_date).toLocaleDateString()}
-          </span>
-        </div>
+        {/* Footer with last updated */}
+        {medicine.updated_at !== medicine.created_at && (
+          <div className="text-xs text-gray-500 flex items-center gap-1 pt-1 border-t border-gray-100">
+            <Clock className="w-3 h-3" />
+            <span>Updated: {formatDate(medicine.updated_at)}</span>
+          </div>
+        )}
       </CardContent>
     </Card>
   );
