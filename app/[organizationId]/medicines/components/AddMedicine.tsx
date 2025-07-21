@@ -44,12 +44,18 @@ import { postData } from "@/services/api";
 import { cn } from "@/lib/utils";
 
 import { homeopathicMedicineSchema } from "@/schemas/MedicineSchema";
-import { ParamValue } from "next/dist/server/request/params";
 
 type HomeopathicMedicineForm = z.infer<typeof homeopathicMedicineSchema>;
 
 // Form field configuration
 const FORM_FIELDS = [
+  {
+    name: "is_available" as const,
+    label: "Medicine is currently available",
+    icon: <Package className="w-4 h-4 text-green-500" />,
+    required: true,
+    type: "checkbox",
+  },
   {
     name: "avatar" as const,
     label: "Medicine Image",
@@ -67,20 +73,20 @@ const FORM_FIELDS = [
     placeholder: "Enter medicine name",
   },
   {
-    name: "power" as const,
-    label: "Power",
-    icon: <Pill className="w-4 h-4 text-blue-500" />,
-    required: false,
-    type: "text",
-    placeholder: "Enter power (e.g., 30C, 200C)",
-  },
-  {
     name: "expiration_date" as const,
     label: "Expiration Date",
     icon: <Calendar className="w-4 h-4 text-red-500" />,
     required: true,
     type: "date",
     placeholder: "Enter expiration date",
+  },
+  {
+    name: "power" as const,
+    label: "Power",
+    icon: <Pill className="w-4 h-4 text-blue-500" />,
+    required: false,
+    type: "text",
+    placeholder: "Enter power (e.g., 30C, 200C)",
   },
   {
     name: "manufacturer" as const,
@@ -123,14 +129,6 @@ const FORM_FIELDS = [
     type: "textarea",
     placeholder: "Describe the medicine in detail...",
     rows: 3,
-  },
-  {
-    name: "is_available" as const,
-    label: "Medicine is currently available",
-    icon: <Package className="w-4 h-4 text-green-500" />,
-    required: true,
-    type: "checkbox",
-    placeholder: "Is Available",
   },
 ] as const;
 
@@ -363,7 +361,6 @@ const AddHomeopathicMedicine = ({
                             id={fieldConfig.name}
                             type="number"
                             placeholder={fieldConfig.placeholder}
-                            step={fieldConfig.step}
                             min="0"
                             {...field}
                             value={field.value || ""}
