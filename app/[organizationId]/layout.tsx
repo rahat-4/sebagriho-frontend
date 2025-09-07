@@ -3,7 +3,7 @@
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 
-import { Pill, LayoutDashboard, CalendarPlus2, User } from "lucide-react";
+import { Pill, LayoutDashboard, User } from "lucide-react";
 
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import AppSidebar from "@/components/SidebarComponents/AppSidebar";
@@ -45,11 +45,17 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     ],
   };
 
-  const company = organization || {
-    name: "Sebagriho",
-    logo: SebagrihoLogo.src,
-    title: "Healthcare Everywhere",
-  };
+  const company = organization
+    ? {
+        name: organization.name,
+        logo: organization.logo?.url,
+        title: organization.title,
+      }
+    : {
+        name: "Sebagriho",
+        logo: SebagrihoLogo.src,
+        title: "Healthcare everywhere",
+      };
 
   return (
     <SidebarProvider>

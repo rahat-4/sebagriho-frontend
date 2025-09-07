@@ -1,11 +1,11 @@
-import { notFound } from "next/navigation";
 import { getData } from "@/services/api";
 const Dashboard = async ({
   params,
 }: {
   params: { organizationId: string };
 }) => {
-  const organizationId = params.organizationId;
+  const resolvedParams = await params;
+  const organizationId = resolvedParams.organizationId;
 
   const [status, response] = await getData(
     `/organization/homeopathy/profile/${organizationId}`

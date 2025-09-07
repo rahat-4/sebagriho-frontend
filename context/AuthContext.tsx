@@ -37,7 +37,7 @@ interface Organization {
   slug: string;
   name: string;
   title: string | null;
-  logo: string | null;
+  logo: { url: string } | null;
   subdomain: string | null;
   organization_type: OrganizationType;
   status: OrganizationStatus;
@@ -75,7 +75,6 @@ interface LoginCredentials {
 interface AuthContextType {
   user: User | null;
   organization: Organization | null;
-  isAuthenticated: boolean;
   isLoading: boolean;
   login: (credentials: LoginCredentials) => Promise<{
     success: boolean;
@@ -91,7 +90,6 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [organization, setOrganization] = useState<Organization | null>(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
@@ -103,15 +101,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         const { organization, ...userOnly } = response;
         setUser(userOnly);
         setOrganization(organization);
-
-        setIsAuthenticated(true);
-      } else {
-        setUser(null);
-        setIsAuthenticated(false);
       }
     } catch {
       setUser(null);
-      setIsAuthenticated(false);
+      setOrganization(null);
     } finally {
       setIsLoading(false);
     }
@@ -145,7 +138,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       return {
         success: true,
-        message: `Welcome to Sebagriho!`, // This message is shown after successful login
+        message: `Welcome back, ${response.user_name}!`,
       };
     } catch (error) {
       console.error("Login failed:", error);
@@ -166,21 +159,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       console.error("Logout failed:", error);
     } finally {
       setUser(null);
-      setIsAuthenticated(false);
       router.push("/login");
     }
   };
-
-  useEffect(() => {
-    checkAuth();
-  }, []);
 
   return (
     <AuthContext.Provider
       value={{
         user,
         organization,
-        isAuthenticated,
         isLoading,
         login,
         logout,

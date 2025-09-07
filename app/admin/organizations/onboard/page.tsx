@@ -15,17 +15,17 @@ import AddOrganization from "@/components/Organizations/AddOrganization";
 const OrganizationRegistration = () => {
   const [step, setStep] = useState(1);
   const router = useRouter();
-  const { isAuthenticated, user, isLoading } = useAuth();
+  const { user, isLoading } = useAuth();
 
   useEffect(() => {
-    if (!isLoading && (!isAuthenticated || user?.is_admin !== true)) {
+    if (!isLoading && user?.is_admin !== true) {
       router.replace("/login"); // Replace this later
     }
-  }, [isAuthenticated, isLoading, user, router]);
+  }, [isLoading, user, router]);
 
   // ⛔ Prevent rendering before auth status is known
   if (isLoading) return <p>Checking authentication...</p>; // Add loading animation later
-  if (!isAuthenticated || user?.is_admin !== true) return null;
+  if (user?.is_admin !== true) return null;
 
   const completeRegistration = () => {
     router.push("/admin/organizations");

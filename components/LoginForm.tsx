@@ -81,7 +81,7 @@ const socialLogins = [
 ];
 
 const LoginForm = () => {
-  const { login, user, organization, isAuthenticated } = useAuth();
+  const { login, user, organization } = useAuth();
   const router = useRouter();
 
   // State management for form fields and UI states
@@ -107,19 +107,20 @@ const LoginForm = () => {
 
   // ✅ Handle navigation when user state updates
   useEffect(() => {
-    if (loginSuccess && isAuthenticated && user) {
+    console.log("----------------------", organization?.logo);
+    if (loginSuccess && user) {
       const timer = setTimeout(() => {
         if (user.is_admin === true) {
           router.push(`/admin`);
         } else {
           router.replace(`/${organization?.uid}`);
         }
-        setLoginSuccess(false); // Reset flag
+        setLoginSuccess(false);
       }, 1500);
 
       return () => clearTimeout(timer);
     }
-  }, [loginSuccess, isAuthenticated, user, router]);
+  }, [loginSuccess, user, router]);
 
   const onSubmit = useCallback(
     async (data: LoginFormData) => {
@@ -160,10 +161,9 @@ const LoginForm = () => {
         // Success
         setMessage({
           type: "success",
-          text: result.message || `Welcome to Sebagriho, ${user?.name}!`,
+          text: result.message || "Login successful!",
         });
 
-        // ✅ Set flag to trigger navigation when user updates
         setLoginSuccess(true);
       } catch (error) {
         setMessage({
