@@ -138,7 +138,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       return {
         success: true,
-        message: `Welcome back, ${response.user_name}!`,
+        message: `Welcome back, ${user?.name}!`,
       };
     } catch (error) {
       console.error("Login failed:", error);
@@ -162,6 +162,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       router.push("/login");
     }
   };
+
+  useEffect(() => {
+    checkAuth();
+  }, []);
 
   return (
     <AuthContext.Provider

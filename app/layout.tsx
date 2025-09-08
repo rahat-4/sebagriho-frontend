@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Outfit, Ovo } from "next/font/google";
 import "./globals.css";
-import ClientLayout from "./ClientLayout";
+import ClientLayout from "@/context/ClientLayout";
 
 const getOutfit = Outfit({
   subsets: ["latin"],

@@ -45,17 +45,13 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     ],
   };
 
-  const company = organization
-    ? {
-        name: organization.name,
-        logo: organization.logo?.url,
-        title: organization.title,
-      }
-    : {
-        name: "Sebagriho",
-        logo: SebagrihoLogo.src,
-        title: "Healthcare everywhere",
-      };
+  console.log("Organization in Layout:", organization);
+
+  const company = organization && {
+    name: organization.name,
+    logo: organization.logo || SebagrihoLogo.src,
+    title: organization.title,
+  };
 
   return (
     <SidebarProvider>
