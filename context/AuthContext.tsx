@@ -138,7 +138,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       return {
         success: true,
-        message: `Welcome back, ${user?.name}!`,
+        message: `Welcome back, ${response.user_name}!`,
       };
     } catch (error) {
       console.error("Login failed:", error);

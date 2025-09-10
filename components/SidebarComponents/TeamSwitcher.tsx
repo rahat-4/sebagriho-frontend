@@ -7,7 +7,6 @@ import {
 import Image from "next/image";
 
 export function TeamSwitcher({ company }: any) {
-  console.log("Company in TeamSwitcher:", company);
   return (
     <SidebarMenu>
       <SidebarMenuItem>

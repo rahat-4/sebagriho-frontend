@@ -107,7 +107,6 @@ const LoginForm = () => {
 
   // ✅ Handle navigation when user state updates
   useEffect(() => {
-    console.log("----------------------", organization?.logo);
     if (loginSuccess && user) {
       const timer = setTimeout(() => {
         if (user.is_admin === true) {

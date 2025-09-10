@@ -30,7 +30,11 @@ import UserImage from "@/public/user_image.jpg";
 
 const UserNav = () => {
   const { isMobile } = useSidebar();
-  const { logout, user } = useAuth();
+  const { isLoading, logout, user } = useAuth();
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <SidebarMenu>

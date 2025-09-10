@@ -14,7 +14,7 @@ import { beautifyTitle } from "@/components/Converter";
 import SebagrihoLogo from "@/public/sebagriho_logo.png";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
-  const { organization } = useAuth();
+  const { isLoading, organization } = useAuth();
   const path = usePathname();
   const segments = path.split("/").filter(Boolean);
 
@@ -45,13 +45,15 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     ],
   };
 
-  console.log("Organization in Layout:", organization);
-
   const company = organization && {
     name: organization.name,
     logo: organization.logo || SebagrihoLogo.src,
     title: organization.title,
   };
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <SidebarProvider>
