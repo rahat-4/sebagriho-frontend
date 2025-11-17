@@ -5,6 +5,35 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  /* Custom Brand Colors */
+  --color-navy: #205072;
+  --color-navy-light: #2d6a96;
+  --color-navy-lighter: #3a84ba;
+  --color-navy-dark: #183d56;
+  --color-navy-darker: #0f2a3b;
+
+  --color-cyan: #2ab7ca;
+  --color-cyan-light: #4dc4d4;
+  --color-cyan-lighter: #70d1de;
+  --color-cyan-dark: #2199aa;
+  --color-cyan-darker: #187b8a;
+
+  /* Alias for primary/secondary (recommended approach) */
+  --color-primary: var(--navy);
+  --color-primary-light: var(--navy-light);
+  --color-primary-lighter: var(--navy-lighter);
+  --color-primary-dark: var(--navy-dark);
+  --color-primary-darker: var(--navy-darker);
+  --color-primary-foreground: #ffffff;
+
+  --color-secondary: var(--cyan);
+  --color-secondary-light: var(--cyan-light);
+  --color-secondary-lighter: var(--cyan-lighter);
+  --color-secondary-dark: var(--cyan-dark);
+  --color-secondary-darker: var(--cyan-darker);
+  --color-secondary-foreground: #ffffff;
+
+  /* Existing shadcn theme tokens */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
@@ -31,10 +60,6 @@
   --color-accent: var(--accent);
   --color-muted-foreground: var(--muted-foreground);
   --color-muted: var(--muted);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-secondary: var(--secondary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-primary: var(--primary);
   --color-popover-foreground: var(--popover-foreground);
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
@@ -52,16 +77,22 @@
   --card-foreground: oklch(0.129 0.042 264.695);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.129 0.042 264.695);
-  --primary: oklch(0.208 0.042 265.755);
-  --primary-foreground: oklch(0.984 0.003 247.858);
-  --secondary: oklch(0.968 0.007 247.896);
-  --secondary-foreground: oklch(0.208 0.042 265.755);
+  --navy: #205072;
+  --navy-light: #2d6a96;
+  --navy-lighter: #3a84ba;
+  --navy-dark: #183d56;
+  --navy-darker: #0f2a3b;
+  --cyan: #2ab7ca;
+  --cyan-light: #4dc4d4;
+  --cyan-lighter: #70d1de;
+  --cyan-dark: #2199aa;
+  --cyan-darker: #187b8a;
   --muted: oklch(0.968 0.007 247.896);
   --muted-foreground: oklch(0.554 0.046 257.417);
   --accent: oklch(0.968 0.007 247.896);
   --accent-foreground: oklch(0.208 0.042 265.755);
   --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.984 0.003 247.858);
   --border: oklch(0.929 0.013 255.508);
   --input: oklch(0.929 0.013 255.508);
   --ring: oklch(0.704 0.04 256.788);
@@ -73,8 +104,8 @@
   --radius: 0.625rem;
   --sidebar: oklch(0.984 0.003 247.858);
   --sidebar-foreground: oklch(0.129 0.042 264.695);
-  --sidebar-primary: oklch(0.208 0.042 265.755);
-  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
+  --sidebar-primary: var(--navy);
+  --sidebar-primary-foreground: #ffffff;
   --sidebar-accent: oklch(0.968 0.007 247.896);
   --sidebar-accent-foreground: oklch(0.208 0.042 265.755);
   --sidebar-border: oklch(0.929 0.013 255.508);
@@ -88,10 +119,16 @@
   --card-foreground: oklch(0.984 0.003 247.858);
   --popover: oklch(0.129 0.042 264.695);
   --popover-foreground: oklch(0.984 0.003 247.858);
-  --primary: oklch(0.984 0.003 247.858);
-  --primary-foreground: oklch(0.208 0.042 265.755);
-  --secondary: oklch(0.279 0.041 260.031);
-  --secondary-foreground: oklch(0.984 0.003 247.858);
+  --navy: #2d6a96;
+  --navy-light: #3a84ba;
+  --navy-lighter: #4d9dd4;
+  --navy-dark: #205072;
+  --navy-darker: #183d56;
+  --cyan: #4dc4d4;
+  --cyan-light: #70d1de;
+  --cyan-lighter: #93dee8;
+  --cyan-dark: #2ab7ca;
+  --cyan-darker: #2199aa;
   --muted: oklch(0.279 0.041 260.031);
   --muted-foreground: oklch(0.704 0.04 256.788);
   --accent: oklch(0.279 0.041 260.031);
@@ -108,8 +145,8 @@
   --chart-5: oklch(0.645 0.246 16.439);
   --sidebar: oklch(0.208 0.042 265.755);
   --sidebar-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
+  --sidebar-primary: var(--cyan);
+  --sidebar-primary-foreground: oklch(0.129 0.042 264.695);
   --sidebar-accent: oklch(0.279 0.041 260.031);
   --sidebar-accent-foreground: oklch(0.984 0.003 247.858);
   --sidebar-border: oklch(0.279 0.041 260.031);

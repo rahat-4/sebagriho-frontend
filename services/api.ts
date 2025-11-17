@@ -30,6 +30,8 @@ const request = async (endpoint: string, method: string, data?: any) => {
       credentials: "include", // Include cookies for authentication
     });
 
+    console.log("API------------------------- Request:", res);
+
     let json;
 
     // Handle cases where response might not be JSON
