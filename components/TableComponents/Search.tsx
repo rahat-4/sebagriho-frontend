@@ -12,7 +12,6 @@ const Search = ({
   onChange: (value: string) => void;
 }) => {
   const column = table.getColumn(searchableColumn);
-  const filterValue = column.getFilterValue() as string;
 
   return (
     <Input

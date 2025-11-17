@@ -221,14 +221,17 @@ const AddHomeopathicMedicine = ({
         } else {
           // Handle validation errors
           if (response && typeof response === "object") {
-            Object.entries(response).forEach(([field, errorMessage]: any) => {
-              form.setError(field as keyof HomeopathicMedicineForm, {
-                type: "manual",
-                message: Array.isArray(errorMessage)
-                  ? errorMessage[0]
-                  : errorMessage,
-              });
-            });
+            Object.entries(response as Record<string, unknown>).forEach(
+              ([field, errorMessage]: [string, unknown]) => {
+                const messageText = Array.isArray(errorMessage)
+                  ? String((errorMessage as unknown[])[0])
+                  : String(errorMessage);
+                form.setError(field as keyof HomeopathicMedicineForm, {
+                  type: "manual",
+                  message: messageText,
+                });
+              }
+            );
           }
           setMessage({
             type: "error",

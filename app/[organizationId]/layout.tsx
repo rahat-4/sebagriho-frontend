@@ -1,6 +1,5 @@
 "use client";
 
-import { usePathname } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 
 import { Pill, LayoutDashboard, User, CalendarPlus2 } from "lucide-react";
@@ -8,8 +7,6 @@ import { Pill, LayoutDashboard, User, CalendarPlus2 } from "lucide-react";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import AppSidebar from "@/components/SidebarComponents/AppSidebar";
 import SiteHeader from "@/components/SidebarComponents/SiteHeader";
-
-import { beautifyTitle } from "@/components/Converter";
 
 import SebagrihoLogo from "@/public/sebagriho_logo.png";
 

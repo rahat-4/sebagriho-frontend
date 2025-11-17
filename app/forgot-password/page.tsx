@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 
 import { Card } from "@/components/ui/card";
 
@@ -11,11 +10,6 @@ import ResetPassword from "@/components/Registrations/ResetPassword";
 
 const ForgotPassword = () => {
   const [step, setStep] = useState(1);
-  const router = useRouter();
-
-  const completeRegistration = () => {
-    router.push("/admin/organizations");
-  };
 
   interface StepType {
     title: string;

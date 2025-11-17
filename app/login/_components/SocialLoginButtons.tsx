@@ -1,8 +1,5 @@
 import { Button } from "@/components/ui/button";
-import {
-  socialLogins,
-  type SocialLoginProvider,
-} from "../_constants/socialLogins";
+import { socialLogins } from "../_constants/socialLogins";
 
 interface SocialLoginButtonsProps {
   onSocialLogin: (provider: string) => void;

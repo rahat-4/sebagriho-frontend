@@ -38,8 +38,12 @@ const Organizations = () => {
           // console.log("")
         }
         setTableData(response);
-      } catch (error: any) {
-        setError(error.message || "Failed to fetch organizations");
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          setError(err.message || "Failed to fetch organizations");
+        } else {
+          setError(String(err) || "Failed to fetch organizations");
+        }
       } finally {
         setLoading(false);
       }

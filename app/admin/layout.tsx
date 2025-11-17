@@ -1,7 +1,6 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-// import { useAuth } from "@/context/AuthContext";
 import {
   Hospital,
   LayoutDashboard,
@@ -13,11 +12,7 @@ import {
 import UserImage from "@/public/user_image.jpg";
 import SebagrihoLogo from "@/public/sebagriho_logo.png";
 
-import {
-  SidebarProvider,
-  SidebarInset,
-  SidebarTrigger,
-} from "@/components/ui/sidebar";
+import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 
 import AppSidebar from "@/components/SidebarComponents/AppSidebar";
 
