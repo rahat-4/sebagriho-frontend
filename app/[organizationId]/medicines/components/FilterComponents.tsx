@@ -19,30 +19,18 @@ import {
 } from "@/components/ui/drawer";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import {
-  Search,
-  Filter,
-  Grid3X3,
-  List,
-  Package,
-  Calendar,
-  X,
-  Check,
-} from "lucide-react";
+import { Search, Filter, Package, Calendar, X, Check } from "lucide-react";
 import AddHomeopathicMedicine from "./AddMedicine";
-
-interface Filters {
-  isAvailable: string;
-  expirationDate: string;
-  expirationOperator: string;
-}
+import { MedicineFilters } from "@/types/medicine.types";
+import { EXPIRATION_OPERATORS } from "@/constants/medicine.constants";
 
 interface FilterComponentsProps {
   searchTerm: string;
   setSearchTerm: (term: string) => void;
-  filters: Filters;
-  setFilters: (filters: Filters) => void;
+  filters: MedicineFilters;
+  setFilters: (filters: MedicineFilters) => void;
   onApplyFilters?: () => void;
+  onMedicineCreated?: () => void;
 }
 
 const FilterComponents = ({
@@ -51,28 +39,26 @@ const FilterComponents = ({
   filters,
   setFilters,
   onApplyFilters,
+  onMedicineCreated,
 }: FilterComponentsProps) => {
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [isFilterOpen, setIsFilterOpen] = useState(false);
-  const [tempFilters, setTempFilters] = useState<Filters>(filters);
+  const [tempFilters, setTempFilters] = useState<MedicineFilters>(filters);
 
   const getActiveFilterCount = () => {
     let count = 0;
     if (filters.isAvailable !== "all") count++;
-    if (filters.expirationDate && filters.expirationDate !== "") count++;
+    if (filters.expirationDate) count++;
     return count;
   };
 
   const handleApplyFilters = () => {
     setFilters(tempFilters);
     setIsFilterOpen(false);
-    if (onApplyFilters) {
-      onApplyFilters();
-    }
+    onApplyFilters?.();
   };
 
   const handleResetFilters = () => {
-    const resetFilters: Filters = {
+    const resetFilters: MedicineFilters = {
       isAvailable: "all",
       expirationDate: "",
       expirationOperator: "exact",
@@ -80,42 +66,30 @@ const FilterComponents = ({
     setTempFilters(resetFilters);
     setFilters(resetFilters);
     setIsFilterOpen(false);
-    if (onApplyFilters) {
-      onApplyFilters();
-    }
+    onApplyFilters?.();
   };
 
-  const clearFilter = (filterKey: keyof Filters) => {
+  const clearFilter = (filterKey: keyof MedicineFilters) => {
     const newFilters = {
       ...filters,
       [filterKey]: filterKey === "expirationDate" ? "" : "all",
     };
     setFilters(newFilters);
     setTempFilters(newFilters);
-    if (onApplyFilters) {
-      onApplyFilters();
-    }
+    onApplyFilters?.();
   };
 
   const clearSearch = () => {
     setSearchTerm("");
-    if (onApplyFilters) {
-      onApplyFilters();
-    }
+    onApplyFilters?.();
   };
 
   const getExpirationFilterDisplay = () => {
     if (!filters.expirationDate) return "";
 
-    const operatorLabels = {
-      exact: "on",
-      gt: "after",
-      lt: "before",
-    };
-
-    return `Expires ${
-      operatorLabels[filters.expirationOperator as keyof typeof operatorLabels]
-    } ${filters.expirationDate}`;
+    return `Expires ${EXPIRATION_OPERATORS[filters.expirationOperator]} ${
+      filters.expirationDate
+    }`;
   };
 
   return (
@@ -128,7 +102,7 @@ const FilterComponents = ({
               placeholder="Search by name or manufacturer..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 pr-4 py-3 rounded-xl border-slate-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200/50 text-xs bg-white shadow-sm transition-all duration-200"
+              className="pl-10 pr-4 py-3 rounded-xl border-slate-200 focus:border-[#2ab7ca] focus:ring-2 focus:ring-[#2ab7ca]/20 text-xs bg-white shadow-sm transition-all duration-200"
             />
           </div>
 
@@ -137,46 +111,17 @@ const FilterComponents = ({
               <Button
                 variant="outline"
                 onClick={() => setIsFilterOpen(true)}
-                className="rounded-xl border-slate-200 hover:border-indigo-300 hover:bg-indigo-50 transition-all duration-200 relative"
+                className="rounded-xl border-slate-200 hover:border-[#2ab7ca] hover:bg-[#e6f7f9] transition-all duration-200 relative"
               >
                 <Filter className="h-4 w-4" />
                 <span>Filter</span>
                 {getActiveFilterCount() > 0 && (
-                  <Badge className="ml-2 h-5 w-5 p-0 bg-indigo-500 hover:bg-indigo-600 rounded-full text-xs flex items-center justify-center">
+                  <Badge className="ml-2 h-5 w-5 p-0 bg-[#2ab7ca] hover:bg-[#2199aa] rounded-full text-xs flex items-center justify-center">
                     {getActiveFilterCount()}
                   </Badge>
                 )}
               </Button>
-              <AddHomeopathicMedicine />
-            </div>
-
-            <div className="hidden sm:flex bg-slate-100 rounded-xl p-1">
-              <Button
-                variant={viewMode === "grid" ? "default" : "ghost"}
-                size="sm"
-                onClick={() => setViewMode("grid")}
-                className={`rounded-lg transition-all duration-200 ${
-                  viewMode === "grid"
-                    ? "bg-white shadow-sm text-slate-900"
-                    : "text-slate-600 hover:text-slate-900"
-                }`}
-              >
-                <Grid3X3 className="h-4 w-4" />
-                <span className="ml-1">Grid</span>
-              </Button>
-              <Button
-                variant={viewMode === "list" ? "default" : "ghost"}
-                size="sm"
-                onClick={() => setViewMode("list")}
-                className={`rounded-lg transition-all duration-200 ${
-                  viewMode === "list"
-                    ? "bg-white shadow-sm text-slate-900"
-                    : "text-slate-600 hover:text-slate-900"
-                }`}
-              >
-                <List className="h-4 w-4" />
-                <span className="ml-1">List</span>
-              </Button>
+              <AddHomeopathicMedicine onMedicineCreated={onMedicineCreated} />
             </div>
           </div>
 
@@ -189,7 +134,7 @@ const FilterComponents = ({
               {searchTerm && (
                 <Badge
                   variant="secondary"
-                  className="bg-indigo-100 text-indigo-800 hover:bg-indigo-200"
+                  className="bg-[#e6f7f9] text-[#2199aa] hover:bg-[#d1f2f5]"
                 >
                   Search: {searchTerm}
                   <X
@@ -279,7 +224,7 @@ const FilterComponents = ({
                   onValueChange={(value) =>
                     setTempFilters({
                       ...tempFilters,
-                      expirationOperator: value,
+                      expirationOperator: value as "exact" | "gt" | "lt",
                     })
                   }
                 >
@@ -302,7 +247,7 @@ const FilterComponents = ({
                       expirationDate: e.target.value,
                     })
                   }
-                  className="rounded-xl border-slate-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200/50"
+                  className="rounded-xl border-slate-200 focus:border-[#2ab7ca] focus:ring-2 focus:ring-[#2ab7ca]/20"
                 />
               </div>
             </div>
@@ -312,7 +257,7 @@ const FilterComponents = ({
             <div className="flex gap-3">
               <Button
                 onClick={handleApplyFilters}
-                className="flex-1 rounded-xl bg-indigo-500 hover:bg-indigo-600"
+                className="flex-1 rounded-xl bg-[#2ab7ca] hover:bg-[#2199aa]"
               >
                 <Check className="h-4 w-4 mr-2" />
                 Apply Filters

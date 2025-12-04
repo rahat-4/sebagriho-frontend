@@ -16,7 +16,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 
-import { HomeopathicMedicine } from "./medicineinterface";
+import { HomeopathicMedicine } from "@/types/medicine.types";
 import clsx from "clsx";
 
 interface InfoItemProps {

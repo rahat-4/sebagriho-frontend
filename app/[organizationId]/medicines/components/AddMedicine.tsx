@@ -1,7 +1,6 @@
+// File: app/(organization)/[organizationId]/medicines/components/AddMedicine.tsx
 import { z } from "zod";
-
 import { useParams } from "next/navigation";
-
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -42,24 +41,22 @@ import { RequiredLabel } from "@/components/RequiredLabel";
 import { camelToSnake } from "@/services/caseConverters";
 import { postData } from "@/services/api";
 import { cn } from "@/lib/utils";
-
 import { homeopathicMedicineSchema } from "@/schemas/MedicineSchema";
 
 type HomeopathicMedicineForm = z.infer<typeof homeopathicMedicineSchema>;
 
-// Form field configuration
 const FORM_FIELDS = [
   {
     name: "is_available" as const,
     label: "Medicine is currently available",
-    icon: <Package className="w-4 h-4 text-green-500" />,
+    icon: <Package className="w-4 h-4 text-[#2ab7ca]" />,
     required: true,
     type: "checkbox",
   },
   {
     name: "avatar" as const,
     label: "Medicine Image",
-    icon: <ImageIcon className="w-4 h-4 text-orange-500" />,
+    icon: <ImageIcon className="w-4 h-4 text-[#2ab7ca]" />,
     required: false,
     type: "file",
     accept: "image/*",
@@ -67,7 +64,7 @@ const FORM_FIELDS = [
   {
     name: "name" as const,
     label: "Medicine Name",
-    icon: <Pill className="w-4 h-4 text-orange-500" />,
+    icon: <Pill className="w-4 h-4 text-[#205072]" />,
     required: true,
     type: "text",
     placeholder: "Enter medicine name",
@@ -83,7 +80,7 @@ const FORM_FIELDS = [
   {
     name: "power" as const,
     label: "Power",
-    icon: <Pill className="w-4 h-4 text-blue-500" />,
+    icon: <Pill className="w-4 h-4 text-[#2ab7ca]" />,
     required: false,
     type: "text",
     placeholder: "Enter power (e.g., 30C, 200C)",
@@ -91,7 +88,7 @@ const FORM_FIELDS = [
   {
     name: "manufacturer" as const,
     label: "Manufacturer",
-    icon: <Building className="w-4 h-4 text-purple-500" />,
+    icon: <Building className="w-4 h-4 text-[#205072]" />,
     required: false,
     type: "text",
     placeholder: "Enter manufacturer name",
@@ -99,7 +96,7 @@ const FORM_FIELDS = [
   {
     name: "unit_price" as const,
     label: "Unit Price",
-    icon: <DollarSign className="w-4 h-4 text-green-600" />,
+    icon: <DollarSign className="w-4 h-4 text-[#2ab7ca]" />,
     required: false,
     type: "number",
     placeholder: "Enter unit price",
@@ -108,7 +105,7 @@ const FORM_FIELDS = [
   {
     name: "total_quantity" as const,
     label: "Total Quantity",
-    icon: <Package className="w-4 h-4 text-indigo-500" />,
+    icon: <Package className="w-4 h-4 text-[#205072]" />,
     required: false,
     type: "number",
     placeholder: "Enter total quantity",
@@ -164,7 +161,6 @@ const AddHomeopathicMedicine = ({
     },
   });
 
-  // Reset form when dialog closes
   const handleDialogChange = (open: boolean) => {
     setIsOpen(open);
     if (!open) {
@@ -180,7 +176,6 @@ const AddHomeopathicMedicine = ({
 
       const formData = new FormData();
 
-      // Process form data
       Object.entries(data).forEach(([key, value]) => {
         if (value === "" || value === null || value === undefined) return;
 
@@ -191,7 +186,6 @@ const AddHomeopathicMedicine = ({
             formData.append(snakeCaseKey, value[0]);
           }
         } else if (key === "unit_price" || key === "total_quantity") {
-          // Only append if value is greater than 0
           if (Number(value) > 0) {
             formData.append(snakeCaseKey, String(value));
           }
@@ -219,7 +213,6 @@ const AddHomeopathicMedicine = ({
             setMessage(null);
           }, 1500);
         } else {
-          // Handle validation errors
           if (response && typeof response === "object") {
             Object.entries(response as Record<string, unknown>).forEach(
               ([field, errorMessage]: [string, unknown]) => {
@@ -256,7 +249,7 @@ const AddHomeopathicMedicine = ({
       <DialogTrigger asChild>
         <Button
           size="sm"
-          className="bg-gradient-to-br from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-semibold px-6 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border-0"
+          className="bg-gradient-to-br from-[#205072] to-[#2d6a96] hover:from-[#183d56] hover:to-[#205072] text-white font-semibold px-6 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border-0"
         >
           <Plus className="h-5 w-5 mr-2" />
           Add Medicine
@@ -265,7 +258,7 @@ const AddHomeopathicMedicine = ({
 
       <DialogContent className="max-w-[95vw] sm:max-w-[600px] max-h-[90vh] rounded-2xl border-0 shadow-2xl bg-gradient-to-br from-white to-slate-50">
         <DialogHeader className="gap-0">
-          <DialogTitle className="text-lg font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent">
+          <DialogTitle className="text-lg font-bold bg-gradient-to-r from-[#205072] to-[#2ab7ca] bg-clip-text text-transparent">
             Add New Medicine
           </DialogTitle>
           <DialogDescription className="text-slate-600 text-xs leading-relaxed">
@@ -279,13 +272,12 @@ const AddHomeopathicMedicine = ({
               onSubmit={form.handleSubmit(onSubmit)}
               className="space-y-4 pb-2"
             >
-              {/* Message Alert */}
               {message && (
                 <Alert
                   className={cn(
                     "border-l-4 rounded-lg",
                     message.type === "success"
-                      ? "border-l-green-500 bg-green-50 border-green-200"
+                      ? "border-l-[#2ab7ca] bg-[#e6f7f9] border-[#2ab7ca]/30"
                       : "border-l-red-500 bg-red-50 border-red-200"
                   )}
                   variant={message.type === "error" ? "destructive" : "default"}
@@ -294,7 +286,7 @@ const AddHomeopathicMedicine = ({
                     className={cn(
                       "font-medium",
                       message.type === "success"
-                        ? "text-green-800"
+                        ? "text-[#2199aa]"
                         : "text-red-800"
                     )}
                   >
@@ -303,7 +295,6 @@ const AddHomeopathicMedicine = ({
                 </Alert>
               )}
 
-              {/* Dynamic form fields */}
               {FORM_FIELDS.map((fieldConfig) => (
                 <FormField
                   key={fieldConfig.name}
@@ -334,7 +325,7 @@ const AddHomeopathicMedicine = ({
                             rows={fieldConfig.rows}
                             {...field}
                             value={field.value || ""}
-                            className="text-sm resize-none border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                            className="text-sm resize-none border-slate-200 rounded-lg focus:ring-2 focus:ring-[#2ab7ca]/50 focus:border-[#2ab7ca]"
                           />
                         ) : fieldConfig.type === "file" ? (
                           <Input
@@ -342,7 +333,7 @@ const AddHomeopathicMedicine = ({
                             type="file"
                             accept={fieldConfig.accept}
                             onChange={(e) => field.onChange(e.target.files)}
-                            className="text-sm border-slate-200 rounded-lg file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-orange-50 file:text-orange-700 hover:file:bg-orange-100"
+                            className="text-sm border-slate-200 rounded-lg file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#e6f7f9] file:text-[#205072] hover:file:bg-[#d1f2f5]"
                           />
                         ) : fieldConfig.type === "checkbox" ? (
                           <div className="flex items-center space-x-2">
@@ -350,7 +341,7 @@ const AddHomeopathicMedicine = ({
                               id={fieldConfig.name}
                               checked={field.value || false}
                               onCheckedChange={field.onChange}
-                              className="border-slate-300 data-[state=checked]:bg-emerald-500 data-[state=checked]:border-emerald-500"
+                              className="border-slate-300 data-[state=checked]:bg-[#2ab7ca] data-[state=checked]:border-[#2ab7ca]"
                             />
                             <RequiredLabel
                               htmlFor={fieldConfig.name}
@@ -370,7 +361,7 @@ const AddHomeopathicMedicine = ({
                             onChange={(e) =>
                               field.onChange(Number(e.target.value))
                             }
-                            className="text-sm border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                            className="text-sm border-slate-200 rounded-lg focus:ring-2 focus:ring-[#2ab7ca]/50 focus:border-[#2ab7ca]"
                           />
                         ) : (
                           <Input
@@ -379,7 +370,7 @@ const AddHomeopathicMedicine = ({
                             placeholder={fieldConfig.placeholder}
                             {...field}
                             value={field.value || ""}
-                            className="text-sm border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                            className="text-sm border-slate-200 rounded-lg focus:ring-2 focus:ring-[#2ab7ca]/50 focus:border-[#2ab7ca]"
                           />
                         )}
                       </FormControl>
@@ -389,12 +380,11 @@ const AddHomeopathicMedicine = ({
                 />
               ))}
 
-              {/* Submit Button */}
               <div className="pt-4">
                 <Button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-semibold py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50"
+                  className="w-full bg-gradient-to-r from-[#2ab7ca] to-[#2199aa] hover:from-[#2199aa] hover:to-[#187b8a] text-white font-semibold py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50"
                 >
                   {isLoading ? (
                     <>
