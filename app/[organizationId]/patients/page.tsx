@@ -23,8 +23,11 @@ const Patients = () => {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
-  const [filterMiasm, setFilterMiasm] = useState("all");
-  const [filterEffectiveness, setFilterEffectiveness] = useState("all");
+  const [filters, setFilters] = useState({
+    miasm: "all",
+    bloodGroup: "all",
+    gender: "all",
+  });
   const [sortBy, setSortBy] = useState("name");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
@@ -58,15 +61,13 @@ const Patients = () => {
         patient.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         patient.phone.includes(searchTerm);
       const matchesMiasm =
-        filterMiasm === "all" ||
-        patient?.miasm_type?.toLowerCase() === filterMiasm.toLowerCase();
-      // const matchesEffectiveness =
-      //   filterEffectiveness === "all" ||
-      //   patient.effectiveness.toLowerCase() ===
-      //     filterEffectiveness.toLowerCase();
+        filters.miasm === "all" ||
+        patient?.miasm_type?.toLowerCase() === filters.miasm.toLowerCase();
+      const matchesBloodGroup =
+        filters.bloodGroup === "all" ||
+        patient?.blood_group === filters.bloodGroup;
 
-      // return matchesSearch && matchesMiasm && matchesEffectiveness;
-      return matchesSearch && matchesMiasm;
+      return matchesSearch && matchesMiasm && matchesBloodGroup;
     });
 
     // Sort patients
@@ -88,7 +89,7 @@ const Patients = () => {
     });
 
     setFilteredPatients(filtered);
-  }, [patients, searchTerm, filterMiasm, filterEffectiveness, sortBy]);
+  }, [patients, searchTerm, filters, sortBy]);
 
   // const getImprovedCount = () => {
   //   return patients.filter(
@@ -162,9 +163,10 @@ const Patients = () => {
         <FilterComponents
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}
-          filterMiasm={filterMiasm}
-          setFilterMiasm={setFilterMiasm}
-          AddPatientDialog={AddPatientDialog}
+          filters={filters}
+          setFilters={setFilters}
+          sortBy={sortBy}
+          setSortBy={setSortBy}
         />
 
         {/* Results Count */}
@@ -179,15 +181,19 @@ const Patients = () => {
             patients
           </p>
           {(searchTerm ||
-            filterMiasm !== "all" ||
-            filterEffectiveness !== "all") && (
+            filters.miasm !== "all" ||
+            filters.bloodGroup !== "all" ||
+            filters.gender !== "all") && (
             <Button
               variant="ghost"
               size="sm"
               onClick={() => {
                 setSearchTerm("");
-                setFilterMiasm("all");
-                setFilterEffectiveness("all");
+                setFilters({
+                  miasm: "all",
+                  bloodGroup: "all",
+                  gender: "all",
+                });
               }}
               className="text-slate-500 hover:text-slate-700"
             >
@@ -222,8 +228,9 @@ const Patients = () => {
                   </h3>
                   <p className="text-slate-600 max-w-md mx-auto leading-relaxed">
                     {searchTerm ||
-                    filterMiasm !== "all" ||
-                    filterEffectiveness !== "all"
+                    filters.miasm !== "all" ||
+                    filters.bloodGroup !== "all" ||
+                    filters.gender !== "all"
                       ? "No patients match your current search criteria. Try adjusting your filters or search terms."
                       : "You haven't added any patients yet. Get started by adding your first patient to the system."}
                   </p>
