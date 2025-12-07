@@ -1,26 +1,24 @@
 "use client";
 
 import { getData } from "@/services/api";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import type React from "react";
 import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
-import { Users, TrendingUp, Eye } from "lucide-react";
+import { Users, Eye } from "lucide-react";
 
 import FilterComponents from "./components/FilterComponents";
 import AddPatientDialog from "./components/AddPatientComponents";
 import PatientCard from "./components/PatientCard";
 import { Patient } from "./components/PatientCard";
 import { LoadingComponent } from "@/components/LoadingComponent";
+import StatCard from "./components/StatCard";
 
 const Patients = () => {
-  const router = useRouter();
   const { organizationId } = useParams();
   const [patients, setPatients] = useState<Patient[]>([]);
   const [filteredPatients, setFilteredPatients] = useState<Patient[]>([]);
-  const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [filters, setFilters] = useState({
@@ -29,7 +27,6 @@ const Patients = () => {
     gender: "all",
   });
   const [sortBy, setSortBy] = useState("name");
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
   useEffect(() => {
     const fetchPatients = async () => {
@@ -39,13 +36,13 @@ const Patients = () => {
         );
 
         if (status !== 200) {
-          setError("Failed to fetch patients");
+          console.error("Failed to fetch patients");
           return;
         }
         setPatients(response.results || []);
         setFilteredPatients(response || []);
-      } catch (error: any) {
-        setError(error.message || "Failed to fetch patients");
+      } catch (error) {
+        console.error("Failed to fetch patients:", error);
       } finally {
         setLoading(false);
       }
@@ -97,18 +94,12 @@ const Patients = () => {
   //   ).length;
   // };
 
-  const getRecentPatientsCount = () => {
-    return patients.filter(
-      (p) => p.updated_at.includes("day") || p.updated_at.includes("week")
-    ).length;
-  };
-
   if (loading) {
     return <LoadingComponent name={"Loading patients..."} />;
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-indigo-50/30 px-4 sm:p-6 lg:p-8">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-indigo-50/30 px-4 py-2 sm:p-6 lg:p-8">
       <div className="max-w-7xl mx-auto space-y-2">
         {/* Header */}
         {/* <div className="text-center space-y-4 pb-2">
@@ -123,40 +114,19 @@ const Patients = () => {
         </div> */}
 
         {/* Enhanced Stats Cards */}
-        <div className="grid grid-cols-2 gap-2">
-          <Card className="p-2 bg-gradient-to-br from-indigo-500 to-purple-600 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-            <CardContent className="px-1">
-              <div className="flex flex-col items-center ">
-                <div className="bg-white/20 p-1 rounded-xl">
-                  <Users className="h-4 w-4 text-white" />
-                </div>
-                <div>
-                  <p className="text-indigo-100 text-sm font-medium">
-                    Total Patients
-                  </p>
-                  <p className="text-md text-center font-bold">
-                    {patients.length}
-                  </p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="p-2 bg-gradient-to-br from-emerald-500 to-teal-600 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-            <CardContent className="px-1">
-              <div className="flex flex-col items-center ">
-                <div className="bg-white/20 p-1 rounded-xl">
-                  <Eye className="h-4 w-4 text-white" />
-                </div>
-                <div>
-                  <p className="text-emerald-100 text-sm font-medium">
-                    Today visited
-                  </p>
-                  <p className="text-md text-center font-bold">4</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+        <div className="grid grid-cols-2 gap-1 mb-2">
+          <StatCard
+            title="Total Patients"
+            value={patients.length}
+            icon={<Users className="w-4 h-4" />}
+            color="bg-gradient-to-br from-[#205072] to-[#2d6a96]"
+          />
+          <StatCard
+            title="Today visited"
+            value={patients.length}
+            icon={<Eye className="w-4 h-4" />}
+            color="bg-gradient-to-br from-[#2ab7ca] to-[#4dc4d4]"
+          />
         </div>
 
         {/* Enhanced Controls */}
@@ -184,9 +154,7 @@ const Patients = () => {
             filters.miasm !== "all" ||
             filters.bloodGroup !== "all" ||
             filters.gender !== "all") && (
-            <Button
-              variant="ghost"
-              size="sm"
+            <button
               onClick={() => {
                 setSearchTerm("");
                 setFilters({
@@ -195,22 +163,16 @@ const Patients = () => {
                   gender: "all",
                 });
               }}
-              className="text-slate-500 hover:text-slate-700"
+              className="text-slate-500 hover:text-slate-700 text-sm"
             >
               Clear filters
-            </Button>
+            </button>
           )}
         </div>
 
         {/* Patient Grid/List */}
         {filteredPatients.length > 0 ? (
-          <div
-            className={`grid gap-6 ${
-              viewMode === "grid"
-                ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4"
-                : "grid-cols-1 max-w-5xl mx-auto"
-            }`}
-          >
+          <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
             {filteredPatients.map((patient) => (
               <PatientCard key={patient.uid} patient={patient} />
             ))}

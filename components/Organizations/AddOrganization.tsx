@@ -1,12 +1,10 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,7 +12,6 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -24,7 +21,6 @@ import PhoneNumber from "@/components/PhoneNumber";
 
 import { postData } from "@/services/api";
 
-import { cn } from "@/lib/utils";
 import { organizationSchema } from "@/schemas/OrganizationOnboard";
 
 interface OrganizationProps {
@@ -207,10 +203,13 @@ const AddOrganization: React.FC<OrganizationProps> = ({ onComplete }) => {
 
         if (status !== 201) {
           // Handle validation errors
-          Object.entries(response).map(([field, errorMessage]: any) => {
+          Object.entries(response).forEach(([field, errorMessage]) => {
+            const message = Array.isArray(errorMessage)
+              ? errorMessage[0]
+              : String(errorMessage);
             form.setError(field as keyof OrganizationFormData, {
               type: "manual",
-              message: errorMessage,
+              message,
             });
           });
           return;

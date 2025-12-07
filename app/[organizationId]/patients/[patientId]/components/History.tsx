@@ -153,8 +153,9 @@ const History = ({ patientId, organizationId }: HistoryProps) => {
         }
 
         setAppointment(response);
-      } catch (error: any) {
-        setError(error.message || "Failed to fetch appointment details");
+      } catch (error) {
+        console.error("Failed to fetch appointment details:", error);
+        setError("Failed to fetch appointment details");
       } finally {
         setLoading(false);
       }
@@ -192,7 +193,7 @@ const History = ({ patientId, organizationId }: HistoryProps) => {
               <Button
                 variant="outline"
                 size="sm"
-                className="border-indigo-200 text-indigo-600 hover:bg-indigo-50 font-medium rounded-lg transition-all duration-200"
+                className="border-[#2199aa]-200 text-[#2199aa] hover:bg-[#e0f2f7] font-medium rounded-lg transition-all duration-200"
               >
                 <Calendar className="h-3 w-3" />
                 All Appointments
@@ -217,7 +218,7 @@ const History = ({ patientId, organizationId }: HistoryProps) => {
                 No Appointments Yet
               </h3>
               <p className="text-slate-600 mb-4 text-xs">
-                This patient hasn't had any appointments recorded.
+                This patient hasn&apos;t had any appointments recorded.
               </p>
               <Button
                 onClick={() => {

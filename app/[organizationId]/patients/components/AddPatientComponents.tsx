@@ -56,7 +56,7 @@ const AddPatientDialog = ({ onPatientCreated }: AddPatientDialogProps) => {
       <DialogTrigger asChild>
         <Button
           size="sm"
-          className="bg-gradient-to-br from-[#205072] to-[#2d6a96] hover:from-[#183d56] hover:to-[#205072] text-white font-semibold px-6 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border-0"
+          className="bg-gradient-to-br from-red-500 to-pink-500 hover:from-[#183d56] hover:to-[#205072] text-white font-semibold px-6 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border-0"
         >
           <Plus className="h-5 w-5 mr-2" />
           Add Patient

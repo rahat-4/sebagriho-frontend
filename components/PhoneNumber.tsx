@@ -55,7 +55,7 @@ const PhoneNumber = ({
           const prevCursor = input.selectionStart ?? 0;
 
           // Only allow digits and handle deletion
-          const lastChar = e.nativeEvent.data;
+          const lastChar = (e.nativeEvent as InputEvent).data;
           if (lastChar && /\D/.test(lastChar)) {
             input.value = prevFormatted;
             input.setSelectionRange(prevCursor - 1, prevCursor - 1);

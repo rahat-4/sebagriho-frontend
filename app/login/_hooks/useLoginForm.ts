@@ -57,11 +57,22 @@ export function useLoginForm() {
 
       if (!result.success) {
         if (result.errors) {
-          Object.entries(result.errors).forEach(([field, err]: any) =>
-            form.setError(field as keyof LoginFormData, {
-              type: "manual",
-              message: err as string,
-            })
+          Object.entries(result.errors).forEach(
+            ([field, err]: [string, unknown]) => {
+              let messageText: string;
+              if (Array.isArray(err)) {
+                const first = err[0];
+                messageText = typeof first === "string" ? first : String(first);
+              } else if (typeof err === "string") {
+                messageText = err;
+              } else {
+                messageText = String(err ?? "");
+              }
+              form.setError(field as keyof LoginFormData, {
+                type: "manual",
+                message: messageText,
+              });
+            }
           );
         }
         if (result.message) {
@@ -78,7 +89,7 @@ export function useLoginForm() {
     } catch (error) {
       setMessage({
         type: "error",
-        text: "An unexpected error occurred. Please try again.",
+        text: error instanceof Error ? error.message : "An error occurred.",
       });
     } finally {
       setIsLoading(false);

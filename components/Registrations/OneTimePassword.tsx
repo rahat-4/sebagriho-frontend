@@ -67,10 +67,13 @@ const OneTimePassword: React.FC<StepProps> = ({ onNext }) => {
       );
 
       if (status !== 200) {
-        Object.entries(response).forEach(([field, errorMessage]: any) => {
+        Object.entries(response).forEach(([field, errorMessage]) => {
+          const message = Array.isArray(errorMessage)
+            ? errorMessage[0]
+            : String(errorMessage);
           form.setError(field as keyof OtpFormData, {
             type: "manual",
-            message: errorMessage,
+            message,
           });
         });
         setIsLoading(false);

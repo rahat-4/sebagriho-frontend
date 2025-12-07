@@ -1,5 +1,3 @@
-import { TrendingUpIcon } from "lucide-react";
-
 import {
   Card,
   CardDescription,
@@ -12,14 +10,12 @@ interface CardComponentsProps {
   title: string;
   amount: string;
   description: string;
-  trendingDescription: string;
 }
 
 const CardComponents: React.FC<CardComponentsProps> = ({
   title,
   amount,
   description,
-  trendingDescription,
 }) => {
   return (
     <Card className="p-2">

@@ -10,6 +10,7 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
+  type Column,
 } from "@tanstack/react-table";
 
 import TableView from "@/components/TableComponents/data-table";
@@ -17,8 +18,6 @@ import ResetTable from "@/components/TableComponents/ResetTable";
 import Search from "@/components/TableComponents/Search";
 import MultiSelectFilter from "@/components/TableComponents/MultiSelectFilter";
 import PaginationControls from "@/components/TableComponents/PaginationControls";
-
-("use client");
 
 import { ColumnDef } from "@tanstack/react-table";
 
@@ -29,17 +28,18 @@ import {
   getActionsColumn,
 } from "@/components/TableComponents/columns";
 
-// Organization type definition
-type Medicine = {
+// Organization type definition (this file appears to be for organizations, not medicines)
+type Organization = {
   uid: string;
   name: string;
-  power: string;
-  expirationDate: Date;
-  isAvailable: boolean;
-  totalQuantity: number;
-  unitPrice: number;
-  manufacturer: string;
-  description: string;
+  parent?: string;
+  subdomain?: string;
+  created_at: string;
+  billing_cycle?: string;
+  payment_status?: string;
+  status: string;
+  organization_type: string;
+  amount: number;
 };
 
 const generateOrganizationColumns = (): ColumnDef<Organization>[] => [
@@ -52,27 +52,27 @@ const generateOrganizationColumns = (): ColumnDef<Organization>[] => [
     "payment Status",
   ].map((key) => ({
     accessorKey: key,
-    header: ({ column }: any) => (
+    header: ({ column }: { column: Column<Organization> }) => (
       <SortableHeader column={column} label={toTitleCase(key)} />
     ),
   })),
   {
     accessorKey: "status",
-    header: ({ column }: any) => (
+    header: ({ column }: { column: Column<Organization> }) => (
       <SortableHeader column={column} label="Status" />
     ),
     filterFn: multiSelectFilterFn,
   },
   {
     accessorKey: "organization_type",
-    header: ({ column }: any) => (
+    header: ({ column }: { column: Column<Organization> }) => (
       <SortableHeader column={column} label="Organization Type" />
     ),
     filterFn: multiSelectFilterFn,
   },
   {
     accessorKey: "amount",
-    header: ({ column }: any) => (
+    header: ({ column }: { column: Column<Organization> }) => (
       <SortableHeader column={column} label="Amount" />
     ),
     cell: ({ row }) => {
@@ -87,7 +87,7 @@ const generateOrganizationColumns = (): ColumnDef<Organization>[] => [
   getActionsColumn<Organization>(),
 ];
 
-export const columns = generateOrganizationColumns();
+export const columns: ColumnDef<Organization>[] = generateOrganizationColumns();
 
 const statusOptions = [
   { label: "Active", value: "active" },
@@ -109,11 +109,7 @@ const organizationTypes = [
   { label: "Hospital", value: "hospital" },
 ];
 
-interface DataTableProps<TData extends object> {
-  data: TData[];
-}
-
-const DataTable = <TData extends object>({ data }: DataTableProps<TData>) => {
+const DataTable = ({ data }: { data: Organization[] }) => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [searchValue, setSearchValue] = useState("");
@@ -124,7 +120,7 @@ const DataTable = <TData extends object>({ data }: DataTableProps<TData>) => {
     setSorting([]);
   };
 
-  const table = useReactTable({
+  const table = useReactTable<Organization>({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),

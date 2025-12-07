@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 const Organization = async ({
   params,
 }: {
-  params: { organizationId: string };
+  params: Promise<{ organizationId: string }>;
 }) => {
   const resolvedParams = await params;
   const organizationId = resolvedParams.organizationId;

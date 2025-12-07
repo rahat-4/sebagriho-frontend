@@ -2,7 +2,7 @@ import { getData } from "@/services/api";
 const Dashboard = async ({
   params,
 }: {
-  params: { organizationId: string };
+  params: Promise<{ organizationId: string }>;
 }) => {
   const resolvedParams = await params;
   const organizationId = resolvedParams.organizationId;

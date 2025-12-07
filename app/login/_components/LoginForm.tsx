@@ -168,7 +168,9 @@ export default function LoginForm() {
                         <Checkbox
                           id="remember"
                           checked={remember}
-                          onCheckedChange={setRemember}
+                          onCheckedChange={(checked) =>
+                            setRemember(checked === true)
+                          }
                           disabled={isLoading}
                         />
                         <Label

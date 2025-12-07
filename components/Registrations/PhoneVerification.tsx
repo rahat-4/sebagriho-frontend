@@ -23,7 +23,6 @@ import { ArrowLeft, Loader2 } from "lucide-react";
 import { phoneVerificationSchema } from "@/schemas/LoginSchema";
 import { RequiredLabel } from "@/components/RequiredLabel";
 import PhoneNumber from "@/components/PhoneNumber";
-import { Card } from "@/components/ui/card";
 
 type PhoneVerificationFormData = z.infer<typeof phoneVerificationSchema>;
 type MessageType = { type: "success" | "error"; text: string };
@@ -94,7 +93,7 @@ const PhoneVerification = ({ onNext }: StepProps) => {
       });
 
       setTimeout(() => onNext(), 2000);
-    } catch (error) {
+    } catch {
       setMessage({
         type: "error",
         text: "Something went wrong. Please try again.",

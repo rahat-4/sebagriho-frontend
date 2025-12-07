@@ -12,8 +12,31 @@ import {
 
 import { TeamSwitcher } from "./TeamSwitcher";
 import UserNav from "./UserNav";
+import type { LucideIcon } from "lucide-react";
 
-const AppSidebar = ({ data, company }: any) => {
+interface NavItem {
+  title: string;
+  url: string;
+  icon: LucideIcon;
+}
+
+interface SidebarData {
+  navMain: NavItem[];
+}
+
+interface Company {
+  logo: string;
+  name: string;
+  title?: string | null;
+}
+
+const AppSidebar = ({
+  data,
+  company,
+}: {
+  data: SidebarData;
+  company: Company | null;
+}) => {
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader>
@@ -22,7 +45,7 @@ const AppSidebar = ({ data, company }: any) => {
       <SidebarContent>
         <SidebarGroup>
           <SidebarMenu>
-            {data.navMain.map((item: any, index: number) => (
+            {data.navMain.map((item, index: number) => (
               <SidebarMenuItem key={index}>
                 <SidebarMenuButton asChild>
                   <a href={item.url}>

@@ -1,7 +1,5 @@
 "use client";
 
-import { useAuth } from "@/context/AuthContext";
-
 import { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -9,10 +7,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   Form,
   FormControl,
@@ -29,7 +24,7 @@ import { RequiredLabel } from "@/components/RequiredLabel";
 
 import { postData } from "@/services/api";
 
-import { camelToSnake, snakeToCamel } from "@/services/caseConverters";
+import { snakeToCamel } from "@/services/caseConverters";
 
 type ResetPasswordFormData = z.infer<typeof resetPasswordSchema>;
 
@@ -85,11 +80,14 @@ const ResetPassword = () => {
 
         if (status !== 201) {
           // Handle validation errors
-          Object.entries(response).forEach(([field, errorMessage]: any) => {
-            field = snakeToCamel(field);
-            form.setError(field as keyof ResetPasswordFormData, {
+          Object.entries(response).forEach(([field, errorMessage]) => {
+            const camelField = snakeToCamel(field);
+            const message = Array.isArray(errorMessage)
+              ? errorMessage[0]
+              : String(errorMessage);
+            form.setError(camelField as keyof ResetPasswordFormData, {
               type: "manual",
-              message: errorMessage,
+              message,
             });
           });
           return;
@@ -106,7 +104,7 @@ const ResetPassword = () => {
         setTimeout(() => {
           router.push(`/login`);
         }, 2000);
-      } catch (error) {
+      } catch {
         setMessage({
           type: "error",
           text: "Something went wrong. Please try again.",
@@ -156,11 +154,9 @@ const ResetPassword = () => {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>
-                  <RequiredLabel
-                    htmlFor="password"
-                    children="Password"
-                    required
-                  />
+                  <RequiredLabel htmlFor="password" required>
+                    Password
+                  </RequiredLabel>
                 </FormLabel>
                 <FormControl>
                   <div className="relative">
@@ -198,11 +194,9 @@ const ResetPassword = () => {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>
-                  <RequiredLabel
-                    htmlFor="confirmPassword"
-                    children="Confirm Password"
-                    required
-                  />
+                  <RequiredLabel htmlFor="confirmPassword" required>
+                    Confirm Password
+                  </RequiredLabel>
                 </FormLabel>
                 <FormControl>
                   <div className="relative">

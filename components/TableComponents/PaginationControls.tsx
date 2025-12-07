@@ -1,7 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import type { Table } from "@tanstack/react-table";
 
-const PaginationControls = ({ table }: { table: any }) => {
+const PaginationControls = <T,>({ table }: { table: Table<T> }) => {
   const pageCount = table.getPageCount();
   const pageIndex = table.getState().pagination.pageIndex;
   const pageSize = table.getState().pagination.pageSize;

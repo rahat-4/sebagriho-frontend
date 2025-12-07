@@ -18,7 +18,7 @@ import Search from "@/components/TableComponents/Search";
 import MultiSelectFilter from "@/components/TableComponents/MultiSelectFilter";
 import PaginationControls from "@/components/TableComponents/PaginationControls";
 
-import { columns } from "./OrganizationColumns";
+import { columns, type Organization } from "./OrganizationColumns";
 
 const statusOptions = [
   { label: "Active", value: "active" },
@@ -40,11 +40,7 @@ const organizationTypes = [
   { label: "Hospital", value: "hospital" },
 ];
 
-interface DataTableProps<TData extends object> {
-  data: TData[];
-}
-
-const DataTable = <TData extends object>({ data }: DataTableProps<TData>) => {
+const DataTable = ({ data }: { data: Organization[] }) => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [searchValue, setSearchValue] = useState("");
@@ -55,7 +51,7 @@ const DataTable = <TData extends object>({ data }: DataTableProps<TData>) => {
     setSorting([]);
   };
 
-  const table = useReactTable({
+  const table = useReactTable<Organization>({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),

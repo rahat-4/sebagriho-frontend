@@ -29,7 +29,7 @@ export const LoadingComponent = ({ name }: { name: string }) => {
   );
 };
 
-export const ErrorLoadingComponent = ({ message }: any) => {
+export const ErrorLoadingComponent = ({ message }: { message: string }) => {
   const router = useRouter();
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-indigo-50/30 flex items-center justify-center p-4">

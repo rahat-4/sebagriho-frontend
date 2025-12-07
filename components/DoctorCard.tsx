@@ -6,10 +6,11 @@ import {
   HospitalIcon,
   CalendarClock,
   Star,
+  type LucideIcon,
 } from "lucide-react";
 
 // Reusable row component for icons + text
-const InfoRow = ({ icon: Icon, text }: { icon: any; text: string }) => (
+const InfoRow = ({ icon: Icon, text }: { icon: LucideIcon; text: string }) => (
   <p className="flex items-center text-xs">
     <Icon className="h-4 w-4 mr-1" />
     {text}

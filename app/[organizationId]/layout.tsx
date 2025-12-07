@@ -40,7 +40,10 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 
   const company = organization && {
     name: organization.name,
-    logo: organization.logo || SebagrihoLogo.src,
+    logo:
+      typeof organization.logo === "string"
+        ? organization.logo
+        : organization.logo?.url || SebagrihoLogo.src,
     title: organization.title,
   };
 

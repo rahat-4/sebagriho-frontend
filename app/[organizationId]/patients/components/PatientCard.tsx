@@ -13,14 +13,7 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
-import {
-  Calendar,
-  Phone,
-  Pill,
-  ArrowRight,
-  Dna,
-  ActivitySquare,
-} from "lucide-react";
+import { Calendar, Phone, ArrowRight, Dna, ActivitySquare } from "lucide-react";
 
 interface InfoItemProps {
   icon: React.ElementType;
@@ -52,7 +45,7 @@ export interface Patient {
 // Enhanced Info item component
 const InfoItem = ({ icon: Icon, label, value }: InfoItemProps) => (
   <div className="flex items-center gap-3 p-1 bg-gradient-to-r from-slate-50 to-slate-100/50 rounded-lg border border-slate-200/60 hover:shadow-sm transition-all duration-200">
-    <div className="flex-shrink-0 bg-gradient-to-br from-blue-500 to-indigo-600 p-[5px] rounded-lg shadow-sm">
+    <div className="flex-shrink-0 bg-gradient-to-br from-red-500 to-pink-500 p-[5px] rounded-lg shadow-sm">
       <Icon className="h-3 w-3 text-white" />
     </div>
     <div className="flex flex-col min-w-0 flex-1">
@@ -70,25 +63,13 @@ const InfoItem = ({ icon: Icon, label, value }: InfoItemProps) => (
 const PatientCard = ({ patient }: { patient: Patient }) => {
   const router = useRouter();
   const { organizationId } = useParams();
-  const getEffectivenessColor = (effectiveness: string) => {
-    switch (effectiveness.toLowerCase()) {
-      case "excellent":
-        return "bg-emerald-100 text-emerald-800 border-emerald-200";
-      case "improved":
-        return "bg-blue-100 text-blue-800 border-blue-200";
-      case "moderate":
-        return "bg-amber-100 text-amber-800 border-amber-200";
-      default:
-        return "bg-slate-100 text-slate-800 border-slate-200";
-    }
-  };
 
   return (
     <Card className="gap-3 group hover:shadow-xl hover:shadow-slate-200/50 transition-all duration-300 border-slate-200 bg-white shadow-md hover:-translate-y-1 rounded-2xl overflow-hidden">
       <CardHeader className="gap-0 px-2 bg-gradient-to-br from-slate-50 to-white border-b border-slate-100 [.border-b]:pb-2">
         <div className="flex justify-between items-start">
           <div className="space-y-1">
-            <Badge className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white border-0 font-medium text-[11px] px-2 py-1 rounded-full shadow-sm">
+            <Badge className="bg-gradient-to-br from-[#2ab7ca] to-[#4dc4d4] text-white border-0 font-medium text-[11px] px-2 py-1 rounded-full shadow-sm">
               Serial #{patient.serial_number}
             </Badge>
             <CardDescription className="text-[11px] pl-2 text-slate-500 font-medium">
@@ -100,7 +81,7 @@ const PatientCard = ({ patient }: { patient: Patient }) => {
               src={patient.avatar || "/placeholder.svg"}
               alt={patient.name}
             />
-            <AvatarFallback className="bg-gradient-to-br from-indigo-500 to-purple-600 text-white font-bold text-lg">
+            <AvatarFallback className="bg-gradient-to-br from-[#205072] to-[#2d6a96] text-white font-bold text-lg">
               {patient.name
                 .split(" ")
                 .map((n) => n[0])
@@ -130,7 +111,7 @@ const PatientCard = ({ patient }: { patient: Patient }) => {
             value={patient?.miasm_type}
           />
           <div className="flex items-center gap-3 p-1 bg-gradient-to-r from-slate-50 to-slate-100/50 rounded-lg border border-slate-200/60">
-            <div className="flex-shrink-0 bg-gradient-to-br from-blue-500 to-indigo-600 p-[5px] rounded-lg shadow-sm">
+            <div className="flex-shrink-0 bg-gradient-to-br from-red-500 to-pink-500 p-[5px] rounded-lg shadow-sm">
               <ActivitySquare className="h-3 w-3 text-white" />
             </div>
             <div className="flex flex-col min-w-0 flex-1">
@@ -172,7 +153,7 @@ const PatientCard = ({ patient }: { patient: Patient }) => {
             onClick={() =>
               router.push(`/${organizationId}/patients/${patient.uid}`)
             }
-            className="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-medium transition-all duration-200 px-6 py-2.5 rounded-xl shadow-sm hover:shadow-md"
+            className="bg-gradient-to-br from-navy-light to-navy-lighter hover:from-indigo-600 hover:to-purple-700 text-white font-medium transition-all duration-200 px-6 py-2.5 rounded-xl shadow-sm hover:shadow-md"
           >
             View Details
             <ArrowRight className="h-4 w-4" />

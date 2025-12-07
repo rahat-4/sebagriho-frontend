@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { useParams } from "next/navigation";
-import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { RefreshCw, AlertCircle } from "lucide-react";
 import { getData, deleteData } from "@/services/api";
@@ -147,7 +146,7 @@ const PatientAppointmentList = () => {
     });
   }, [appointments, dateRange]);
 
-  const hasDateFilter = dateRange.from || dateRange.to;
+  const hasDateFilter = Boolean(dateRange.from || dateRange.to);
 
   useEffect(() => {
     fetchData();
@@ -177,7 +176,6 @@ const PatientAppointmentList = () => {
         setDateRange={setDateRange}
         showDatePicker={showDatePicker}
         setShowDatePicker={setShowDatePicker}
-        appointmentCount={filteredAppointments.length}
       />
 
       {/* Error Alert */}

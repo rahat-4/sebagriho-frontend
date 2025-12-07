@@ -22,12 +22,10 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 
 import { postData } from "@/services/api";
-import { userSchema } from "@/schemas/OrganizationOnboard";
 
 import { RequiredLabel } from "@/components/RequiredLabel";
 
@@ -162,7 +160,7 @@ type HomeoPatientAdditionalInformationFormData = z.infer<
 interface HomeoPatientProps {
   onNext: () => void;
   organizationId?: string;
-  setPatientUid: (patientUid: any) => void;
+  setPatientUid: (patientUid: string) => void;
 }
 
 export const AddHomeoPatient: React.FC<HomeoPatientProps> = ({
@@ -219,10 +217,13 @@ export const AddHomeoPatient: React.FC<HomeoPatientProps> = ({
 
       if (status !== 201) {
         // Handle validation errors
-        Object.entries(response).map(([field, errorMessage]: any) => {
+        Object.entries(response).forEach(([field, errorMessage]) => {
+          const message = Array.isArray(errorMessage)
+            ? errorMessage[0]
+            : String(errorMessage);
           form.setError(field as keyof HomeoPatientFormData, {
             type: "manual",
-            message: errorMessage,
+            message,
           });
         });
         return;
@@ -361,8 +362,6 @@ export const HomeoPatientAdditonalInformations: React.FC<
     text: string;
   } | null>(null);
 
-  const countryCode = "+88";
-
   const form = useForm<HomeoPatientAdditionalInformationFormData>({
     resolver: zodResolver(homeoPatientAdditionalInformationSchema),
     defaultValues: {
@@ -398,12 +397,15 @@ export const HomeoPatientAdditonalInformations: React.FC<
 
         if (status !== 200) {
           // Handle validation errors
-          Object.entries(response).map(([field, errorMessage]: any) => {
+          Object.entries(response).forEach(([field, errorMessage]) => {
+            const message = Array.isArray(errorMessage)
+              ? errorMessage[0]
+              : String(errorMessage);
             form.setError(
               field as keyof HomeoPatientAdditionalInformationFormData,
               {
                 type: "manual",
-                message: errorMessage,
+                message,
               }
             );
           });

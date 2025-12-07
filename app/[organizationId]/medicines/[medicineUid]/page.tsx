@@ -236,8 +236,8 @@ const MedicineDetailPage = () => {
                   <AlertDialogHeader>
                     <AlertDialogTitle>Delete Medicine</AlertDialogTitle>
                     <AlertDialogDescription>
-                      Are you sure you want to delete "{medicine.name}"? This
-                      action cannot be undone.
+                      Are you sure you want to delete &quot;{medicine.name}
+                      &quot;? This action cannot be undone.
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>

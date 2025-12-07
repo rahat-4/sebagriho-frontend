@@ -392,12 +392,13 @@ export const PatientAppointment = ({
         } else {
           // Handle validation errors
           if (response && typeof response === "object") {
-            Object.entries(response).forEach(([field, errorMessage]: any) => {
+            Object.entries(response).forEach(([field, errorMessage]) => {
+              const message = Array.isArray(errorMessage)
+                ? errorMessage[0]
+                : String(errorMessage);
               form.setError(field as keyof HomeoPatientAppointmentFormData, {
                 type: "manual",
-                message: Array.isArray(errorMessage)
-                  ? errorMessage[0]
-                  : errorMessage,
+                message,
               });
             });
           }
@@ -424,7 +425,7 @@ export const PatientAppointment = ({
       <DialogTrigger asChild>
         <Button
           size="lg"
-          className="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-semibold px-6 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border-0"
+          className="bg-gradient-to-r from-[#2ab7ca] to-[#2199aa] hover:from-[#2199aa] hover:to-[#187b8a] hover:from-emerald-600 hover:to-teal-700 text-white font-semibold px-6 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border-0"
         >
           <Plus className="h-5 w-5 mr-2" />
           Create Appointment
@@ -546,7 +547,7 @@ export const PatientAppointment = ({
                 <Button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-semibold py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50"
+                  className="w-full bg-gradient-to-r from-[#2ab7ca] to-[#2199aa] hover:from-emerald-600 hover:to-teal-700 text-white font-semibold py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50"
                 >
                   {isLoading ? (
                     <>

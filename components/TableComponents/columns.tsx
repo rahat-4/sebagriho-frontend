@@ -1,4 +1,4 @@
-import { ColumnDef } from "@tanstack/react-table";
+import { ColumnDef, Column } from "@tanstack/react-table";
 import { MoreHorizontal, ChevronsUpDown } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -17,11 +17,11 @@ export const toTitleCase = (str: string): string => {
 };
 
 // Sortable header component for the table
-export const SortableHeader = ({
+export const SortableHeader = <T,>({
   column,
   label,
 }: {
-  column: any;
+  column: Column<T>;
   label: string;
 }) => (
   <Button
@@ -36,7 +36,7 @@ export const SortableHeader = ({
 // Column definition for the actions column
 export const getActionsColumn = <T,>(): ColumnDef<T> => ({
   id: "actions",
-  cell: ({ row }) => (
+  cell: () => (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="icon">

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { getData } from "@/services/api";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -43,23 +43,19 @@ const InfoItem = ({ icon: Icon, label, value }: InfoItemProps) => (
   </div>
 );
 const PatientCard = ({ organizationId, patientId }: PatientsProps) => {
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
   useEffect(() => {
     const fetchPatients = async () => {
       try {
-        const [status, response] = await getData(
+        const [status] = await getData(
           `/organization/homeopathy/${organizationId}/patients`
         );
 
         if (status !== 200) {
-          setError("Failed to fetch organizations");
+          console.error("Failed to fetch organizations");
           return;
         }
-      } catch (error: any) {
-        setError(error.message || "Failed to fetch organizations");
-      } finally {
-        setLoading(false);
+      } catch (error) {
+        console.error("Failed to fetch organizations:", error);
       }
     };
 

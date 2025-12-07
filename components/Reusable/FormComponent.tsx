@@ -45,9 +45,9 @@ const camelToSnake = (str: string): string => {
 
 // Convert object keys from camelCase to snake_case
 const convertKeysToSnakeCase = (
-  obj: Record<string, any>
-): Record<string, any> => {
-  const converted: Record<string, any> = {};
+  obj: Record<string, unknown>
+): Record<string, unknown> => {
+  const converted: Record<string, unknown> = {};
 
   for (const [key, value] of Object.entries(obj)) {
     const snakeKey = camelToSnake(key);
@@ -80,25 +80,25 @@ export interface FieldConfig {
 
 export interface FormConfig {
   fields: FieldConfig[];
-  schema: z.ZodSchema<any>;
+  schema: z.ZodTypeAny;
   apiEndpoint: string;
   method?: "POST" | "PUT";
   redirectPath?: string;
   successMessage?: string;
   submitButtonText?: string;
   title?: string;
-  onSuccess?: (response: any) => void;
-  onError?: (error: any) => void;
-  transformData?: (data: any) => any;
+  onSuccess?: (response: unknown) => void;
+  onError?: (error: Error) => void;
+  transformData?: (data: Record<string, unknown>) => Record<string, unknown>;
   setStep?: () => void;
   responseData?: string;
-  setResponseData?: (data: any) => void;
+  setResponseData?: (data: unknown) => void;
   className?: string;
 }
 
 interface DynamicFormProps {
   config: FormConfig;
-  initialData?: Record<string, any>;
+  initialData?: Record<string, unknown>;
   isEdit?: boolean;
 }
 
@@ -116,7 +116,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
 
   // Create default values from field configuration
   const getDefaultValues = () => {
-    const defaults: Record<string, any> = {};
+    const defaults: Record<string, unknown> = {};
     config.fields.forEach((field) => {
       if (field.type === "file") {
         defaults[field.name] = undefined;
@@ -124,7 +124,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
         defaults[field.name] = initialData[field.name] || 0;
       } else if (field.type === "date") {
         defaults[field.name] = initialData[field.name]
-          ? new Date(initialData[field.name])
+          ? new Date(initialData[field.name] as string | number | Date)
           : undefined;
       } else {
         defaults[field.name] = initialData[field.name] || "";
@@ -144,9 +144,9 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
     }
   };
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: Record<string, unknown>) => {
     try {
-      let processedData = { ...data };
+      let processedData: Record<string, unknown> = { ...data };
 
       // Convert dates to ISO strings for API
       config.fields.forEach((field) => {
@@ -154,7 +154,9 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
           field.type === "date" &&
           processedData[field.name] instanceof Date
         ) {
-          processedData[field.name] = processedData[field.name].toISOString();
+          processedData[field.name] = (
+            processedData[field.name] as Date
+          ).toISOString();
         }
       });
 
@@ -168,14 +170,18 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
 
       // Check if we need to use FormData (for file uploads)
       const hasFileField = config.fields.some((field) => field.type === "file");
-      let requestData: FormData | Record<string, any>;
+      let requestData: FormData | Record<string, unknown>;
 
       if (hasFileField) {
         const formData = new FormData();
 
         Object.entries(processedData).forEach(([key, value]) => {
           if (value !== undefined && value !== null) {
-            if (typeof value === "object" && value[0] instanceof File) {
+            if (
+              typeof value === "object" &&
+              Array.isArray(value) &&
+              value[0] instanceof File
+            ) {
               // Handle file upload
               formData.append(key, value[0]);
             } else if (typeof value !== "object") {
@@ -203,13 +209,14 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
 
         // Handle validation errors from API
         if (typeof response === "object" && response !== null) {
-          Object.entries(response).forEach(([field, errorMessage]: any) => {
+          Object.entries(response).forEach(([field, errorMessage]) => {
             if (config.fields.some((f) => f.name === field)) {
+              const message = Array.isArray(errorMessage)
+                ? errorMessage[0]
+                : String(errorMessage);
               form.setError(field, {
                 type: "manual",
-                message: Array.isArray(errorMessage)
-                  ? errorMessage[0]
-                  : errorMessage,
+                message,
               });
             }
           });
@@ -227,8 +234,10 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
 
         // Clear file inputs manually
         const fileInputs = document.querySelectorAll('input[type="file"]');
-        fileInputs.forEach((input: any) => {
-          input.value = "";
+        fileInputs.forEach((input) => {
+          if (input instanceof HTMLInputElement) {
+            input.value = "";
+          }
         });
 
         // Force form re-render
@@ -275,12 +284,17 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
       });
 
       if (config.onError) {
-        config.onError(error);
+        config.onError(
+          error instanceof Error ? error : new Error(String(error))
+        );
       }
     }
   };
 
-  const renderField = (fieldConfig: FieldConfig, field: any) => {
+  const renderField = (
+    fieldConfig: FieldConfig,
+    field: { value: unknown; onChange: (value: unknown) => void }
+  ) => {
     const { type, options, accept, placeholder, rows = 3 } = fieldConfig;
 
     switch (type) {
@@ -292,7 +306,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
             rows={rows}
             className="text-sm resize-none"
             // Ensure the value is always a string and handle undefined/null
-            value={field.value || ""}
+            value={typeof field.value === "string" ? field.value : ""}
             onChange={(e) => field.onChange(e.target.value)}
           />
         );
@@ -310,7 +324,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
               >
                 <CalendarIcon className="mr-2 h-4 w-4" />
                 {field.value ? (
-                  format(field.value, "PPP")
+                  format(field.value as Date, "PPP")
                 ) : (
                   <span>{placeholder || "Pick a date"}</span>
                 )}
@@ -319,7 +333,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
             <PopoverContent className="w-auto p-0">
               <Calendar
                 mode="single"
-                selected={field.value}
+                selected={field.value as Date | undefined}
                 onSelect={field.onChange}
                 initialFocus
               />
@@ -329,7 +343,10 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
 
       case "select":
         return (
-          <Select onValueChange={field.onChange} value={field.value || ""}>
+          <Select
+            onValueChange={field.onChange}
+            value={(field.value as string) || ""}
+          >
             <SelectTrigger className="text-sm w-full">
               <SelectValue placeholder={placeholder || "Select an option..."} />
             </SelectTrigger>
@@ -364,7 +381,11 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
             {...field}
             className="text-sm"
             // Ensure proper value handling for text inputs
-            value={field.value || ""}
+            value={
+              typeof field.value === "string" || typeof field.value === "number"
+                ? field.value
+                : ""
+            }
             onChange={(e) => field.onChange(e.target.value)}
           />
         );

@@ -8,14 +8,13 @@ import {
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
 } from "@/components/ui/select";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Calendar as CalendarIcon, X, ArrowUpDown } from "lucide-react";
+import { Calendar as CalendarIcon, X } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 
@@ -31,7 +30,6 @@ interface AppointmentFiltersProps {
   setDateRange: (range: DateRange) => void;
   showDatePicker: boolean;
   setShowDatePicker: (show: boolean) => void;
-  appointmentCount: number;
 }
 
 export const AppointmentFilters = ({
@@ -41,7 +39,6 @@ export const AppointmentFilters = ({
   setDateRange,
   showDatePicker,
   setShowDatePicker,
-  appointmentCount,
 }: AppointmentFiltersProps) => {
   const hasDateFilter = dateRange.from || dateRange.to;
 

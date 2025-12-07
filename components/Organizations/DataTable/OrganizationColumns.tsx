@@ -1,6 +1,6 @@
 "use client";
 
-import { ColumnDef } from "@tanstack/react-table";
+import { ColumnDef, Column } from "@tanstack/react-table";
 
 import multiSelectFilterFn from "@/components/TableComponents/CustomFilter";
 import {
@@ -10,7 +10,7 @@ import {
 } from "@/components/TableComponents/columns";
 
 // Organization type definition
-type Organization = {
+export type Organization = {
   id: string;
   name: string;
   parent: string;
@@ -33,27 +33,27 @@ const generateOrganizationColumns = (): ColumnDef<Organization>[] => [
     "payment Status",
   ].map((key) => ({
     accessorKey: key,
-    header: ({ column }: any) => (
+    header: ({ column }: { column: Column<Organization> }) => (
       <SortableHeader column={column} label={toTitleCase(key)} />
     ),
   })),
   {
     accessorKey: "status",
-    header: ({ column }: any) => (
+    header: ({ column }: { column: Column<Organization> }) => (
       <SortableHeader column={column} label="Status" />
     ),
     filterFn: multiSelectFilterFn,
   },
   {
     accessorKey: "organization_type",
-    header: ({ column }: any) => (
+    header: ({ column }: { column: Column<Organization> }) => (
       <SortableHeader column={column} label="Organization Type" />
     ),
     filterFn: multiSelectFilterFn,
   },
   {
     accessorKey: "amount",
-    header: ({ column }: any) => (
+    header: ({ column }: { column: Column<Organization> }) => (
       <SortableHeader column={column} label="Amount" />
     ),
     cell: ({ row }) => {

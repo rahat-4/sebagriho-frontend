@@ -7,5 +7,5 @@ export default function multiSelectFilterFn<T>(
 ) {
   const value = row.getValue(columnId)?.toString().toLowerCase();
 
-  return filterValue.includes(value);
+  return value ? filterValue.includes(value) : false;
 }

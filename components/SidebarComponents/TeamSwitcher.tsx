@@ -6,7 +6,16 @@ import {
 
 import Image from "next/image";
 
-export function TeamSwitcher({ company }: any) {
+interface Company {
+  logo: string;
+  name: string;
+  title?: string | null;
+}
+
+export function TeamSwitcher({ company }: { company: Company | null }) {
+  if (!company) {
+    return null;
+  }
   return (
     <SidebarMenu>
       <SidebarMenuItem>

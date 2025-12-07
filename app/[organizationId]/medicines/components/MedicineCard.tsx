@@ -13,7 +13,6 @@ import {
   Info,
 } from "lucide-react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 
 import { HomeopathicMedicine } from "@/types/medicine.types";
@@ -115,13 +114,6 @@ const MedicineCard: React.FC<{ medicine: HomeopathicMedicine }> = ({
         Available
       </Badge>
     );
-  };
-
-  const getPriceColor = () => {
-    if (!medicine.is_available || expirationStatus === "expired") {
-      return "text-gray-400";
-    }
-    return "text-emerald-600 font-semibold";
   };
 
   // Format dates

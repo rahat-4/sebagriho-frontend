@@ -17,7 +17,6 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 
@@ -167,10 +166,13 @@ const UserRegistration: React.FC<StepProps> = ({ onNext }) => {
 
       if (status !== 201) {
         // Handle validation errors
-        Object.entries(response).map(([field, errorMessage]: any) => {
+        Object.entries(response).forEach(([field, errorMessage]) => {
+          const message = Array.isArray(errorMessage)
+            ? errorMessage[0]
+            : String(errorMessage);
           form.setError(field as keyof UserFormData, {
             type: "manual",
-            message: errorMessage,
+            message,
           });
         });
         return;

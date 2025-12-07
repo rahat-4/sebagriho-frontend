@@ -63,16 +63,14 @@ const PatientDetail = ({ patient }: { patient: Patient }) => {
             </AvatarFallback>
           </Avatar>
 
-          <Card className="p-2 gap-2 bg-gradient-to-br from-purple-50 to-violet-50 border-purple-200 shadow-sm hover:shadow-md transition-all duration-200 lg:hidden">
+          <Card className="p-2 gap-2 bg-gradient-to-br from-red-50 to-pink-50 border-pink-200 shadow-sm hover:shadow-md transition-all duration-200 lg:hidden">
             <CardContent className="px-1">
               <div className="flex flex-col items-center">
-                <div className="bg-gradient-to-br from-purple-500 to-violet-600 p-2 rounded-lg">
+                <div className="bg-gradient-to-br from-red-500 to-pink-500 p-2 rounded-lg">
                   <Calendar className="h-3 w-3 text-white" />
                 </div>
-                <p className="text-xs font-medium text-purple-600">
-                  Total Visits
-                </p>
-                <p className="text-sm font-bold text-purple-800">0</p>
+                <p className="text-xs font-medium text-red-600">Total Visits</p>
+                <p className="text-sm font-bold text-red-600">0</p>
               </div>
             </CardContent>
           </Card>
@@ -135,7 +133,7 @@ const PatientDetail = ({ patient }: { patient: Patient }) => {
             <AlertDialogTrigger asChild>
               <Button
                 variant="outline"
-                className="border-red-200 bg-red-600 text-white hover:bg-red-700 font-medium px-6 py-2.5 rounded-xl transition-all duration-200"
+                className="bg-gradient-to-r from-red-500 to-pink-500 text-white hover:bg-red-700 font-medium px-6 py-2.5 rounded-xl transition-all duration-200"
               >
                 <Trash2 className="h-4 w-4 mr-2" />
                 Delete
@@ -145,8 +143,8 @@ const PatientDetail = ({ patient }: { patient: Patient }) => {
               <AlertDialogHeader>
                 <AlertDialogTitle>Delete Patient</AlertDialogTitle>
                 <AlertDialogDescription>
-                  Are you sure you want to delete "{patient.name}"? This action
-                  cannot be undone.
+                  Are you sure you want to delete &quot;{patient.name}&quot;?
+                  This action cannot be undone.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>

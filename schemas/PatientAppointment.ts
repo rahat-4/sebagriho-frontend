@@ -4,10 +4,7 @@ export const patientAppointmentSchema = z.object({
   symptoms: z.string().min(1, { message: "Symptoms are required." }),
   treatmentEffectiveness: z.string().optional(),
   appointmentFile: z.any().optional(),
-  medicines: z
-    .array(z.object({ uid: z.string().uuid() }))
-    .transform((arr) => arr.map((m) => m.uid))
-    .optional(),
+  medicines: z.array(z.any()).optional(),
 });
 
 // import { z } from "zod";

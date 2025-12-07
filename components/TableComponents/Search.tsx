@@ -1,12 +1,13 @@
 import { Input } from "@/components/ui/input";
+import type { Table } from "@tanstack/react-table";
 
-const Search = ({
+const Search = <T,>({
   table,
   searchableColumn,
   value,
   onChange,
 }: {
-  table: any;
+  table: Table<T>;
   searchableColumn: string;
   value: string;
   onChange: (value: string) => void;
@@ -21,7 +22,7 @@ const Search = ({
       onChange={(event) => {
         const val = event.target.value;
         onChange(val);
-        column.setFilterValue(val);
+        column?.setFilterValue(val);
       }}
     />
   );
