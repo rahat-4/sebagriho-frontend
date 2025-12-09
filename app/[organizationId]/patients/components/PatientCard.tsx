@@ -49,10 +49,10 @@ const InfoItem = ({ icon: Icon, label, value }: InfoItemProps) => (
       <Icon className="h-3 w-3 text-white" />
     </div>
     <div className="flex flex-col min-w-0 flex-1">
-      <span className="text-slate-500 text-[11px] font-medium uppercase tracking-wide">
+      <span className="text-slate-500 text-[10px] font-medium uppercase tracking-wide">
         {label}
       </span>
-      <span className="text-slate-900 text-[11px] font-semibold truncate">
+      <span className="text-slate-900 text-[10px] font-semibold truncate">
         {value}
       </span>
     </div>
@@ -81,7 +81,7 @@ const PatientCard = ({ patient }: { patient: Patient }) => {
               src={patient.avatar || "/placeholder.svg"}
               alt={patient.name}
             />
-            <AvatarFallback className="bg-gradient-to-br from-[#205072] to-[#2d6a96] text-white font-bold text-lg">
+            <AvatarFallback className="bg-gradient-to-br from-[#205072] to-[#2d6a96] text-white font-bold text-xs">
               {patient.name
                 .split(" ")
                 .map((n) => n[0])
@@ -115,7 +115,7 @@ const PatientCard = ({ patient }: { patient: Patient }) => {
               <ActivitySquare className="h-3 w-3 text-white" />
             </div>
             <div className="flex flex-col min-w-0 flex-1">
-              <span className="text-slate-500 text-[11px] font-medium uppercase tracking-wide">
+              <span className="text-slate-500 text-[10px] font-medium uppercase tracking-wide">
                 Effectiveness
               </span>
               {/* <Badge
@@ -150,10 +150,11 @@ const PatientCard = ({ patient }: { patient: Patient }) => {
             </div>
           </div>
           <Button
+            size={"sm"}
             onClick={() =>
               router.push(`/${organizationId}/patients/${patient.uid}`)
             }
-            className="bg-gradient-to-br from-navy-light to-navy-lighter hover:from-indigo-600 hover:to-purple-700 text-white font-medium transition-all duration-200 px-6 py-2.5 rounded-xl shadow-sm hover:shadow-md"
+            className="bg-gradient-to-br from-navy-light to-navy-lighter hover:from-indigo-600 hover:to-purple-700 text-white text-xs transition-all duration- rounded-xl shadow-sm hover:shadow-md"
           >
             View Details
             <ArrowRight className="h-4 w-4" />

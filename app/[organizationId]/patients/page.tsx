@@ -2,7 +2,6 @@
 
 import { getData } from "@/services/api";
 import { useParams } from "next/navigation";
-import type React from "react";
 import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 
@@ -101,18 +100,6 @@ const Patients = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-indigo-50/30 px-4 py-2 sm:p-6 lg:p-8">
       <div className="max-w-7xl mx-auto space-y-2">
-        {/* Header */}
-        {/* <div className="text-center space-y-4 pb-2">
-          <div className="">
-            <h1 className="text-lg sm:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-indigo-600 via-purple-600 to-teal-600 bg-clip-text text-transparent">
-              Patient Management
-            </h1>
-            <p className="text-slate-600 text-xs sm:text-base font-medium max-w-2xl mx-auto">
-              Comprehensive patient tracking and management system
-            </p>
-          </div>
-        </div> */}
-
         {/* Enhanced Stats Cards */}
         <div className="grid grid-cols-2 gap-1 mb-2">
           <StatCard
