@@ -33,7 +33,7 @@ import PhoneNumber from "@/components/PhoneNumber";
 import { splitFullNameToParts } from "@/services/nameConverter";
 
 import { patchData } from "@/services/api";
-import { camelToSnake } from "@/services/caseConverters";
+import { camelToSnake } from "@/services/converter";
 
 interface FieldProps {
   label: string;

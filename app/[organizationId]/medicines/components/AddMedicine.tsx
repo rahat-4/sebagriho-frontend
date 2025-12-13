@@ -38,7 +38,7 @@ import {
 } from "lucide-react";
 import { useCallback, useState } from "react";
 import { RequiredLabel } from "@/components/RequiredLabel";
-import { camelToSnake } from "@/services/caseConverters";
+import { camelToSnake } from "@/services/converter";
 import { postData } from "@/services/api";
 import { cn } from "@/lib/utils";
 import { homeopathicMedicineSchema } from "@/schemas/MedicineSchema";

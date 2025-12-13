@@ -35,7 +35,7 @@ import {
 import { useCallback, useState, useEffect, useMemo } from "react";
 import { patientAppointmentSchema } from "@/schemas/PatientAppointment";
 import { RequiredLabel } from "@/components/RequiredLabel";
-import { camelToSnake } from "@/services/caseConverters";
+import { camelToSnake } from "@/services/converter";
 import { postData, getData } from "@/services/api";
 import { cn } from "@/lib/utils";
 

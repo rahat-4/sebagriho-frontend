@@ -24,7 +24,7 @@ import { RequiredLabel } from "@/components/RequiredLabel";
 
 import { postData } from "@/services/api";
 
-import { snakeToCamel } from "@/services/caseConverters";
+import { snakeToCamel } from "@/services/converter";
 
 type ResetPasswordFormData = z.infer<typeof resetPasswordSchema>;
 

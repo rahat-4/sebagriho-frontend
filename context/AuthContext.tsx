@@ -9,7 +9,7 @@ import {
 } from "react";
 import { useRouter } from "next/navigation";
 
-import { getData, postData } from "../services/api";
+import { getData, postData } from "@/services/api";
 
 type OrganizationType =
   | "CHAMBER"

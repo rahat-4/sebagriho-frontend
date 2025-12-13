@@ -4,9 +4,9 @@ import type { NextRequest } from "next/server";
 export async function middleware(request: NextRequest) {
   const url = request.nextUrl.clone();
 
-  // if (url.pathname !== "/") {
-  //   return NextResponse.next();
-  // }
+  if (url.pathname !== "/") {
+    return NextResponse.next();
+  }
 
   try {
     const response = await fetch(
@@ -38,14 +38,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: [
-    /*
-      Match all paths except:
-      - /login
-      - /api
-      - /_next (static files)
-      - /favicon.ico
-    */
-    "/((?!login|api|_next|favicon.ico).*)",
-  ],
+  matcher: ["/"],
 };
