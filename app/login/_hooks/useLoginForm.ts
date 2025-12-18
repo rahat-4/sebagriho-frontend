@@ -1,10 +1,11 @@
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useAuth } from "@/context/AuthContext";
+
 import { loginSchema } from "@/schemas/LoginSchema";
+import { login } from "@/services/auth";
 
 type LoginFormData = z.infer<typeof loginSchema>;
 
@@ -14,13 +15,12 @@ interface MessageState {
 }
 
 export function useLoginForm() {
-  const { login, user, organization } = useAuth();
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const [showPassword, setShowPassword] = useState(false);
   const [remember, setRemember] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [loginSuccess, setLoginSuccess] = useState(false);
   const [message, setMessage] = useState<MessageState | null>(null);
 
   const form = useForm<LoginFormData>({
@@ -29,68 +29,65 @@ export function useLoginForm() {
     mode: "onBlur",
   });
 
-  useEffect(() => {
-    if (loginSuccess && user) {
-      const timer = setTimeout(() => {
-        const destination = user.is_admin
-          ? "/admin"
-          : `/${organization?.uid ?? ""}`;
-        router.replace(destination);
-        setLoginSuccess(false);
-      }, 1500);
-
-      return () => clearTimeout(timer);
-    }
-  }, [loginSuccess, user, organization, router]);
-
   async function onSubmit(data: LoginFormData) {
     setIsLoading(true);
     setMessage(null);
-    setLoginSuccess(false);
 
     try {
-      const result = await login({
-        phone: data.phone,
+      const response = await login({
+        username: data.phone,
         password: data.password,
         rememberMe: remember,
       });
 
-      if (!result.success) {
-        if (result.errors) {
-          Object.entries(result.errors).forEach(
-            ([field, err]: [string, unknown]) => {
-              let messageText: string;
-              if (Array.isArray(err)) {
-                const first = err[0];
-                messageText = typeof first === "string" ? first : String(first);
-              } else if (typeof err === "string") {
-                messageText = err;
-              } else {
-                messageText = String(err ?? "");
-              }
-              form.setError(field as keyof LoginFormData, {
-                type: "manual",
-                message: messageText,
-              });
-            }
-          );
-        }
-        if (result.message) {
-          setMessage({ type: "error", text: result.message });
-        }
-        return;
-      }
+      console.log("Login successful:", response);
 
       setMessage({
         type: "success",
-        text: result.message || "Login successful!",
+        text: "Login successful! Redirecting...",
       });
-      setLoginSuccess(true);
+
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      const redirect = searchParams.get("redirect") ?? "/dashboard";
+
+      router.push(redirect);
+      router.refresh();
     } catch (error) {
-      setMessage({
-        type: "error",
-        text: error instanceof Error ? error.message : "An error occurred.",
-      });
+      if (error instanceof Error) {
+        try {
+          const errorData = JSON.parse(error.message) as Record<
+            string,
+            string | string[]
+          >;
+
+          Object.entries(errorData).forEach(([field, messages]) => {
+            // Handle non-field errors explicitly
+            if (field === "non_field_errors" || field === "detail") {
+              form.setError("root", {
+                type: "manual",
+                message: Array.isArray(messages) ? messages[0] : messages,
+              });
+              return;
+            }
+
+            form.setError(field as keyof LoginFormData, {
+              type: "manual",
+              message: Array.isArray(messages) ? messages[0] : messages,
+            });
+          });
+        } catch {
+          form.setError("root", {
+            type: "manual",
+            message: error.message || "Something went wrong",
+          });
+        }
+      } else {
+        setMessage({
+          type: "error",
+          text: "An unexpected error occurred. Please try again.",
+        });
+      }
     } finally {
       setIsLoading(false);
     }
