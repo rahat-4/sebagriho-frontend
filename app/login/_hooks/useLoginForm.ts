@@ -35,23 +35,27 @@ export function useLoginForm() {
 
     try {
       const response = await login({
-        username: data.phone,
+        phone: data.phone,
         password: data.password,
         rememberMe: remember,
       });
 
-      console.log("Login successful:", response);
+      let url = "/dashboard";
+
+      console.log("Login successful:", searchParams.toString());
 
       setMessage({
         type: "success",
-        text: "Login successful! Redirecting...",
+        text: `Welcome back, ${response.user_name}`,
       });
 
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      const redirect = searchParams.get("redirect") ?? "/dashboard";
+      if (response.admin === true) {
+        url = "/admin";
+      }
 
-      router.push(redirect);
+      router.push(url);
       router.refresh();
     } catch (error) {
       if (error instanceof Error) {
