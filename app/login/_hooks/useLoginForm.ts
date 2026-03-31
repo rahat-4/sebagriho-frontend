@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -16,7 +16,6 @@ interface MessageState {
 
 export function useLoginForm() {
   const router = useRouter();
-  const searchParams = useSearchParams();
 
   const [showPassword, setShowPassword] = useState(false);
   const [remember, setRemember] = useState(false);
@@ -40,7 +39,6 @@ export function useLoginForm() {
         rememberMe: remember,
       });
 
-      console.log("Login successful:", searchParams.toString());
 
       setMessage({
         type: "success",
