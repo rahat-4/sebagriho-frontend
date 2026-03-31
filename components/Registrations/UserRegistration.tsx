@@ -26,7 +26,7 @@ import { userSchema } from "@/schemas/OrganizationOnboard";
 import { RequiredLabel } from "@/components/RequiredLabel";
 
 import PhoneNumber from "@/components/PhoneNumber";
-import { splitFullNameToParts } from "@/services/nameConverter";
+import { splitFullNameToParts } from "@/services/converter";
 
 interface StepProps {
   onNext: () => void;

@@ -17,15 +17,15 @@ const OrganizationRegistration = () => {
   const router = useRouter();
   const { user, isLoading } = useAuth();
 
-  useEffect(() => {
-    if (!isLoading && user?.is_admin !== true) {
-      router.replace("/login"); // Replace this later
-    }
-  }, [isLoading, user, router]);
+  // useEffect(() => {
+  //   if (!isLoading && user?.is_admin !== true) {
+  //     router.replace("/login"); // Replace this later
+  //   }
+  // }, [isLoading, user, router]);
 
   // ⛔ Prevent rendering before auth status is known
   if (isLoading) return <p>Checking authentication...</p>; // Add loading animation later
-  if (user?.is_admin !== true) return null;
+  // if (user?.is_admin !== true) return null;
 
   const completeRegistration = () => {
     router.push("/admin/organizations");
@@ -38,7 +38,7 @@ const OrganizationRegistration = () => {
 
   const steps: StepType[] = [
     {
-      title: "Organization user registration",
+      title: "User Information",
       component: <UserRegistration onNext={() => setStep(2)} />,
     },
     {

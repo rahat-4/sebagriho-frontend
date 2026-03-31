@@ -30,7 +30,7 @@ import { postData } from "@/services/api";
 import { RequiredLabel } from "@/components/RequiredLabel";
 
 import PhoneNumber from "@/components/PhoneNumber";
-import { splitFullNameToParts } from "@/services/nameConverter";
+import { splitFullNameToParts } from "@/services/converter";
 
 import { patchData } from "@/services/api";
 import { camelToSnake } from "@/services/converter";

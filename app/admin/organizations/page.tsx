@@ -23,11 +23,11 @@ const Organizations = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (!isLoading && user?.is_admin !== true) {
-      router.replace("/login"); // Replace this later
-    }
-  }, [isLoading, user, router]);
+  // useEffect(() => {
+  //   if (!isLoading && user?.admin !== true) {
+  //     router.replace("/login"); // Replace this later
+  //   }
+  // }, [isLoading, user, router]);
 
   useEffect(() => {
     const fetchOrganizations = async () => {
@@ -54,7 +54,6 @@ const Organizations = () => {
 
   // ⛔ Prevent rendering before auth status is known
   if (isLoading) return <p>Checking authentication...</p>; // Add loading animation later
-  if (user?.is_admin !== true) return null;
 
   return (
     <div className="container mx-auto p-2">

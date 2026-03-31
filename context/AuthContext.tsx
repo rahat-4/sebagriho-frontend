@@ -123,7 +123,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       formData.append("phone", fullPhoneNumber);
       formData.append("password", credentials.password);
-      formData.append("rememberMe", String(credentials.rememberMe || "false"));
+      formData.append("remember_me", String(credentials.rememberMe || false));
 
       const [status, response] = await postData("/public/auth/login", formData);
 

@@ -13,6 +13,7 @@ export interface AuthResponse {
   refresh: string;
   user_name: string;
   admin: boolean;
+  organization_uid: string;
 }
 
 type OrganizationType =
@@ -84,7 +85,7 @@ export async function login(
 
   formData.append("phone", fullPhoneNumber);
   formData.append("password", credentials.password);
-  formData.append("rememberMe", String(credentials.rememberMe || "false"));
+  formData.append("remember_me", String(credentials.rememberMe || false));
 
   const response = await postData("/public/auth/login", formData);
   const [status, data] = response;

@@ -40,8 +40,6 @@ export function useLoginForm() {
         rememberMe: remember,
       });
 
-      let url = "/dashboard";
-
       console.log("Login successful:", searchParams.toString());
 
       setMessage({
@@ -51,9 +49,13 @@ export function useLoginForm() {
 
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
+      let url = `${response.organization_uid}`;
+
       if (response.admin === true) {
         url = "/admin";
       }
+
+      
 
       router.push(url);
       router.refresh();
