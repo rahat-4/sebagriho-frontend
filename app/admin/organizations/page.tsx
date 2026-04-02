@@ -34,10 +34,13 @@ const Organizations = () => {
       try {
         const [status, response] = await getData("/admin/organizations");
 
+        console.log("API Response Status:", status);
+        console.log("API Response Data:", response["results"]);
+
         if (status !== 200) {
           // console.log("")
         }
-        setTableData(response);
+        setTableData(response["results"] || []); // Adjust based on actual API response structure
       } catch (err: unknown) {
         if (err instanceof Error) {
           setError(err.message || "Failed to fetch organizations");
