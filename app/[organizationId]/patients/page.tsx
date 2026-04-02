@@ -98,10 +98,10 @@ const Patients = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-indigo-50/30 px-4 py-2 sm:p-6 lg:p-8">
-      <div className="max-w-7xl mx-auto space-y-2">
+    <div className="min-h-screen bg-background px-4 py-4 sm:p-6 lg:p-8">
+      <div className="mx-auto max-w-7xl space-y-4">
         {/* Enhanced Stats Cards */}
-        <div className="grid grid-cols-2 gap-1 mb-2">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <StatCard
             title="Total Patients"
             value={patients.length}
@@ -127,14 +127,14 @@ const Patients = () => {
         />
 
         {/* Results Count */}
-        <div className="flex justify-between items-center px-1">
-          <p className="text-slate-600 font-medium text-sm">
+        <div className="flex items-center justify-between px-1">
+          <p className="text-sm font-medium text-muted-foreground">
             Showing{" "}
-            <span className="font-bold text-slate-900">
+            <span className="font-bold text-foreground">
               {filteredPatients.length}
             </span>{" "}
             of{" "}
-            <span className="font-bold text-slate-900">{patients.length}</span>{" "}
+            <span className="font-bold text-foreground">{patients.length}</span>{" "}
             patients
           </p>
           {(searchTerm ||
@@ -150,7 +150,7 @@ const Patients = () => {
                   gender: "all",
                 });
               }}
-              className="text-slate-500 hover:text-slate-700 text-sm"
+              className="text-sm text-muted-foreground hover:text-foreground"
             >
               Clear filters
             </button>
@@ -159,23 +159,23 @@ const Patients = () => {
 
         {/* Patient Grid/List */}
         {filteredPatients.length > 0 ? (
-          <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
             {filteredPatients.map((patient) => (
               <PatientCard key={patient.uid} patient={patient} />
             ))}
           </div>
         ) : (
-          <Card className="border-0 rounded-2xl bg-gradient-to-br from-slate-50 to-slate-100/50 shadow-lg">
+          <Card className="rounded-3xl border border-border/60 bg-white/80 shadow-sm backdrop-blur">
             <CardContent className="p-12 text-center">
               <div className="space-y-6">
-                <div className="bg-gradient-to-br from-slate-200 to-slate-300 rounded-full p-6 w-24 h-24 mx-auto flex items-center justify-center">
-                  <Users className="h-12 w-12 text-slate-500" />
+                <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-muted p-6">
+                  <Users className="h-12 w-12 text-muted-foreground" />
                 </div>
                 <div className="space-y-3">
-                  <h3 className="text-2xl font-bold text-slate-800">
+                  <h3 className="text-2xl font-bold text-foreground">
                     No Patients Found
                   </h3>
-                  <p className="text-slate-600 max-w-md mx-auto leading-relaxed">
+                  <p className="mx-auto max-w-md leading-relaxed text-muted-foreground">
                     {searchTerm ||
                     filters.miasm !== "all" ||
                     filters.bloodGroup !== "all" ||

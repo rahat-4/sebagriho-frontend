@@ -38,22 +38,25 @@ export default function LoginForm() {
   } = useLoginForm();
 
   return (
-    <div className="flex min-h-svh flex-col items-center justify-center p-6 md:p-10">
-      <div className="w-full max-w-3xl">
+    <div className="flex min-h-svh flex-col items-center justify-center bg-[radial-gradient(circle_at_top_left,_rgba(42,183,202,0.12),_transparent_30%),radial-gradient(circle_at_top_right,_rgba(32,80,114,0.1),_transparent_28%)] p-4 sm:p-6 md:p-10">
+      <div className="w-full max-w-5xl">
         <div className="flex flex-col gap-6">
-          <Card className="overflow-hidden shadow-lg">
+          <Card className="overflow-hidden rounded-3xl border border-border/60 bg-white/90 shadow-xl backdrop-blur">
             <CardContent className="grid p-0 md:grid-cols-2">
               <Form {...form}>
                 <form
                   onSubmit={form.handleSubmit(onSubmit)}
-                  className="p-6 md:p-8"
+                  className="p-6 sm:p-8"
                 >
                   <div className="flex flex-col gap-6">
                     <div className="flex flex-col items-center text-center">
-                      <h1 className="text-2xl font-bold text-navy">
+                      <p className="text-xs font-semibold uppercase tracking-[0.24em] text-secondary-darker">
+                        Sebagriho
+                      </p>
+                      <h1 className="text-3xl font-semibold text-foreground font-ovo">
                         Welcome back
                       </h1>
-                      <p className="text-balance text-muted-foreground mt-1">
+                      <p className="mt-1 text-balance text-sm text-muted-foreground">
                         Login to your Sebagriho account
                       </p>
                     </div>
@@ -193,7 +196,7 @@ export default function LoginForm() {
 
                     <Button
                       type="submit"
-                      className="bg-navy hover:bg-navy-dark text-white font-medium"
+                      className="h-11 rounded-xl bg-primary text-primary-foreground font-medium hover:bg-primary/90"
                       disabled={isLoading}
                     >
                       {isLoading ? (

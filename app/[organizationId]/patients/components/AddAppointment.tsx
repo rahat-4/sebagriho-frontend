@@ -158,7 +158,7 @@ const MedicineMultiSelect = ({
         type="button"
         variant="outline"
         onClick={() => setOpen(!open)}
-        className="w-full justify-between min-h-[40px] rounded-lg"
+        className="h-11 w-full justify-between rounded-xl border-border/60 bg-background px-3 shadow-sm transition-all duration-200 hover:border-primary hover:bg-primary/5"
         aria-expanded={open}
       >
         <span
@@ -174,15 +174,15 @@ const MedicineMultiSelect = ({
 
       {/* Dropdown content */}
       {open && (
-        <div className="absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-hidden">
+        <div className="absolute z-50 mt-1 max-h-60 w-full overflow-hidden rounded-xl border border-border/60 bg-background shadow-lg">
           {/* Search input */}
-          <div className="p-2 border-b border-gray-200">
+          <div className="border-b border-border/60 p-2">
             <Input
               type="text"
               placeholder="Search medicines..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="h-8 text-sm"
+              className="h-9 text-sm"
               autoFocus
             />
           </div>
@@ -195,7 +195,7 @@ const MedicineMultiSelect = ({
                 <span className="text-sm">Loading medicines...</span>
               </div>
             ) : error ? (
-              <div className="p-4 text-center text-sm text-red-600">
+              <div className="p-4 text-center text-sm text-destructive">
                 {error}
                 <Button
                   variant="link"
@@ -221,7 +221,7 @@ const MedicineMultiSelect = ({
                       key={medicine.uid}
                       type="button"
                       onClick={() => handleSelect(medicine)}
-                      className="w-full px-3 py-2 text-left hover:bg-gray-100 flex items-center transition-colors"
+                      className="flex w-full items-center px-3 py-2 text-left transition-colors hover:bg-muted"
                     >
                       <Check
                         className={cn(
@@ -250,12 +250,12 @@ const MedicineMultiSelect = ({
 
       {/* Selected medicines display */}
       {value.length > 0 && (
-        <div className="flex flex-wrap gap-2 p-2 bg-slate-50 rounded-lg">
+        <div className="flex flex-wrap gap-2 rounded-xl border border-border/60 bg-muted/30 p-2">
           {value.map((medicine) => (
             <Badge
               key={medicine.uid}
               variant="secondary"
-              className="px-2 py-1 bg-blue-100 text-blue-800 hover:bg-blue-200"
+              className="bg-primary/10 px-2 py-1 text-primary hover:bg-primary/15"
             >
               <Pill className="w-3 h-3 mr-1" />
               {medicine.name}
@@ -265,7 +265,7 @@ const MedicineMultiSelect = ({
               <Button
                 variant="ghost"
                 size="sm"
-                className="ml-1 h-4 w-4 p-0 hover:bg-blue-300"
+                className="ml-1 h-4 w-4 p-0 hover:bg-primary/15"
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
@@ -425,19 +425,19 @@ export const PatientAppointment = ({
       <DialogTrigger asChild>
         <Button
           size="lg"
-          className="bg-gradient-to-r from-[#2ab7ca] to-[#2199aa] hover:from-[#2199aa] hover:to-[#187b8a] hover:from-emerald-600 hover:to-teal-700 text-white font-semibold px-6 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border-0"
+          className="rounded-xl bg-primary px-6 py-3 font-semibold text-primary-foreground shadow-sm transition-all duration-200 hover:bg-primary/90 hover:shadow-md"
         >
           <Plus className="h-5 w-5 mr-2" />
           Create Appointment
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="max-w-[95vw] sm:max-w-[600px] max-h-[90vh] rounded-2xl border-0 shadow-2xl bg-gradient-to-br from-white to-slate-50">
+      <DialogContent className="max-h-[90vh] max-w-[95vw] rounded-3xl border border-border/60 bg-white/95 shadow-xl backdrop-blur sm:max-w-[600px]">
         <DialogHeader className="gap-0">
-          <DialogTitle className="text-lg font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent">
+          <DialogTitle className="text-lg font-semibold text-foreground">
             Patient Appointment
           </DialogTitle>
-          <DialogDescription className="text-slate-600 text-xs leading-relaxed">
+          <DialogDescription className="text-xs leading-relaxed text-muted-foreground">
             Record patient present conditions and medicines.
           </DialogDescription>
         </DialogHeader>
@@ -489,7 +489,7 @@ export const PatientAppointment = ({
                           {fieldConfig.label}
                         </RequiredLabel>
                       ) : (
-                        <FormLabel className="flex items-center text-sm font-semibold text-slate-700">
+                        <FormLabel className="flex items-center text-sm font-semibold text-foreground">
                           {fieldConfig.icon}
                           {fieldConfig.label}
                         </FormLabel>
@@ -502,7 +502,7 @@ export const PatientAppointment = ({
                             rows={fieldConfig.rows}
                             {...field}
                             value={field.value || ""}
-                            className="text-sm resize-none border-slate-200 rounded-lg"
+                            className="resize-none rounded-xl border-border/60 text-sm"
                           />
                         ) : (
                           <Input
@@ -510,7 +510,7 @@ export const PatientAppointment = ({
                             type="file"
                             accept={fieldConfig.accept}
                             onChange={(e) => field.onChange(e.target.files)}
-                            className="text-sm border-slate-200 rounded-lg file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-orange-50 file:text-orange-700 hover:file:bg-orange-100"
+                            className="rounded-xl border-border/60 text-sm file:mr-4 file:rounded-full file:border-0 file:bg-primary/10 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-primary-dark hover:file:bg-primary/20"
                           />
                         )}
                       </FormControl>
@@ -526,7 +526,7 @@ export const PatientAppointment = ({
                 name="medicines"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="flex items-center text-sm font-semibold text-slate-700">
+                    <FormLabel className="flex items-center text-sm font-semibold text-foreground">
                       <Pill className="w-4 h-4 text-purple-500" />
                       Prescribed Medicines
                     </FormLabel>
@@ -547,7 +547,7 @@ export const PatientAppointment = ({
                 <Button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full bg-gradient-to-r from-[#2ab7ca] to-[#2199aa] hover:from-emerald-600 hover:to-teal-700 text-white font-semibold py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50"
+                  className="w-full rounded-xl bg-primary py-3 font-semibold text-primary-foreground shadow-sm transition-all duration-200 hover:bg-primary/90 hover:shadow-md disabled:opacity-50"
                 >
                   {isLoading ? (
                     <>

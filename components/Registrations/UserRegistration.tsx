@@ -209,21 +209,11 @@ const UserRegistration: React.FC<StepProps> = ({ onNext }) => {
 
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-4 max-w-md"
-      >
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 p-6 md:p-8">
         {/* Display message */}
         {message && (
-          <Alert
-            className={`mb-4 ${
-              message.type === "success" ? "border-green-500 bg-green-50" : ""
-            }`}
-            variant={message.type === "error" ? "destructive" : "default"}
-          >
-            <AlertDescription
-              className={message.type === "success" ? "text-green-800" : ""}
-            >
+          <Alert className={`mb-4 ${message.type === "success" ? "border-emerald-500 bg-emerald-50" : ""}`} variant={message.type === "error" ? "destructive" : "default"}>
+            <AlertDescription className={message.type === "success" ? "text-emerald-800" : ""}>
               {message.text}
             </AlertDescription>
           </Alert>
@@ -258,14 +248,14 @@ const UserRegistration: React.FC<StepProps> = ({ onNext }) => {
                           const files = e.target.files;
                           field.onChange(files);
                         }}
-                        className="text-sm"
+                        className="rounded-xl text-sm"
                       />
                     ) : type === "select" ? (
                       <select
                         id={name}
                         {...field}
                         value={field.value || ""}
-                        className="flex h-9 w-full rounded border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                        className="flex h-11 w-full rounded-xl border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                       >
                         <option value="" disabled>
                           {placeholder || `Select ${label}`}
@@ -290,7 +280,7 @@ const UserRegistration: React.FC<StepProps> = ({ onNext }) => {
                         type={type}
                         {...field}
                         value={field.value || ""}
-                        className="text-sm"
+                        className="rounded-xl text-sm"
                       />
                     )}
                   </FormControl>
@@ -300,12 +290,7 @@ const UserRegistration: React.FC<StepProps> = ({ onNext }) => {
             />
           )
         )}
-        <Button
-          type="submit"
-          className="w-full"
-          disabled={isLoading}
-          onClick={form.handleSubmit(onSubmit)}
-        >
+        <Button type="submit" className="w-full rounded-xl bg-primary text-primary-foreground hover:bg-primary/90" disabled={isLoading} onClick={form.handleSubmit(onSubmit)}>
           {isLoading ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />

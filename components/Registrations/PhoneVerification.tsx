@@ -105,25 +105,15 @@ const PhoneVerification = ({ onNext }: StepProps) => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="p-6 md:p-8">
-        <div className="flex flex-col">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 p-6 md:p-8">
+        <div className="flex flex-col gap-4">
           {/* Alert Message */}
           {message && (
             <Alert
-              className={
-                message.type === "success"
-                  ? "border-green-500 bg-green-50 dark:bg-green-950 mb-4"
-                  : "mb-4"
-              }
+              className={message.type === "success" ? "mb-4 border-emerald-500 bg-emerald-50" : "mb-4"}
               variant={message.type === "error" ? "destructive" : "default"}
             >
-              <AlertDescription
-                className={
-                  message.type === "success"
-                    ? "text-green-800 dark:text-green-200"
-                    : ""
-                }
-              >
+              <AlertDescription className={message.type === "success" ? "text-emerald-800" : ""}>
                 {message.text}
               </AlertDescription>
             </Alert>
@@ -154,7 +144,7 @@ const PhoneVerification = ({ onNext }: StepProps) => {
           />
 
           {/* Submit Button */}
-          <Button type="submit" className="w-full mb-4" disabled={isLoading}>
+          <Button type="submit" className="mb-4 w-full rounded-xl bg-primary text-primary-foreground hover:bg-primary/90" disabled={isLoading}>
             {isLoading ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />

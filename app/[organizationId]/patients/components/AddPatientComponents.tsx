@@ -56,18 +56,18 @@ const AddPatientDialog = ({ onPatientCreated }: AddPatientDialogProps) => {
       <DialogTrigger asChild>
         <Button
           size="sm"
-          className="bg-gradient-to-br from-red-500 to-pink-500 hover:from-[#183d56] hover:to-[#205072] text-white font-semibold px-6 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border-0"
+          className="rounded-xl bg-primary px-6 py-3 font-semibold text-primary-foreground shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-primary/90 hover:shadow-md"
         >
           <Plus className="h-5 w-5 mr-2" />
           Add Patient
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-[95vw] sm:max-w-[500px] max-h-[90vh] rounded-2xl border-0 shadow-2xl bg-gradient-to-br from-white to-slate-50">
+      <DialogContent className="max-w-[95vw] max-h-[90vh] rounded-3xl border border-border/60 bg-white/90 shadow-xl backdrop-blur sm:max-w-[500px]">
         <DialogHeader className="gap-0">
-          <DialogTitle className="text-lg font-bold bg-gradient-to-r from-[#205072] to-[#2ab7ca] bg-clip-text text-transparent">
+          <DialogTitle className="text-lg font-bold text-foreground">
             Add Homeopathic Patient
           </DialogTitle>
-          <DialogDescription className="text-slate-600 text-xs">
+          <DialogDescription className="text-xs text-muted-foreground">
             {currentStep === 1
               ? "Enter patient basic information"
               : "Enter patient clinical information"}

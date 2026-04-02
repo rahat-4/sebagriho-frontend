@@ -98,20 +98,13 @@ const OneTimePassword: React.FC<StepProps> = ({ onNext }) => {
 
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-4 max-w-md"
-      >
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 p-6 md:p-8">
         {message && (
           <Alert
-            className={`mb-4 ${
-              message.type === "success" ? "border-green-500 bg-green-50" : ""
-            }`}
+            className={`mb-4 ${message.type === "success" ? "border-emerald-500 bg-emerald-50" : ""}`}
             variant={message.type === "error" ? "destructive" : "default"}
           >
-            <AlertDescription
-              className={message.type === "success" ? "text-green-800" : ""}
-            >
+            <AlertDescription className={message.type === "success" ? "text-emerald-800" : ""}>
               {message.text}
             </AlertDescription>
           </Alert>
@@ -144,7 +137,7 @@ const OneTimePassword: React.FC<StepProps> = ({ onNext }) => {
           )}
         />
 
-        <Button type="submit" className="w-full" disabled={isLoading}>
+        <Button type="submit" className="w-full rounded-xl bg-primary text-primary-foreground hover:bg-primary/90" disabled={isLoading}>
           {isLoading ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />

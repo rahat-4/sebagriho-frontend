@@ -58,19 +58,18 @@ const data = {
 };
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
-  // const { organization } = useAuth();
-  // Displaytitle for future use
-  // const path = usePathname();
-  // const segments = path.split("/").filter(Boolean);
-  // const displayTitle = segments.slice(1).map(beautifyTitle).join(" > ");
   return (
     <SidebarProvider>
-      <AppSidebar data={data} company={data.company} />
-      <SidebarInset>
-        <SiteHeader />
+      <div className="flex min-h-svh w-full bg-[radial-gradient(circle_at_top_left,_rgba(42,183,202,0.12),_transparent_30%),radial-gradient(circle_at_top_right,_rgba(32,80,114,0.1),_transparent_28%)]">
+        <AppSidebar data={data} company={data.company} />
+        <SidebarInset className="flex-1 bg-transparent">
+          <SiteHeader />
 
-        <main className="flex-1 p-4">{children}</main>
-      </SidebarInset>
+          <main className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-6 px-4 py-4 sm:px-6 lg:px-8 lg:py-6">
+            {children}
+          </main>
+        </SidebarInset>
+      </div>
     </SidebarProvider>
   );
 };

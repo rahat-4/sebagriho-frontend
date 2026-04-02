@@ -16,8 +16,8 @@ const Search = <T,>({
 
   return (
     <Input
-      placeholder={`Search by ${searchableColumn}`}
-      className="max-w-xs"
+      placeholder={`Search ${searchableColumn}`}
+      className="w-full max-w-sm rounded-xl bg-background"
       value={value}
       onChange={(event) => {
         const val = event.target.value;

@@ -3,19 +3,21 @@ import { Outfit, Ovo } from "next/font/google";
 import "./globals.css";
 import ClientLayout from "@/context/ClientLayout";
 
-const getOutfit = Outfit({
+const outfit = Outfit({
   subsets: ["latin"],
+  variable: "--font-outfit",
   weight: ["400", "500", "600", "700"],
 });
 
-const getOvo = Ovo({
+const ovo = Ovo({
   subsets: ["latin"],
+  variable: "--font-ovo",
   weight: ["400"],
 });
 
 export const metadata: Metadata = {
-  title: "Sebagriho",
-  description: "Healthcare Platform",
+  title: "Sebagriho | Healthcare platform",
+  description: "Sebagriho healthcare operations and administration platform",
 };
 
 export default function RootLayout({
@@ -25,7 +27,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${getOutfit.className} ${getOvo.className}`}>
+      <body className={`${outfit.variable} ${ovo.variable} bg-background text-foreground antialiased`}>
         <ClientLayout>{children}</ClientLayout>
       </body>
     </html>

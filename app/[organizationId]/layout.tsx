@@ -48,17 +48,25 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   };
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex min-h-svh items-center justify-center px-4 text-sm text-muted-foreground">
+        Loading workspace...
+      </div>
+    );
   }
 
   return (
     <SidebarProvider>
-      <AppSidebar data={data} company={company} />
-      <SidebarInset>
-        <SiteHeader />
+      <div className="flex min-h-svh w-full bg-[radial-gradient(circle_at_top_left,_rgba(42,183,202,0.12),_transparent_30%),radial-gradient(circle_at_top_right,_rgba(32,80,114,0.1),_transparent_28%)]">
+        <AppSidebar data={data} company={company} />
+        <SidebarInset className="flex-1 bg-transparent">
+          <SiteHeader />
 
-        <main className="">{children}</main>
-      </SidebarInset>
+          <main className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-6 px-4 py-4 sm:px-6 lg:px-8 lg:py-6">
+            {children}
+          </main>
+        </SidebarInset>
+      </div>
     </SidebarProvider>
   );
 };

@@ -32,13 +32,12 @@ interface InfoItemProps {
   value: string;
 }
 
-// Info item component to reduce repetitive code
 const InfoItem = ({ icon: Icon, label, value }: InfoItemProps) => (
-  <div className="flex items-center gap-1 text-sm text-gray-600 bg-gray-50 px-3 rounded-lg">
-    <Icon className="h-3 w-3 text-blue-500" />
+  <div className="flex items-center gap-2 rounded-xl border border-border/60 bg-muted/30 px-3 py-2 text-sm text-muted-foreground">
+    <Icon className="h-3 w-3 text-primary" />
     <div>
-      <span className="text-gray-500 text-xs">{label}:</span>
-      <span className="font-medium ml-1 text-xs">{value}</span>
+      <span className="text-xs text-muted-foreground">{label}:</span>
+      <span className="ml-1 text-xs font-medium text-foreground">{value}</span>
     </div>
   </div>
 );
@@ -63,33 +62,33 @@ const PatientCard = ({ organizationId, patientId }: PatientsProps) => {
   }, [organizationId, patientId]);
 
   return (
-    <Card className="gap-4 p-2 w-full max-w-md mx-auto rounded shadow border-0">
+    <Card className="mx-auto w-full max-w-md rounded-3xl border-border/60 bg-white p-2 shadow-sm">
       <CardHeader className="pb-0 gap-0">
         <div className="flex justify-between items-center">
           <div>
             <Badge
               variant="outline"
-              className="bg-blue-50 text-blue-600 border-blue-200 font-medium mb-1"
+              className="mb-1 border-border/60 bg-primary/10 font-medium text-primary"
             >
               Serial #01
             </Badge>
-            <CardDescription className="text-xs text-gray-500">
+            <CardDescription className="text-xs text-muted-foreground">
               Previous ID: 121
             </CardDescription>
           </div>
-          <Avatar className="h-12 w-12 ring-2 ring-blue-100">
+          <Avatar className="h-12 w-12 ring-4 ring-background">
             <AvatarImage src="" alt="Patient" />
-            <AvatarFallback className="bg-blue-100 text-blue-600 font-medium">
+            <AvatarFallback className="bg-primary/10 font-medium text-primary">
               JD
             </AvatarFallback>
           </Avatar>
         </div>
       </CardHeader>
 
-      <CardContent className="space-y-1">
+      <CardContent className="space-y-2">
         <div className="pb-1">
-          <h3 className="font-semibold text-md text-gray-800">John Doe</h3>
-          <div className="flex items-center gap-1 text-gray-500">
+          <h3 className="text-md font-semibold text-foreground">John Doe</h3>
+          <div className="flex items-center gap-1 text-muted-foreground">
             <Phone className="h-3 w-3" />
             <span className="text-xs">123456789</span>
           </div>
@@ -104,18 +103,18 @@ const PatientCard = ({ organizationId, patientId }: PatientsProps) => {
         <InfoItem icon={Pill} label="Medicine Date" value="01/01/2023" />
       </CardContent>
 
-      <CardFooter className="border-t border-gray-200 pt-2 pb-1">
+      <CardFooter className="border-t border-border/60 pt-2 pb-1">
         <div className="w-full flex justify-between items-center">
           <div className="flex items-center gap-1">
-            <Calendar className="h-4 w-4 text-gray-400" />
-            <span className="text-xs text-gray-400">
+            <Calendar className="h-4 w-4 text-muted-foreground" />
+            <span className="text-xs text-muted-foreground">
               Last visit: 2 weeks ago
             </span>
           </div>
           <Button
             variant="ghost"
             size="sm"
-            className="text-blue-600 font-medium hover:bg-blue-50 hover:text-blue-700 transition-colors px-3 py-1 h-auto"
+            className="h-auto px-3 py-1 font-medium text-primary transition-colors hover:bg-primary/5 hover:text-primary"
           >
             Details <ArrowRight className="ml-1 h-4 w-4" />
           </Button>

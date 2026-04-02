@@ -66,10 +66,9 @@ const DataTable = ({ data }: { data: Organization[] }) => {
     },
   });
   return (
-    <div>
-      <div className="flex items-center justify-between py-2">
-        {/* Left side: Search and Filter */}
-        <div className="flex items-center space-x-2">
+    <div className="space-y-4">
+      <div className="flex flex-col gap-3 rounded-2xl border border-border/60 bg-white/90 p-4 shadow-sm backdrop-blur lg:grid lg:grid-cols-[1fr_auto] lg:items-center">
+        <div className="flex flex-col gap-3 lg:flex-row lg:flex-wrap lg:items-center">
           <Search
             table={table}
             searchableColumn="name"
@@ -91,7 +90,9 @@ const DataTable = ({ data }: { data: Organization[] }) => {
         </div>
         <ResetTable table={table} onReset={handleReset} />
       </div>
-      <TableView table={table} />
+      <div className="overflow-hidden rounded-2xl border border-border/60 bg-white/90 shadow-sm backdrop-blur">
+        <TableView table={table} />
+      </div>
       <PaginationControls table={table} />
     </div>
   );

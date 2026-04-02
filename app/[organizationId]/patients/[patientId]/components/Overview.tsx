@@ -9,15 +9,15 @@ interface InfoItemProps {
 }
 
 const InfoItem = ({ icon: Icon, label, value }: InfoItemProps) => (
-  <div className="flex items-start gap-3 p-3 bg-gradient-to-r from-slate-50 to-slate-100/50 rounded-lg border border-slate-200/60 hover:shadow-sm transition-all duration-200">
-    <div className="flex-shrink-0 bg-gradient-to-br from-[#205072] to-[#2d6a96] p-2 rounded-lg shadow-sm">
-      <Icon className="h-4 w-4 text-white" />
+  <div className="flex items-start gap-3 rounded-xl border border-border/60 bg-muted/40 p-3 transition-all duration-200 hover:bg-muted">
+    <div className="flex-shrink-0 rounded-lg bg-primary p-2 shadow-sm">
+      <Icon className="h-4 w-4 text-primary-foreground" />
     </div>
     <div className="flex flex-col min-w-0 flex-1">
-      <span className="text-slate-500 text-xs font-medium uppercase tracking-wide">
+      <span className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
         {label}
       </span>
-      <span className="text-slate-900 text-sm font-semibold">
+      <span className="text-sm font-semibold text-foreground">
         {value || "Not provided"}
       </span>
     </div>
@@ -27,11 +27,11 @@ const InfoItem = ({ icon: Icon, label, value }: InfoItemProps) => (
 const Overview = ({ patient }: { patient: Patient }) => {
   return (
     <div className="grid grid-cols-1 gap-6">
-      <Card className="gap-2 px-0 py-3 bg-white border-0 shadow-lg rounded-2xl hover:shadow-xl transition-all duration-300">
+      <Card className="gap-2 rounded-3xl border border-border/60 bg-white/80 px-0 py-3 shadow-sm backdrop-blur transition-all duration-300 hover:shadow-lg">
         <CardHeader>
-          <CardTitle className="text-lg font-bold text-slate-900 flex items-center gap-3">
-            <div className="bg-gradient-to-br from-[#205072] to-[#2d6a96] p-2 rounded-lg">
-              <Users className="h-5 w-5 text-white" />
+          <CardTitle className="flex items-center gap-3 text-lg font-bold text-foreground">
+            <div className="rounded-lg bg-primary p-2">
+              <Users className="h-5 w-5 text-primary-foreground" />
             </div>
             General Information
           </CardTitle>

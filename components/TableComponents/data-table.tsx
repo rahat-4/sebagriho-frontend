@@ -15,14 +15,14 @@ interface DataTableProps<TData> {
 
 const TableView = <TData,>({ table }: DataTableProps<TData>) => {
   return (
-    <div className="rounded border">
-      <Table>
-        <TableHeader>
+    <div className="w-full overflow-x-auto">
+      <Table className="min-w-[900px]">
+        <TableHeader className="bg-muted/50">
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
                 return (
-                  <TableHead key={header.id} className="text-center">
+                  <TableHead key={header.id} className="whitespace-nowrap text-center text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">
                     {header.isPlaceholder
                       ? null
                       : flexRender(
@@ -41,9 +41,10 @@ const TableView = <TData,>({ table }: DataTableProps<TData>) => {
               <TableRow
                 key={row.id}
                 data-state={row.getIsSelected() && "selected"}
+                className="hover:bg-muted/40"
               >
                 {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id} className="text-center">
+                  <TableCell key={cell.id} className="whitespace-nowrap text-center">
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}
@@ -53,7 +54,7 @@ const TableView = <TData,>({ table }: DataTableProps<TData>) => {
             <TableRow>
               <TableCell
                 colSpan={table.getAllColumns().length}
-                className="h-24 text-center"
+                className="h-28 text-center text-muted-foreground"
               >
                 No results
               </TableCell>

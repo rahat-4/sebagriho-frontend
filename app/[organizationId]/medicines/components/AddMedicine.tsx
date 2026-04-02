@@ -249,19 +249,19 @@ const AddHomeopathicMedicine = ({
       <DialogTrigger asChild>
         <Button
           size="sm"
-          className="bg-gradient-to-br from-[#205072] to-[#2d6a96] hover:from-[#183d56] hover:to-[#205072] text-white font-semibold px-6 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border-0"
+          className="rounded-xl bg-primary px-6 py-3 font-semibold text-primary-foreground shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-primary/90 hover:shadow-md"
         >
           <Plus className="h-5 w-5 mr-2" />
           Add Medicine
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="max-w-[95vw] sm:max-w-[600px] max-h-[90vh] rounded-2xl border-0 shadow-2xl bg-gradient-to-br from-white to-slate-50">
+      <DialogContent className="max-w-[95vw] max-h-[90vh] rounded-3xl border border-border/60 bg-white/90 shadow-xl backdrop-blur sm:max-w-[600px]">
         <DialogHeader className="gap-0">
-          <DialogTitle className="text-lg font-bold bg-gradient-to-r from-[#205072] to-[#2ab7ca] bg-clip-text text-transparent">
+          <DialogTitle className="text-lg font-bold text-foreground">
             Add New Medicine
           </DialogTitle>
-          <DialogDescription className="text-slate-600 text-xs leading-relaxed">
+          <DialogDescription className="text-xs leading-relaxed text-muted-foreground">
             Add a new homeopathic medicine to your inventory.
           </DialogDescription>
         </DialogHeader>
@@ -312,7 +312,7 @@ const AddHomeopathicMedicine = ({
                             {fieldConfig.label}
                           </RequiredLabel>
                         ) : (
-                          <FormLabel className="flex items-center gap-2 text-sm font-semibold text-slate-700">
+                          <FormLabel className="flex items-center gap-2 text-sm font-semibold text-foreground">
                             {fieldConfig.icon}
                             {fieldConfig.label}
                           </FormLabel>
@@ -325,7 +325,7 @@ const AddHomeopathicMedicine = ({
                             rows={fieldConfig.rows}
                             {...field}
                             value={field.value || ""}
-                            className="text-sm resize-none border-slate-200 rounded-lg focus:ring-2 focus:ring-[#2ab7ca]/50 focus:border-[#2ab7ca]"
+                            className="resize-none rounded-xl border-border/60 text-sm focus:border-secondary focus:ring-2 focus:ring-secondary/20"
                           />
                         ) : fieldConfig.type === "file" ? (
                           <Input
@@ -333,7 +333,7 @@ const AddHomeopathicMedicine = ({
                             type="file"
                             accept={fieldConfig.accept}
                             onChange={(e) => field.onChange(e.target.files)}
-                            className="text-sm border-slate-200 rounded-lg file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#e6f7f9] file:text-[#205072] hover:file:bg-[#d1f2f5]"
+                            className="rounded-xl border-border/60 text-sm file:mr-4 file:rounded-full file:border-0 file:bg-primary/10 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-primary-dark hover:file:bg-primary/20"
                           />
                         ) : fieldConfig.type === "checkbox" ? (
                           <div className="flex items-center space-x-2">
@@ -341,7 +341,7 @@ const AddHomeopathicMedicine = ({
                               id={fieldConfig.name}
                               checked={field.value || false}
                               onCheckedChange={field.onChange}
-                              className="border-slate-300 data-[state=checked]:bg-[#2ab7ca] data-[state=checked]:border-[#2ab7ca]"
+                              className="border-border/60 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
                             />
                             <RequiredLabel
                               htmlFor={fieldConfig.name}
@@ -361,7 +361,7 @@ const AddHomeopathicMedicine = ({
                             onChange={(e) =>
                               field.onChange(Number(e.target.value))
                             }
-                            className="text-sm border-slate-200 rounded-lg focus:ring-2 focus:ring-[#2ab7ca]/50 focus:border-[#2ab7ca]"
+                            className="rounded-xl border-border/60 text-sm focus:border-secondary focus:ring-2 focus:ring-secondary/20"
                           />
                         ) : (
                           <Input
@@ -370,7 +370,7 @@ const AddHomeopathicMedicine = ({
                             placeholder={fieldConfig.placeholder}
                             {...field}
                             value={field.value || ""}
-                            className="text-sm border-slate-200 rounded-lg focus:ring-2 focus:ring-[#2ab7ca]/50 focus:border-[#2ab7ca]"
+                            className="rounded-xl border-border/60 text-sm focus:border-secondary focus:ring-2 focus:ring-secondary/20"
                           />
                         )}
                       </FormControl>
@@ -384,7 +384,7 @@ const AddHomeopathicMedicine = ({
                 <Button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full bg-gradient-to-r from-[#2ab7ca] to-[#2199aa] hover:from-[#2199aa] hover:to-[#187b8a] text-white font-semibold py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50"
+                  className="w-full rounded-xl bg-primary py-3 font-semibold text-primary-foreground shadow-sm transition-all duration-300 hover:bg-primary/90 hover:shadow-md disabled:opacity-50"
                 >
                   {isLoading ? (
                     <>

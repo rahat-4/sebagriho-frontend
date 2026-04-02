@@ -172,10 +172,10 @@ const MedicineDetailPage = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <Loader2 className="w-8 h-8 animate-spin text-[#205072] mx-auto mb-4" />
-          <p className="text-gray-600">Loading medicine details...</p>
+      <div className="flex min-h-screen items-center justify-center bg-background px-4">
+        <div className="rounded-3xl border border-border/60 bg-white/80 p-8 text-center shadow-sm backdrop-blur">
+          <Loader2 className="mx-auto mb-4 h-8 w-8 animate-spin text-primary" />
+          <p className="text-muted-foreground">Loading medicine details...</p>
         </div>
       </div>
     );
@@ -183,8 +183,8 @@ const MedicineDetailPage = () => {
 
   if (error || !medicine) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-        <Alert variant="destructive" className="max-w-md">
+      <div className="flex min-h-screen items-center justify-center bg-background p-4">
+        <Alert variant="destructive" className="max-w-md rounded-3xl border border-border/60 bg-white/90 shadow-sm backdrop-blur">
           <AlertTriangle className="h-4 w-4" />
           <AlertDescription>{error || "Medicine not found"}</AlertDescription>
         </Alert>
@@ -193,14 +193,14 @@ const MedicineDetailPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-5xl mx-auto p-4 sm:p-6 lg:p-8">
+    <div className="min-h-screen bg-background px-4 py-4 sm:p-6 lg:p-8">
+      <div className="mx-auto max-w-5xl space-y-6">
         {/* Header */}
         <div className="mb-6">
           <Button
             variant="ghost"
             onClick={() => router.back()}
-            className="mb-4 hover:bg-gray-200"
+            className="mb-4 rounded-xl hover:bg-muted"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Medicines
@@ -208,10 +208,10 @@ const MedicineDetailPage = () => {
 
           <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">
+              <h1 className="mb-2 text-3xl font-bold text-foreground">
                 Medicine Details
               </h1>
-              <p className="text-gray-600">
+              <p className="text-muted-foreground">
                 Complete information about this medicine
               </p>
             </div>
@@ -219,7 +219,7 @@ const MedicineDetailPage = () => {
             <div className="flex gap-2">
               <Button
                 onClick={handleEdit}
-                className="bg-[#205072] hover:bg-[#183d56] text-white"
+                className="bg-primary text-primary-foreground hover:bg-primary/90"
               >
                 <Edit className="w-4 h-4 mr-2" />
                 Edit

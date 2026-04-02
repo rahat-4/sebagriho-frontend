@@ -33,17 +33,17 @@ const AppointmentTimelineItem = ({
 }) => {
   return (
     <div className="flex-1 pb-8">
-      <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-all duration-200">
-        <div className="flex items-center justify-between mb-3">
+      <div className="rounded-2xl border border-border/60 bg-white p-4 shadow-sm transition-all duration-200 hover:shadow-md">
+        <div className="mb-3 flex items-center justify-between gap-2">
           <Badge
             variant="outline"
-            className="text-xs bg-slate-50 text-slate-600 border-slate-200"
+            className="border-border/60 bg-muted/40 text-xs text-muted-foreground"
           >
             {formatDate(appointment.created_at)}
           </Badge>
           <Badge
             variant="outline"
-            className="text-xs bg-slate-50 text-slate-600 border-slate-200"
+            className="border-border/60 bg-muted/40 text-xs text-muted-foreground"
           >
             {formatTime(appointment.created_at)}
           </Badge>
@@ -53,11 +53,11 @@ const AppointmentTimelineItem = ({
         <div className="mb-3">
           <div className="flex items-center gap-2 mb-1">
             <AlertCircle className="h-3 w-3 text-red-500" />
-            <span className="text-xs font-medium text-slate-600">
+            <span className="text-xs font-medium text-muted-foreground">
               Symptoms:
             </span>
           </div>
-          <p className="text-sm text-slate-700 bg-red-50 p-2 rounded-lg border border-red-100">
+          <p className="rounded-lg border border-rose-500/10 bg-rose-500/5 p-3 text-sm text-foreground">
             {appointment.symptoms}
           </p>
         </div>
@@ -67,11 +67,11 @@ const AppointmentTimelineItem = ({
           <div className="mb-3">
             <div className="flex items-center gap-2 mb-1">
               <TrendingUp className="h-3 w-3 text-green-500" />
-              <span className="text-xs font-medium text-slate-600">
+              <span className="text-xs font-medium text-muted-foreground">
                 Treatment Effectiveness:
               </span>
             </div>
-            <p className="text-sm text-slate-700 bg-green-50 p-2 rounded-lg border border-green-100">
+            <p className="rounded-lg border border-emerald-500/10 bg-emerald-500/5 p-3 text-sm text-foreground">
               {appointment.treatment_effectiveness}
             </p>
           </div>
@@ -82,7 +82,7 @@ const AppointmentTimelineItem = ({
           <div className="mb-3">
             <div className="flex items-center gap-2 mb-2">
               <Pill className="h-3 w-3 text-blue-500" />
-              <span className="text-xs font-medium text-slate-600">
+              <span className="text-xs font-medium text-muted-foreground">
                 Prescribed Medicines:
               </span>
             </div>
@@ -91,7 +91,7 @@ const AppointmentTimelineItem = ({
                 <Badge
                   key={index}
                   variant="outline"
-                  className="text-xs bg-blue-50 text-blue-700 border-blue-200 px-2 py-1"
+                  className="border-border/60 bg-primary/10 px-2 py-1 text-xs text-primary"
                 >
                   {medicine}
                 </Badge>
@@ -106,7 +106,7 @@ const AppointmentTimelineItem = ({
             <div className="mb-3">
               <div className="flex items-center gap-2 mb-2">
                 <FileText className="h-3 w-3 text-purple-500" />
-                <span className="text-xs font-medium text-slate-600">
+                <span className="text-xs font-medium text-muted-foreground">
                   Attached Files:
                 </span>
               </div>
@@ -116,7 +116,7 @@ const AppointmentTimelineItem = ({
                     key={index}
                     variant="outline"
                     size="sm"
-                    className="text-xs h-6 px-2 bg-purple-50 text-purple-700 border-purple-200 hover:bg-purple-100"
+                    className="h-7 border-border/60 bg-violet-500/10 px-3 text-xs text-violet-700 hover:bg-violet-500/15"
                   >
                     <FileText className="h-3 w-3 mr-1" />
                     File {index + 1}
@@ -177,23 +177,22 @@ const History = ({ patientId, organizationId }: HistoryProps) => {
   return (
     <div>
       {/* Appointment History */}
-      <Card className="bg-white border-0 shadow-lg rounded-2xl hover:shadow-xl transition-all duration-300">
+      <Card className="rounded-3xl border-border/60 bg-white shadow-sm transition-all duration-300 hover:shadow-md">
         <CardHeader>
-          <div className="flex flex-row items-center justify-between">
-            <CardTitle className="text-sm font-bold text-slate-900 flex items-center gap-1">
-              <div className="bg-gradient-to-br from-green-500 to-emerald-600 p-[5px] rounded-lg">
+          <div className="flex flex-row items-center justify-between gap-3">
+            <CardTitle className="flex items-center gap-2 text-sm font-semibold text-foreground">
+              <div className="rounded-lg bg-emerald-500/10 p-2 text-emerald-600">
                 <TrendingUp className="h-3 w-3 text-white" />
               </div>
               Recent
             </CardTitle>
             <Link
               href={`/${organizationId}/patients/${patientId}/appointments`}
-              passHref
             >
               <Button
                 variant="outline"
                 size="sm"
-                className="border-[#2199aa]-200 text-[#2199aa] hover:bg-[#e0f2f7] font-medium rounded-lg transition-all duration-200"
+                className="rounded-lg border-border/60 font-medium text-primary transition-all duration-200 hover:bg-primary/5"
               >
                 <Calendar className="h-3 w-3" />
                 All Appointments
@@ -210,14 +209,14 @@ const History = ({ patientId, organizationId }: HistoryProps) => {
               />
             </div>
           ) : (
-            <div className="text-center py-8">
-              <div className="bg-slate-100 p-4 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                <Calendar className="h-8 w-8 text-slate-400" />
+            <div className="py-10 text-center">
+              <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-muted">
+                <Calendar className="h-8 w-8 text-muted-foreground" />
               </div>
-              <h3 className="text-md font-semibold text-slate-900 mb-2">
+              <h3 className="mb-2 text-base font-semibold text-foreground">
                 No Appointments Yet
               </h3>
-              <p className="text-slate-600 mb-4 text-xs">
+              <p className="mb-4 text-xs text-muted-foreground">
                 This patient hasn&apos;t had any appointments recorded.
               </p>
               <Button
@@ -225,7 +224,7 @@ const History = ({ patientId, organizationId }: HistoryProps) => {
                   // Trigger the appointment booking modal or navigate to booking page
                   // You can call your PatientAppointment component's function here
                 }}
-                className="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white"
+                className="rounded-xl bg-primary text-primary-foreground hover:bg-primary/90"
               >
                 <Plus className="h-4 w-4 mr-2" />
                 Book First Appointment

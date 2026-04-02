@@ -10,7 +10,7 @@ interface StatCardProps {
 
 const StatCard: React.FC<StatCardProps> = ({ title, value, icon, color }) => (
   <Card
-    className={`p-2 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 ${color}`}
+    className={`p-2 text-white border-0 shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-0.5 ${color}`}
   >
     <CardContent className="px-1">
       <div className="flex flex-col items-center">

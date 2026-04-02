@@ -126,24 +126,14 @@ const ResetPassword = () => {
 
   return (
     <Form {...form}>
-      <div className="p-6 md:p-8">
+      <div className="space-y-6 p-6 md:p-8">
         <div className="flex flex-col gap-6">
           {message && (
             <Alert
-              className={
-                message.type === "success"
-                  ? "border-green-500 bg-green-50 dark:bg-green-950"
-                  : ""
-              }
+              className={message.type === "success" ? "border-emerald-500 bg-emerald-50" : ""}
               variant={message.type === "error" ? "destructive" : "default"}
             >
-              <AlertDescription
-                className={
-                  message.type === "success"
-                    ? "text-green-800 dark:text-green-200"
-                    : ""
-                }
-              >
+              <AlertDescription className={message.type === "success" ? "text-emerald-800" : ""}>
                 {message.text}
               </AlertDescription>
             </Alert>
@@ -165,7 +155,7 @@ const ResetPassword = () => {
                       id="password"
                       type={showPassword ? "text" : "password"}
                       placeholder="Enter your password"
-                      className="pr-10 text-sm"
+                      className="rounded-xl pr-10 text-sm"
                       disabled={isLoading}
                     />
                     <Button
@@ -205,7 +195,7 @@ const ResetPassword = () => {
                       id="confirmPassword"
                       type={showPassword ? "text" : "confirmPassword"}
                       placeholder="Enter your password"
-                      className="pr-10 text-sm"
+                      className="rounded-xl pr-10 text-sm"
                       disabled={isLoading}
                     />
                     <Button
@@ -231,7 +221,7 @@ const ResetPassword = () => {
 
           <Button
             type="submit"
-            className="w-full"
+            className="w-full rounded-xl bg-primary text-primary-foreground hover:bg-primary/90"
             disabled={isLoading}
             onClick={form.handleSubmit(onSubmit)}
           >

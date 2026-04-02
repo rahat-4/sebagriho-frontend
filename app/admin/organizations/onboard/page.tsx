@@ -52,10 +52,10 @@ const OrganizationRegistration = () => {
   ];
 
   return (
-    <div className="max-w-4xl mx-auto bg-white p-4 rounded-lg shadow-sm">
-      <div className="space-y-2 mb-6">
+    <div className="mx-auto max-w-5xl rounded-3xl border border-border/60 bg-white/80 p-4 shadow-sm backdrop-blur sm:p-6">
+      <div className="mb-6 space-y-2">
         <div>
-          <Label className="text-sm">
+          <Label className="text-sm font-medium text-muted-foreground">
             Step {step} of {steps.length}: {steps[step - 1].title}
           </Label>
           <Progress value={(step / steps.length) * 100} className="mt-2" />

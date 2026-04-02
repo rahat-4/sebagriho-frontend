@@ -36,14 +36,17 @@ const ForgotPassword = () => {
   ];
 
   return (
-    <div className="flex min-h-svh flex-col items-center justify-center p-6 md:p-10">
+    <div className="flex min-h-svh flex-col items-center justify-center bg-[radial-gradient(circle_at_top_left,_rgba(42,183,202,0.12),_transparent_30%),radial-gradient(circle_at_top_right,_rgba(32,80,114,0.1),_transparent_28%)] p-4 sm:p-6 md:p-10">
       <div className="w-full max-w-sm md:max-w-md">
-        <Card className="overflow-hidden shadow-lg rounded">
-          <div className="flex flex-col items-center text-center">
-            <h1 className="text-xl font-bold text-foreground">
+        <Card className="overflow-hidden rounded-3xl border border-border/60 bg-white/90 shadow-xl backdrop-blur">
+          <div className="flex flex-col items-center border-b border-border/60 px-6 pt-6 text-center">
+            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-secondary-darker">
+              Account recovery
+            </p>
+            <h1 className="mt-2 text-xl font-bold text-foreground">
               {steps[step - 1].title}
             </h1>
-            <p className="text-balance text-sm text-muted-foreground mt-1">
+            <p className="mt-1 text-balance text-sm text-muted-foreground">
               {steps[step - 1].description}
             </p>
           </div>

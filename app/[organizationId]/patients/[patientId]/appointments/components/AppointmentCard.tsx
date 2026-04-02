@@ -45,15 +45,15 @@ export const AppointmentCard = ({
   };
 
   return (
-    <Card className="hover:shadow-lg transition-shadow">
+    <Card className="rounded-3xl border-border/60 bg-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg">
       <CardHeader>
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-emerald-100 rounded-lg">
+            <div className="rounded-lg bg-emerald-500/10 p-2">
               <CalendarIcon className="h-4 w-4 text-emerald-600" />
             </div>
             <div>
-              <CardTitle className="text-[15px]">
+              <CardTitle className="text-[15px] text-foreground">
                 {formatDate(appointment.created_at)}
               </CardTitle>
             </div>
@@ -98,10 +98,10 @@ export const AppointmentCard = ({
       <CardContent className="space-y-3">
         {/* Symptoms */}
         <div className="flex items-start gap-2">
-          <Activity className="h-4 w-4 text-red-500 mt-0.5" />
+          <Activity className="mt-0.5 h-4 w-4 text-red-500" />
           <div className="flex-1">
-            <h4 className="font-semibold text-sm text-slate-700">Symptoms</h4>
-            <p className="text-sm text-slate-600 line-clamp-2">
+            <h4 className="text-sm font-semibold text-foreground">Symptoms</h4>
+            <p className="line-clamp-2 text-sm text-muted-foreground">
               {appointment.symptoms}
             </p>
           </div>
@@ -110,12 +110,12 @@ export const AppointmentCard = ({
         {/* Treatment Effectiveness */}
         {appointment.treatment_effectiveness && (
           <div className="flex items-start gap-2">
-            <Activity className="h-4 w-4 text-blue-500 mt-0.5" />
+            <Activity className="mt-0.5 h-4 w-4 text-blue-500" />
             <div className="flex-1">
-              <h4 className="font-semibold text-sm text-slate-700">
+              <h4 className="text-sm font-semibold text-foreground">
                 Treatment Effectiveness
               </h4>
-              <p className="text-sm text-slate-600 line-clamp-2">
+              <p className="line-clamp-2 text-sm text-muted-foreground">
                 {appointment.treatment_effectiveness}
               </p>
             </div>
@@ -125,9 +125,9 @@ export const AppointmentCard = ({
         {/* Medicines */}
         {appointment.medicines.length > 0 && (
           <div className="flex items-start gap-2">
-            <Pill className="h-4 w-4 text-purple-500 mt-0.5" />
+            <Pill className="mt-0.5 h-4 w-4 text-purple-500" />
             <div className="flex-1">
-              <h4 className="font-semibold text-sm text-slate-700 mb-1">
+              <h4 className="mb-1 text-sm font-semibold text-foreground">
                 Prescribed Medicines
               </h4>
               <div className="flex flex-wrap gap-2">
@@ -135,7 +135,7 @@ export const AppointmentCard = ({
                   <Badge
                     key={medicine.uid}
                     variant="secondary"
-                    className="px-2 py-1 bg-purple-100 text-purple-800"
+                    className="bg-primary/10 px-2 py-1 text-primary"
                   >
                     <Pill className="w-3 h-3 mr-1" />
                     {medicine.name}
@@ -154,10 +154,10 @@ export const AppointmentCard = ({
           <div className="flex items-center gap-2">
             <FileText className="h-4 w-4 text-orange-500" />
             <div className="flex-1">
-              <h4 className="font-semibold text-sm text-slate-700">
+              <h4 className="text-sm font-semibold text-foreground">
                 Attachment
               </h4>
-              <p className="text-sm text-slate-600">File available</p>
+              <p className="text-sm text-muted-foreground">File available</p>
             </div>
           </div>
         )}

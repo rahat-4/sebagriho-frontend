@@ -51,10 +51,10 @@ const PatientProfile = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
+      <div className="min-h-screen bg-background flex items-center justify-center px-4">
+        <div className="text-center rounded-3xl border border-border/60 bg-white/80 p-8 shadow-sm backdrop-blur">
           <Loader2 className="w-8 h-8 animate-spin text-[#205072] mx-auto mb-4" />
-          <p className="text-gray-600">Loading patient details...</p>
+          <p className="text-muted-foreground">Loading patient details...</p>
         </div>
       </div>
     );
@@ -62,16 +62,16 @@ const PatientProfile = () => {
 
   if (error || !patient) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center max-w-md mx-auto p-6">
+      <div className="min-h-screen bg-background flex items-center justify-center px-4">
+        <div className="text-center max-w-md mx-auto rounded-3xl border border-border/60 bg-white/80 p-6 shadow-sm backdrop-blur">
           <AlertTriangle className="w-12 h-12 text-red-500 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 mb-2">
+          <h3 className="text-lg font-medium text-foreground mb-2">
             Error Loading Patient
           </h3>
-          <p className="text-gray-600 mb-4">{error || "Patient not found"}</p>
+          <p className="text-muted-foreground mb-4">{error || "Patient not found"}</p>
           <Button
             onClick={() => router.back()}
-            className="bg-[#205072] hover:bg-[#183d56]"
+            className="bg-primary hover:bg-primary/90"
           >
             Go Back
           </Button>
@@ -81,12 +81,12 @@ const PatientProfile = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="container mx-auto px-4 max-w-7xl">
+    <div className="min-h-screen bg-background px-4 py-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl space-y-6">
         <Button
           variant="ghost"
           size="sm"
-          className="hover:bg-slate-100 transition-colors duration-200 mb-2"
+          className="mb-2 rounded-xl hover:bg-muted transition-colors duration-200"
           onClick={() => router.back()}
         >
           <ChevronLeft className="h-4 w-4" />
@@ -96,23 +96,23 @@ const PatientProfile = () => {
         <PatientDetail patient={patient} />
 
         <Tabs defaultValue="overview" className="w-full">
-          <div className="bg-white rounded-2xl border-0 shadow-lg p-1">
-            <TabsList className="w-full max-w-2xl mx-auto grid grid-cols-3 bg-slate-50 rounded-xl p-1">
+          <div className="rounded-3xl border border-border/60 bg-white/80 p-1 shadow-sm backdrop-blur">
+            <TabsList className="mx-auto grid w-full max-w-2xl grid-cols-3 rounded-2xl bg-muted/60 p-1">
               <TabsTrigger
                 value="overview"
-                className="rounded-lg font-medium transition-all duration-200 data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-[#2ab7ca]"
+                className="rounded-xl font-medium transition-all duration-200 data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-secondary-darker"
               >
                 Overview
               </TabsTrigger>
               <TabsTrigger
                 value="medical"
-                className="rounded-lg font-medium transition-all duration-200 data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-[#2ab7ca]"
+                className="rounded-xl font-medium transition-all duration-200 data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-secondary-darker"
               >
                 Medical
               </TabsTrigger>
               <TabsTrigger
                 value="history"
-                className="rounded-lg font-medium transition-all duration-200 data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-[#2ab7ca]"
+                className="rounded-xl font-medium transition-all duration-200 data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-secondary-darker"
               >
                 History
               </TabsTrigger>

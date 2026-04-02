@@ -106,29 +106,29 @@ const FilterComponents = ({
 
   return (
     <div className="w-full mb-1">
-      <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-lg rounded-2xl">
-        <CardContent className="p-1 sm:p-6 space-y-4">
+      <Card className="rounded-3xl border-border/60 bg-white/90 shadow-sm backdrop-blur">
+        <CardContent className="space-y-4 p-4 sm:p-6">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 h-4 w-4" />
             <Input
               placeholder="Search by name, phone, serial number..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 pr-4 py-3 rounded-xl border-slate-200 focus:border-[#2ab7ca] focus:ring-2 focus:ring-[#2ab7ca]/20 text-xs bg-white shadow-sm transition-all duration-200"
+              className="h-11 rounded-xl border-border/60 pl-10 pr-4 text-sm shadow-sm transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20"
             />
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-3 justify-between items-stretch sm:items-center">
-            <div className="flex justify-between gap-3">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex flex-wrap gap-3">
               <Button
                 variant="outline"
                 onClick={() => setIsFilterOpen(true)}
-                className="rounded-xl border-slate-200 hover:border-[#2ab7ca] hover:bg-[#e6f7f9] transition-all duration-200 relative"
+                className="relative rounded-xl border-border/60 transition-all duration-200 hover:border-primary hover:bg-primary/5"
               >
                 <Filter className="h-4 w-4" />
                 <span>Filter</span>
                 {getActiveFilterCount() > 0 && (
-                  <Badge className="ml-2 h-5 w-5 p-0 bg-[#2ab7ca] hover:bg-[#2199aa] rounded-full text-xs flex items-center justify-center">
+                  <Badge className="ml-2 flex h-5 w-5 items-center justify-center rounded-full bg-primary p-0 text-xs text-primary-foreground hover:bg-primary">
                     {getActiveFilterCount()}
                   </Badge>
                 )}
@@ -137,7 +137,7 @@ const FilterComponents = ({
               <Button
                 variant="outline"
                 onClick={() => setIsSortOpen(true)}
-                className="rounded-xl border-slate-200 hover:border-[#2ab7ca] hover:bg-[#e6f7f9] transition-all duration-200"
+                className="rounded-xl border-border/60 transition-all duration-200 hover:border-primary hover:bg-primary/5"
               >
                 <SortAsc className="h-4 w-4" />
                 <span>Sort</span>
@@ -150,15 +150,15 @@ const FilterComponents = ({
           </div>
 
           {(searchTerm || getActiveFilterCount() > 0) && (
-            <div className="flex flex-wrap gap-2 pt-2 border-t border-slate-100">
-              <span className="text-xs text-slate-500 font-medium self-center">
+            <div className="flex flex-wrap gap-2 border-t border-border/60 pt-3">
+              <span className="self-center text-xs font-medium text-muted-foreground">
                 Active:
               </span>
 
               {searchTerm && (
                 <Badge
                   variant="secondary"
-                  className="bg-[#e6f7f9] text-[#2199aa] hover:bg-[#d1f2f5]"
+                  className="bg-primary/10 text-primary hover:bg-primary/15"
                 >
                   Search: {searchTerm}
                   <X
@@ -171,7 +171,7 @@ const FilterComponents = ({
               {filters.miasm !== "all" && (
                 <Badge
                   variant="secondary"
-                  className="bg-blue-100 text-blue-800 hover:bg-blue-200"
+                  className="bg-sky-500/10 text-sky-700 hover:bg-sky-500/15"
                 >
                   Miasm: {getMiasmLabel(filters.miasm)}
                   <X
@@ -184,7 +184,7 @@ const FilterComponents = ({
               {filters.bloodGroup !== "all" && (
                 <Badge
                   variant="secondary"
-                  className="bg-green-100 text-green-800 hover:bg-green-200"
+                  className="bg-emerald-500/10 text-emerald-700 hover:bg-emerald-500/15"
                 >
                   Blood: {filters.bloodGroup.toUpperCase()}
                   <X
@@ -197,7 +197,7 @@ const FilterComponents = ({
               {filters.gender !== "all" && (
                 <Badge
                   variant="secondary"
-                  className="bg-purple-100 text-purple-800 hover:bg-purple-200"
+                  className="bg-violet-500/10 text-violet-700 hover:bg-violet-500/15"
                 >
                   Gender: {filters.gender}
                   <X
@@ -213,20 +213,20 @@ const FilterComponents = ({
 
       {/* Filter Drawer */}
       <Drawer open={isFilterOpen} onOpenChange={setIsFilterOpen}>
-        <DrawerContent className="max-h-[85vh]">
+        <DrawerContent className="max-h-[85vh] rounded-t-3xl border-border/60">
           <DrawerHeader className="pb-2">
-            <DrawerTitle className="flex items-center gap-2">
+            <DrawerTitle className="flex items-center gap-2 text-foreground">
               <Filter className="h-5 w-5" />
               Filter Patients
             </DrawerTitle>
-            <DrawerDescription>
+            <DrawerDescription className="text-muted-foreground">
               Apply filters to find specific patients
             </DrawerDescription>
           </DrawerHeader>
 
           <div className="px-4 pb-4 space-y-6">
             <div className="space-y-3">
-              <label className="text-sm font-medium text-slate-700 flex items-center gap-2">
+              <label className="flex items-center gap-2 text-sm font-medium text-foreground">
                 <Dna className="h-4 w-4" />
                 Miasm Type
               </label>
@@ -236,7 +236,7 @@ const FilterComponents = ({
                   setTempFilters({ ...tempFilters, miasm: value })
                 }
               >
-                <SelectTrigger className="rounded-xl">
+                <SelectTrigger className="rounded-xl border-border/60">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -253,7 +253,7 @@ const FilterComponents = ({
             <Separator />
 
             <div className="space-y-3">
-              <label className="text-sm font-medium text-slate-700 flex items-center gap-2">
+              <label className="flex items-center gap-2 text-sm font-medium text-foreground">
                 <Hash className="h-4 w-4" />
                 Blood Group
               </label>
@@ -263,7 +263,7 @@ const FilterComponents = ({
                   setTempFilters({ ...tempFilters, bloodGroup: value })
                 }
               >
-                <SelectTrigger className="rounded-xl">
+                <SelectTrigger className="rounded-xl border-border/60">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -280,7 +280,7 @@ const FilterComponents = ({
             <Separator />
 
             <div className="space-y-3">
-              <label className="text-sm font-medium text-slate-700 flex items-center gap-2">
+              <label className="flex items-center gap-2 text-sm font-medium text-foreground">
                 <Users className="h-4 w-4" />
                 Gender
               </label>
@@ -290,7 +290,7 @@ const FilterComponents = ({
                   setTempFilters({ ...tempFilters, gender: value })
                 }
               >
-                <SelectTrigger className="rounded-xl">
+                <SelectTrigger className="rounded-xl border-border/60">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -305,11 +305,11 @@ const FilterComponents = ({
             </div>
           </div>
 
-          <DrawerFooter className="pt-4 border-t">
+          <DrawerFooter className="border-t border-border/60 pt-4">
             <div className="flex gap-3">
               <Button
                 onClick={handleApplyFilters}
-                className="flex-1 rounded-xl bg-[#2ab7ca] hover:bg-[#2199aa]"
+                className="flex-1 rounded-xl bg-primary text-primary-foreground hover:bg-primary/90"
               >
                 <Check className="h-4 w-4 mr-2" />
                 Apply Filters
@@ -317,7 +317,7 @@ const FilterComponents = ({
               <Button
                 variant="outline"
                 onClick={handleResetFilters}
-                className="flex-1 rounded-xl"
+                className="flex-1 rounded-xl border-border/60"
               >
                 <X className="h-4 w-4 mr-2" />
                 Reset
@@ -329,13 +329,13 @@ const FilterComponents = ({
 
       {/* Sort Drawer */}
       <Drawer open={isSortOpen} onOpenChange={setIsSortOpen}>
-        <DrawerContent className="max-h-[60vh]">
+        <DrawerContent className="max-h-[60vh] rounded-t-3xl border-border/60">
           <DrawerHeader className="pb-2">
-            <DrawerTitle className="flex items-center gap-2">
+            <DrawerTitle className="flex items-center gap-2 text-foreground">
               <SortAsc className="h-5 w-5" />
               Sort Patients
             </DrawerTitle>
-            <DrawerDescription>
+            <DrawerDescription className="text-muted-foreground">
               Choose how to sort the patient list
             </DrawerDescription>
           </DrawerHeader>
@@ -348,8 +348,8 @@ const FilterComponents = ({
                 onClick={() => setTempSort(option.value)}
                 className={`w-full justify-start rounded-xl transition-all duration-200 ${
                   tempSort === option.value
-                    ? "bg-[#2ab7ca] text-white hover:bg-[#2199aa]"
-                    : "hover:bg-slate-100"
+                    ? "bg-primary text-primary-foreground hover:bg-primary/90"
+                    : "hover:bg-muted"
                 }`}
               >
                 <SortAsc className="h-4 w-4 mr-3" />
@@ -364,7 +364,7 @@ const FilterComponents = ({
           <DrawerFooter className="pt-4 border-t">
             <Button
               onClick={handleApplySort}
-              className="w-full rounded-xl bg-[#2ab7ca] hover:bg-[#2199aa]"
+              className="w-full rounded-xl bg-primary text-primary-foreground hover:bg-primary/90"
             >
               <Check className="h-4 w-4 mr-2" />
               Apply Sort

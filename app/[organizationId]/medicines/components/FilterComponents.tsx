@@ -94,29 +94,29 @@ const FilterComponents = ({
 
   return (
     <div className="w-full mb-1">
-      <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-lg rounded-2xl">
-        <CardContent className="p-1 sm:p-6 space-y-4">
+      <Card className="rounded-3xl border-border/60 bg-white/90 shadow-sm backdrop-blur">
+        <CardContent className="space-y-4 p-4 sm:p-6">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 h-4 w-4" />
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               placeholder="Search by name or manufacturer..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 pr-4 py-3 rounded-xl border-slate-200 focus:border-[#2ab7ca] focus:ring-2 focus:ring-[#2ab7ca]/20 text-xs bg-white shadow-sm transition-all duration-200"
+              className="h-11 rounded-xl border-border/60 pl-10 pr-4 text-sm shadow-sm transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20"
             />
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-3 justify-between items-stretch sm:items-center">
-            <div className="flex justify-between gap-3">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex flex-wrap gap-3">
               <Button
                 variant="outline"
                 onClick={() => setIsFilterOpen(true)}
-                className="rounded-xl border-slate-200 hover:border-[#2ab7ca] hover:bg-[#e6f7f9] transition-all duration-200 relative"
+                className="relative rounded-xl border-border/60 transition-all duration-200 hover:border-primary hover:bg-primary/5"
               >
                 <Filter className="h-4 w-4" />
                 <span>Filter</span>
                 {getActiveFilterCount() > 0 && (
-                  <Badge className="ml-2 h-5 w-5 p-0 bg-[#2ab7ca] hover:bg-[#2199aa] rounded-full text-xs flex items-center justify-center">
+                  <Badge className="ml-2 flex h-5 w-5 items-center justify-center rounded-full bg-primary p-0 text-xs text-primary-foreground hover:bg-primary">
                     {getActiveFilterCount()}
                   </Badge>
                 )}
@@ -126,15 +126,15 @@ const FilterComponents = ({
           </div>
 
           {(searchTerm || getActiveFilterCount() > 0) && (
-            <div className="flex flex-wrap gap-2 pt-2 border-t border-slate-100">
-              <span className="text-xs text-slate-500 font-medium self-center">
+            <div className="flex flex-wrap gap-2 border-t border-border/60 pt-3">
+              <span className="self-center text-xs font-medium text-muted-foreground">
                 Active:
               </span>
 
               {searchTerm && (
                 <Badge
                   variant="secondary"
-                  className="bg-[#e6f7f9] text-[#2199aa] hover:bg-[#d1f2f5]"
+                  className="bg-primary/10 text-primary hover:bg-primary/15"
                 >
                   Search: {searchTerm}
                   <X
@@ -147,9 +147,9 @@ const FilterComponents = ({
               {filters.isAvailable !== "all" && (
                 <Badge
                   variant="secondary"
-                  className="bg-green-100 text-green-800 hover:bg-green-200"
+                  className="bg-emerald-500/10 text-emerald-700 hover:bg-emerald-500/15"
                 >
-                  Status:{" "}
+                  Status: {" "}
                   {filters.isAvailable === "true" ? "Available" : "Unavailable"}
                   <X
                     className="h-3 w-3 ml-1 cursor-pointer"
@@ -161,7 +161,7 @@ const FilterComponents = ({
               {filters.expirationDate && (
                 <Badge
                   variant="secondary"
-                  className="bg-blue-100 text-blue-800 hover:bg-blue-200"
+                  className="bg-sky-500/10 text-sky-700 hover:bg-sky-500/15"
                 >
                   {getExpirationFilterDisplay()}
                   <X
@@ -176,20 +176,20 @@ const FilterComponents = ({
       </Card>
 
       <Drawer open={isFilterOpen} onOpenChange={setIsFilterOpen}>
-        <DrawerContent className="max-h-[85vh]">
+        <DrawerContent className="max-h-[85vh] rounded-t-3xl border-border/60">
           <DrawerHeader className="pb-2">
-            <DrawerTitle className="flex items-center gap-2">
+            <DrawerTitle className="flex items-center gap-2 text-foreground">
               <Filter className="h-5 w-5" />
               Filter Medicines
             </DrawerTitle>
-            <DrawerDescription>
+            <DrawerDescription className="text-muted-foreground">
               Apply filters to find specific homeopathic medicines
             </DrawerDescription>
           </DrawerHeader>
 
           <div className="px-4 pb-4 space-y-6">
             <div className="space-y-3">
-              <label className="text-sm font-medium text-slate-700 flex items-center gap-2">
+              <label className="flex items-center gap-2 text-sm font-medium text-foreground">
                 <Package className="h-4 w-4" />
                 Availability Status
               </label>
@@ -199,7 +199,7 @@ const FilterComponents = ({
                   setTempFilters({ ...tempFilters, isAvailable: value })
                 }
               >
-                <SelectTrigger className="rounded-xl">
+                <SelectTrigger className="rounded-xl border-border/60">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -213,7 +213,7 @@ const FilterComponents = ({
             <Separator />
 
             <div className="space-y-3">
-              <label className="text-sm font-medium text-slate-700 flex items-center gap-2">
+              <label className="flex items-center gap-2 text-sm font-medium text-foreground">
                 <Calendar className="h-4 w-4" />
                 Expiration Date
               </label>
@@ -228,7 +228,7 @@ const FilterComponents = ({
                     })
                   }
                 >
-                  <SelectTrigger className="rounded-xl">
+                  <SelectTrigger className="rounded-xl border-border/60">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -247,17 +247,17 @@ const FilterComponents = ({
                       expirationDate: e.target.value,
                     })
                   }
-                  className="rounded-xl border-slate-200 focus:border-[#2ab7ca] focus:ring-2 focus:ring-[#2ab7ca]/20"
+                  className="rounded-xl border-border/60 focus:border-primary focus:ring-2 focus:ring-primary/20"
                 />
               </div>
             </div>
           </div>
 
-          <DrawerFooter className="pt-4 border-t">
+          <DrawerFooter className="border-t border-border/60 pt-4">
             <div className="flex gap-3">
               <Button
                 onClick={handleApplyFilters}
-                className="flex-1 rounded-xl bg-[#2ab7ca] hover:bg-[#2199aa]"
+                className="flex-1 rounded-xl bg-primary text-primary-foreground hover:bg-primary/90"
               >
                 <Check className="h-4 w-4 mr-2" />
                 Apply Filters
@@ -265,7 +265,7 @@ const FilterComponents = ({
               <Button
                 variant="outline"
                 onClick={handleResetFilters}
-                className="flex-1 rounded-xl"
+                className="flex-1 rounded-xl border-border/60"
               >
                 <X className="h-4 w-4 mr-2" />
                 Reset

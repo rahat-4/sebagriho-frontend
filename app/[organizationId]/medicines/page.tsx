@@ -87,10 +87,10 @@ const HomeopathicMedicineList = () => {
 
   if (loading && medicines.length === 0) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
+      <div className="min-h-screen bg-background flex items-center justify-center px-4">
+        <div className="text-center rounded-3xl border border-border/60 bg-white/80 p-8 shadow-sm backdrop-blur">
           <Loader2 className="w-8 h-8 animate-spin text-[#205072] mx-auto mb-4" />
-          <p className="text-gray-600">Loading medicines...</p>
+          <p className="text-muted-foreground">Loading medicines...</p>
         </div>
       </div>
     );
@@ -98,16 +98,16 @@ const HomeopathicMedicineList = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center max-w-md mx-auto p-6">
+      <div className="min-h-screen bg-background flex items-center justify-center px-4">
+        <div className="text-center max-w-md mx-auto rounded-3xl border border-border/60 bg-white/80 p-6 shadow-sm backdrop-blur">
           <AlertTriangle className="w-12 h-12 text-red-500 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 mb-2">
+          <h3 className="text-lg font-medium text-foreground mb-2">
             Error Loading Medicines
           </h3>
-          <p className="text-gray-600 mb-4">{error}</p>
+          <p className="text-muted-foreground mb-4">{error}</p>
           <button
             onClick={fetchMedicines}
-            className="bg-[#205072] text-white px-4 py-2 rounded-md hover:bg-[#183d56] transition-colors"
+            className="bg-primary text-primary-foreground px-4 py-2 rounded-xl hover:bg-primary/90 transition-colors"
           >
             Try Again
           </button>
@@ -117,10 +117,10 @@ const HomeopathicMedicineList = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 px-4 py-2 sm:p-6 lg:p-8">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-background px-4 py-4 sm:p-6 lg:p-8">
+      <div className="max-w-7xl mx-auto space-y-6">
         {/* Statistics Cards */}
-        <div className="grid grid-cols-3 gap-1 mb-2">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
           <StatCard
             title="Total"
             value={statistics.total}
@@ -152,8 +152,8 @@ const HomeopathicMedicineList = () => {
         />
 
         {/* Results Info */}
-        <div className="flex items-center justify-between mb-2">
-          <p className="text-gray-600 text-xs">
+        <div className="flex items-center justify-between">
+          <p className="text-muted-foreground text-xs">
             Showing {medicines.length} of {totalCount} medicines
             {loading && (
               <Loader2 className="inline w-3 h-3 ml-1 animate-spin" />
@@ -164,17 +164,17 @@ const HomeopathicMedicineList = () => {
         {/* Medicine Cards */}
         <div className="space-y-6">
           {medicines.length === 0 ? (
-            <div className="text-center py-12">
-              <Package className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">
+            <div className="rounded-3xl border border-dashed border-border/70 bg-white/70 py-12 text-center shadow-sm backdrop-blur">
+              <Package className="mx-auto mb-4 h-16 w-16 text-muted-foreground/40" />
+              <h3 className="mb-2 text-lg font-semibold text-foreground">
                 No medicines found
               </h3>
-              <p className="text-gray-600">
-                Try adjusting your search or filter criteria
+              <p className="text-sm text-muted-foreground">
+                Try adjusting your search or filter criteria.
               </p>
               <button
                 onClick={handleClearFilters}
-                className="mt-4 text-[#2ab7ca] hover:text-[#2199aa] font-medium"
+                className="mt-4 text-sm font-medium text-primary hover:text-primary/80 disabled:opacity-50"
                 disabled={loading}
               >
                 Clear all filters
