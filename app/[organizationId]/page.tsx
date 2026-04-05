@@ -5,7 +5,9 @@ const Organization = async ({
 }: {
   params: Promise<{ organizationId: string }>;
 }) => {
+  
   const resolvedParams = await params;
+  console.log("llllllllllllllllllll", resolvedParams)
   const organizationId = resolvedParams.organizationId;
 
   redirect(`/${organizationId}/dashboard`);

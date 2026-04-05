@@ -47,13 +47,15 @@ export function useLoginForm() {
 
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
+      console.log("Login response:", response);
+
       let url = `${response.organization_uid}`;
 
       if (response.admin === true) {
         url = "/admin";
       }
 
-      
+      console.log("Redirecting to:", url);
 
       router.push(url);
       router.refresh();
