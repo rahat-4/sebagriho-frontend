@@ -38,6 +38,7 @@ export const otpSchema = z.object({
 });
 
 export const organizationSchema = z.object({
+  subdomain: z.string().min(1, "Subdomain is required").regex(/^[a-z0-9]+$/, "Subdomain must be lowercase letters and numbers only"),
   name: z.string().min(1, "Organization name is required"),
   logo: z.any().optional(),
   organizationType: z.string().min(1, "Organization type is required"),
@@ -47,8 +48,6 @@ export const organizationSchema = z.object({
   website: optionalUrl,
   address: z.string().min(1, "Address is required"),
   facebook: optionalUrl,
-  twitter: optionalUrl,
   linkedin: optionalUrl,
-  instagram: optionalUrl,
   youtube: optionalUrl,
 });

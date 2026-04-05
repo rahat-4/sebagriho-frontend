@@ -25,24 +25,17 @@ const Organizations = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // useEffect(() => {
-  //   if (!isLoading && user?.admin !== true) {
-  //     router.replace("/login"); // Replace this later
-  //   }
-  // }, [isLoading, user, router]);
-
   useEffect(() => {
     const fetchOrganizations = async () => {
       try {
         const [status, response] = await getData("/admin/organizations");
 
         console.log("API Response Status:", status);
-        console.log("API Response Data:", response["results"]);
+        console.log("API Response Data:", response["results"] || response); // Adjust based on actual API response structure
 
-        if (status !== 200) {
-          // console.log("")
-        }
         setTableData(response["results"] || []); // Adjust based on actual API response structure
+
+
       } catch (err: unknown) {
         if (err instanceof Error) {
           setError(err.message || "Failed to fetch organizations");

@@ -18,7 +18,6 @@ export type Organization = {
   organization_type: string;
   status: string;
   created_at: string;
-  amount: number;
   billing_cycle: string;
   payment_status: string;
 };
@@ -50,20 +49,6 @@ const generateOrganizationColumns = (): ColumnDef<Organization>[] => [
       <SortableHeader column={column} label="Organization Type" />
     ),
     filterFn: multiSelectFilterFn,
-  },
-  {
-    accessorKey: "amount",
-    header: ({ column }: { column: Column<Organization> }) => (
-      <SortableHeader column={column} label="Amount" />
-    ),
-    cell: ({ row }) => {
-      const amount = parseFloat(row.getValue("amount"));
-      const formatted = new Intl.NumberFormat("en-BD", {
-        style: "currency",
-        currency: "BDT",
-      }).format(amount);
-      return <div>{formatted}</div>;
-    },
   },
   getActionsColumn<Organization>(),
 ];

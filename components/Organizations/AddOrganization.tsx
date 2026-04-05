@@ -38,6 +38,13 @@ interface FieldProps {
 
 const fields: FieldProps[] = [
   {
+    label: "Domain Name",
+    name: "subdomain",
+    type: "text",
+    placeholder: "Enter subdomain (e.g., myclinic)",
+    required: true,
+  },
+  {
     label: "Organization Name",
     name: "name",
     type: "text",
@@ -110,22 +117,10 @@ const fields: FieldProps[] = [
     placeholder: "https://facebook.com/example",
   },
   {
-    label: "Twitter",
-    name: "twitter",
-    type: "text",
-    placeholder: "https://twitter.com/example",
-  },
-  {
     label: "LinkedIn",
     name: "linkedin",
     type: "text",
     placeholder: "https://linkedin.com/company/example",
-  },
-  {
-    label: "Instagram",
-    name: "instagram",
-    type: "text",
-    placeholder: "https://instagram.com/example",
   },
   {
     label: "YouTube",
@@ -149,6 +144,7 @@ const AddOrganization: React.FC<OrganizationProps> = ({ onComplete }) => {
   const form = useForm<OrganizationFormData>({
     resolver: zodResolver(organizationSchema),
     defaultValues: {
+      subdomain: "",
       name: "",
       logo: undefined,
       organizationType: "",
@@ -158,9 +154,7 @@ const AddOrganization: React.FC<OrganizationProps> = ({ onComplete }) => {
       website: "",
       address: "",
       facebook: "",
-      twitter: "",
       linkedin: "",
-      instagram: "",
       youtube: "",
     },
   });

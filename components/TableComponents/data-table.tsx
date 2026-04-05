@@ -14,6 +14,7 @@ interface DataTableProps<TData> {
 }
 
 const TableView = <TData,>({ table }: DataTableProps<TData>) => {
+  console.log("------------------------", table)
   return (
     <div className="w-full overflow-x-auto">
       <Table className="min-w-[900px]">
@@ -38,6 +39,7 @@ const TableView = <TData,>({ table }: DataTableProps<TData>) => {
         <TableBody>
           {table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => (
+              console.log("Row Data:", row.original),
               <TableRow
                 key={row.id}
                 data-state={row.getIsSelected() && "selected"}
