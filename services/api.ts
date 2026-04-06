@@ -1,4 +1,6 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+import { getSubdomain } from "./subdomain";
+
+const API_URL = process.env.NEXT_PUBLIC_BACKEND_API_URL;
 
 // Custom error class for API errors
 export class APIError extends Error {
@@ -22,10 +24,23 @@ const request = async (endpoint: string, method: string, data?: any) => {
   try {
     // Check if the data is FormData
     const isFormData = data instanceof FormData;
+    const subdomain = getSubdomain();
+    const headers: Record<string, string> = {
+      ...(isFormData ? {} : { "Content-Type": "application/json" }),
+    };
+    
+    if (subdomain) {
+      headers["X-ORGANIZATION-SUBDOMAIN"] = subdomain;
+    }
+
+    console.log("API URL--------------------------->:", API_URL);
+
+    console.log("Making API request togggggggggggggggggggggggg:", `${API_URL}${endpoint}`);
+    console.log("Request headersgggggggggggggggggggggggg:", headers);
 
     const res = await fetch(`${API_URL}${endpoint}`, {
       method,
-      headers: isFormData ? {} : { "Content-Type": "application/json" },
+      headers,
       body: isFormData ? data : data ? JSON.stringify(data) : undefined,
       credentials: "include", // Include cookies for authentication
     });
@@ -35,8 +50,7 @@ const request = async (endpoint: string, method: string, data?: any) => {
     // Handle cases where response might not be JSON
     try {
       json = await res.json();
-    } catch (parseError) {
-      // If response is not JSON, return empty object
+    } catch{
       json = {};
     }
 
