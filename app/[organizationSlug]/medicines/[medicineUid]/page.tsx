@@ -68,7 +68,7 @@ const MedicineDetailPage = () => {
   const router = useRouter();
   const params = useParams();
   const medicineId = params.medicineId as string;
-  const organizationId = params.organizationId as string;
+  const organizationSlug = params.organizationSlug as string;
 
   const [medicine, setMedicine] = useState<HomeopathicMedicine | null>(null);
   const [loading, setLoading] = useState(true);
@@ -85,7 +85,7 @@ const MedicineDetailPage = () => {
       setError(null);
 
       const [status, response] = await getData(
-        `/organization/homeopathy/${organizationId}/medicines/${medicineId}`
+        `/organization/homeopathy/${organizationSlug}/medicines/${medicineId}`
       );
 
       if (status !== 200) {
@@ -108,11 +108,11 @@ const MedicineDetailPage = () => {
       setDeleting(true);
 
       const [status] = await deleteData(
-        `/organization/homeopathy/${organizationId}/medicines/${medicineId}`
+        `/organization/homeopathy/${organizationSlug}/medicines/${medicineId}`
       );
 
       if (status === 200 || status === 204) {
-        router.push(`/organization/${organizationId}/medicines`);
+        router.push(`/organization/${organizationSlug}/medicines`);
       } else {
         throw new Error("Failed to delete medicine");
       }
@@ -127,7 +127,7 @@ const MedicineDetailPage = () => {
   };
 
   const handleEdit = () => {
-    router.push(`/organization/${organizationId}/medicines/${medicineId}/edit`);
+    router.push(`/organization/${organizationSlug}/medicines/${medicineId}/edit`);
   };
 
   const getStatusBadge = () => {

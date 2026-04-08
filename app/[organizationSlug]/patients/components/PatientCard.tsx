@@ -60,7 +60,7 @@ const InfoItem = ({ icon: Icon, label, value }: InfoItemProps) => (
 
 const PatientCard = ({ patient }: { patient: Patient }) => {
   const router = useRouter();
-  const { organizationId } = useParams();
+  const { organizationSlug } = useParams();
 
   return (
     <Card className="group overflow-hidden rounded-3xl border-border/60 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
@@ -150,7 +150,7 @@ const PatientCard = ({ patient }: { patient: Patient }) => {
           <Button
             size={"sm"}
             onClick={() =>
-              router.push(`/${organizationId}/patients/${patient.uid}`)
+              router.push(`/${organizationSlug}/patients/${patient.uid}`)
             }
             className="rounded-xl bg-primary px-4 text-xs font-medium text-primary-foreground shadow-sm transition-all duration-200 hover:bg-primary/90 hover:shadow-md"
           >

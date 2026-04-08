@@ -22,7 +22,7 @@ import {
 } from "lucide-react";
 
 interface PatientsProps {
-  organizationId: string;
+  organizationSlug: string;
   patientId: string;
 }
 
@@ -41,12 +41,12 @@ const InfoItem = ({ icon: Icon, label, value }: InfoItemProps) => (
     </div>
   </div>
 );
-const PatientCard = ({ organizationId, patientId }: PatientsProps) => {
+const PatientCard = ({ organizationSlug, patientId }: PatientsProps) => {
   useEffect(() => {
     const fetchPatients = async () => {
       try {
         const [status] = await getData(
-          `/organization/homeopathy/${organizationId}/patients`
+          `/organization/homeopathy/${organizationSlug}/patients`
         );
 
         if (status !== 200) {
@@ -59,7 +59,7 @@ const PatientCard = ({ organizationId, patientId }: PatientsProps) => {
     };
 
     fetchPatients();
-  }, [organizationId, patientId]);
+  }, [organizationSlug, patientId]);
 
   return (
     <Card className="mx-auto w-full max-w-md rounded-3xl border-border/60 bg-white p-2 shadow-sm">

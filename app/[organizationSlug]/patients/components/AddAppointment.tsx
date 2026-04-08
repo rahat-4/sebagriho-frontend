@@ -51,7 +51,7 @@ interface Medicine {
 type HomeoPatientAppointmentFormData = z.infer<typeof patientAppointmentSchema>;
 
 interface PatientAppointmentProps {
-  organizationId: string;
+  organizationSlug: string;
   patientId: string;
   onAppointmentCreated?: () => void;
 }
@@ -59,11 +59,11 @@ interface PatientAppointmentProps {
 const MedicineMultiSelect = ({
   value = [],
   onChange,
-  organizationId,
+  organizationSlug,
 }: {
   value: Medicine[];
   onChange: (medicines: Medicine[]) => void;
-  organizationId: string;
+  organizationSlug: string;
 }) => {
   const [open, setOpen] = useState(false);
   const [medicines, setMedicines] = useState<Medicine[]>([]);
@@ -77,13 +77,13 @@ const MedicineMultiSelect = ({
   // Optimized fetch function
   const fetchMedicines = useCallback(
     async (query = "") => {
-      if (!organizationId) return;
+      if (!organizationSlug) return;
 
       setLoading(true);
       setError(null);
 
       try {
-        const url = `/organization/homeopathy/${organizationId}/medicines${
+        const url = `/organization/homeopathy/${organizationSlug}/medicines${
           query ? `?search=${encodeURIComponent(query)}` : ""
         }`;
         const [status, response] = await getData(url);
@@ -104,7 +104,7 @@ const MedicineMultiSelect = ({
         setLoading(false);
       }
     },
-    [organizationId]
+    [organizationSlug]
   );
 
   // Debounced search effect
@@ -314,7 +314,7 @@ const FORM_FIELDS = [
 ] as const;
 
 export const PatientAppointment = ({
-  organizationId,
+  organizationSlug,
   patientId,
   onAppointmentCreated,
 }: PatientAppointmentProps) => {
@@ -373,7 +373,7 @@ export const PatientAppointment = ({
 
       try {
         const [status, response] = await postData(
-          `/organization/homeopathy/${organizationId}/patients/${patientId}/appointments`,
+          `/organization/homeopathy/${organizationSlug}/patients/${patientId}/appointments`,
           formData
         );
 
@@ -417,7 +417,7 @@ export const PatientAppointment = ({
         setIsLoading(false);
       }
     },
-    [organizationId, patientId, form, onAppointmentCreated]
+    [organizationSlug, patientId, form, onAppointmentCreated]
   );
 
   return (
@@ -534,7 +534,7 @@ export const PatientAppointment = ({
                       <MedicineMultiSelect
                         value={field.value || []}
                         onChange={field.onChange}
-                        organizationId={organizationId}
+                        organizationSlug={organizationSlug}
                       />
                     </FormControl>
                     <FormMessage />

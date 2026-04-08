@@ -1,4 +1,4 @@
-// File: app/(organization)/[organizationId]/medicines/components/StatCard.tsx
+// File: app/(organization)/[organizationSlug]/medicines/components/StatCard.tsx
 import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 

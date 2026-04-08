@@ -1,4 +1,4 @@
-// File: app/(organization)/[organizationId]/patients/[patientId]/components/PatientDetail.tsx
+// File: app/(organization)/[organizationSlug]/patients/[patientId]/components/PatientDetail.tsx
 import { Calendar, Clock, Edit, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -25,18 +25,18 @@ import { Loader2 } from "lucide-react";
 
 const PatientDetail = ({ patient }: { patient: Patient }) => {
   const router = useRouter();
-  const { organizationId } = useParams();
+  const { organizationSlug } = useParams();
   const [deleting, setDeleting] = useState(false);
 
   const handleDelete = async () => {
     try {
       setDeleting(true);
       const [status] = await deleteData(
-        `/organization/homeopathy/${organizationId}/patients/${patient.uid}`
+        `/organization/homeopathy/${organizationSlug}/patients/${patient.uid}`
       );
 
       if (status === 200 || status === 204) {
-        router.push(`/${organizationId}/patients`);
+        router.push(`/${organizationSlug}/patients`);
       }
     } catch (error) {
       console.error("Failed to delete patient:", error);
@@ -46,7 +46,7 @@ const PatientDetail = ({ patient }: { patient: Patient }) => {
   };
 
   const handleEdit = () => {
-    router.push(`/${organizationId}/patients/${patient.uid}/edit`);
+    router.push(`/${organizationSlug}/patients/${patient.uid}/edit`);
   };
 
   return (

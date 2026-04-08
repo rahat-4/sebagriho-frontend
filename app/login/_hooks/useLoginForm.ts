@@ -49,7 +49,7 @@ export function useLoginForm() {
 
       console.log("Login response:", response);
 
-      let url = `${response.organization_uid}`;
+      let url = `${response.organization_slug}`;
 
       if (response.admin === true) {
         url = "/admin";

@@ -132,10 +132,10 @@ const AppointmentTimelineItem = ({
 
 interface HistoryProps {
   patientId: ParamValue;
-  organizationId: ParamValue;
+  organizationSlug: ParamValue;
 }
 
-const History = ({ patientId, organizationId }: HistoryProps) => {
+const History = ({ patientId, organizationSlug }: HistoryProps) => {
   const [appointment, setAppointment] = useState<Appointment | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -144,7 +144,7 @@ const History = ({ patientId, organizationId }: HistoryProps) => {
     const fetchCurrentAppointment = async () => {
       try {
         const [status, response] = await getData(
-          `/organization/homeopathy/${organizationId}/patients/${patientId}/appointments?recent=true`
+          `/organization/homeopathy/${organizationSlug}/patients/${patientId}/appointments?recent=true`
         );
 
         if (status !== 200) {
@@ -161,10 +161,10 @@ const History = ({ patientId, organizationId }: HistoryProps) => {
       }
     };
 
-    if (organizationId && patientId) {
+    if (organizationSlug && patientId) {
       fetchCurrentAppointment();
     }
-  }, [organizationId, patientId]);
+  }, [organizationSlug, patientId]);
 
   if (loading) {
     return <LoadingComponent name="Loading recent appointment..." />;
@@ -187,7 +187,7 @@ const History = ({ patientId, organizationId }: HistoryProps) => {
               Recent
             </CardTitle>
             <Link
-              href={`/${organizationId}/patients/${patientId}/appointments`}
+              href={`/${organizationSlug}/patients/${patientId}/appointments`}
             >
               <Button
                 variant="outline"

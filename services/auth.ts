@@ -13,7 +13,7 @@ export interface AuthResponse {
   refresh: string;
   user_name: string;
   admin: boolean;
-  organization_uid: string;
+  organization_slug: string;
 }
 
 type OrganizationType =

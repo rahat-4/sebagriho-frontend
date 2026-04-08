@@ -3,14 +3,16 @@ import { Card, CardContent } from "@/components/ui/card";
 const Dashboard = async ({
   params,
 }: {
-  params: Promise<{ organizationId: string }>;
+  params: Promise<{ organizationSlug: string }>;
 }) => {
   const resolvedParams = await params;
-  const organizationId = resolvedParams.organizationId;
+  const organizationSlug = resolvedParams.organizationSlug;
 
   const [status, response] = await getData(
-    `/organization/homeopathy/profile/${organizationId}`
+    `/organization/homeopathy/${organizationSlug}/profile`
   );
+
+  console.log("Organization profile response:", { status, response });
 
   if (status !== 200) {
     console.error("Failed to fetch organization data");

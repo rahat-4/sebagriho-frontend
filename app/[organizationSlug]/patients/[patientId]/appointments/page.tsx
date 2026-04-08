@@ -20,7 +20,7 @@ interface DateRange {
 }
 
 const PatientAppointmentList = () => {
-  const { organizationId, patientId } = useParams();
+  const { organizationSlug, patientId } = useParams();
   const [patient, setPatient] = useState<Patient | null>(null);
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [loading, setLoading] = useState(true);
@@ -45,7 +45,7 @@ const PatientAppointmentList = () => {
 
     try {
       // Build appointments URL with ordering
-      const baseUrl = `/organization/homeopathy/${organizationId}/patients/${patientId}/appointments`;
+      const baseUrl = `/organization/homeopathy/${organizationSlug}/patients/${patientId}/appointments`;
       const params = new URLSearchParams();
       const orderPrefix = sortOrder === "desc" ? "-" : "";
       params.append("ordering", `${orderPrefix}created_at`);
@@ -56,7 +56,7 @@ const PatientAppointmentList = () => {
       );
 
       // Fetch patient data
-      const patientUrl = `/organization/homeopathy/${organizationId}/patients/${patientId}`;
+      const patientUrl = `/organization/homeopathy/${organizationSlug}/patients/${patientId}`;
       const [patientStatus, patientResponse] = await getData(patientUrl);
 
       if (patientStatus === 200) {
@@ -91,13 +91,13 @@ const PatientAppointmentList = () => {
     } finally {
       setLoading(false);
     }
-  }, [organizationId, patientId, sortOrder]);
+  }, [organizationSlug, patientId, sortOrder]);
 
   // Delete appointment
   const handleDeleteAppointment = async (appointmentId: string) => {
     setDeleteLoading(true);
     try {
-      const url = `/organization/homeopathy/${organizationId}/patients/${patientId}/appointments/${appointmentId}`;
+      const url = `/organization/homeopathy/${organizationSlug}/patients/${patientId}/appointments/${appointmentId}`;
       const [status] = await deleteData(url);
 
       if (status === 200 || status === 204) {

@@ -11,7 +11,7 @@ import FilterComponents from "./components/FilterComponents";
 import StatCard from "./components/StatCard";
 
 const HomeopathicMedicineList = () => {
-  const { organizationId } = useParams();
+  const { organizationSlug } = useParams();
 
   const [searchTerm, setSearchTerm] = useState("");
   const [filters, setFilters] = useState<MedicineFilters>({
@@ -47,7 +47,7 @@ const HomeopathicMedicineList = () => {
 
       const queryString = params.toString();
       const [status, response] = await getData(
-        `/organization/homeopathy/${organizationId}/medicines${
+        `/organization/homeopathy/${organizationSlug}/medicines${
           queryString ? `?${queryString}` : ""
         }`
       );
@@ -64,7 +64,7 @@ const HomeopathicMedicineList = () => {
     } finally {
       setLoading(false);
     }
-  }, [organizationId, searchTerm, filters, sortBy, sortDirection]);
+  }, [organizationSlug, searchTerm, filters, sortBy, sortDirection]);
 
   useEffect(() => {
     fetchMedicines();

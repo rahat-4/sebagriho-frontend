@@ -6,7 +6,7 @@ interface User {
   user_uid: string;
   is_admin: boolean;
   is_owner: boolean;
-  organization_uid?: string;
+  organization_slug?: string;
   exp: number;
 }
 
@@ -140,7 +140,7 @@ export default async function AdminLayout({
   return <>{children}</>;
 }
 
-// app/[organizationId]/layout.tsx
+// app/[organizationSlug]/layout.tsx
 import { getUser } from "@/lib/getUser";
 import { redirect } from "next/navigation";
 
@@ -149,11 +149,11 @@ export default async function OrgLayout({
   params,
 }: {
   children: React.ReactNode;
-  params: { organizationId: string };
+  params: { organizationSlug: string };
 }) {
   const user = await getUser();
 
-  if (!user || user.organization_uid !== params.organizationId) {
+  if (!user || user.organization_slug !== params.organizationSlug) {
     redirect("/login");
   }
 

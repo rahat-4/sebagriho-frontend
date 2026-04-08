@@ -23,19 +23,19 @@ interface AddPatientDialogProps {
 
 const AddPatientDialog = ({ onPatientCreated }: AddPatientDialogProps) => {
   const router = useRouter();
-  const { organizationId } = useParams();
+  const { organizationSlug } = useParams();
 
   const [isOpen, setIsOpen] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
   const [patientUid, setPatientUid] = useState<string | null>(null);
 
   const completeRegistration = () => {
-    if (organizationId && patientUid) {
+    if (organizationSlug && patientUid) {
       setIsOpen(false);
       setCurrentStep(1);
       setPatientUid(null);
       onPatientCreated?.();
-      router.push(`/${organizationId}/patients/${patientUid}`);
+      router.push(`/${organizationSlug}/patients/${patientUid}`);
     }
   };
 
@@ -79,13 +79,13 @@ const AddPatientDialog = ({ onPatientCreated }: AddPatientDialogProps) => {
             {currentStep === 1 && (
               <AddHomeoPatient
                 onNext={handleNextStep}
-                organizationId={organizationId as string}
+                organizationSlug={organizationSlug as string}
                 setPatientUid={setPatientUid}
               />
             )}
             {currentStep === 2 && patientUid && (
               <HomeoPatientAdditonalInformations
-                organizationId={organizationId as string}
+                organizationSlug={organizationSlug as string}
                 patientUid={patientUid}
                 onComplete={completeRegistration}
               />

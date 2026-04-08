@@ -1,4 +1,4 @@
-// File: app/(organization)/[organizationId]/medicines/components/AddMedicine.tsx
+// File: app/(organization)/[organizationSlug]/medicines/components/AddMedicine.tsx
 import { z } from "zod";
 import { useParams } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -136,7 +136,7 @@ interface AddHomeopathicMedicineProps {
 const AddHomeopathicMedicine = ({
   onMedicineCreated,
 }: AddHomeopathicMedicineProps) => {
-  const { organizationId } = useParams();
+  const { organizationSlug } = useParams();
 
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -196,7 +196,7 @@ const AddHomeopathicMedicine = ({
 
       try {
         const [status, response] = await postData(
-          `/organization/homeopathy/${organizationId}/medicines`,
+          `/organization/homeopathy/${organizationSlug}/medicines`,
           formData
         );
 
@@ -241,7 +241,7 @@ const AddHomeopathicMedicine = ({
         setIsLoading(false);
       }
     },
-    [organizationId, form, onMedicineCreated]
+    [organizationSlug, form, onMedicineCreated]
   );
 
   return (

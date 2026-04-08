@@ -159,13 +159,13 @@ type HomeoPatientAdditionalInformationFormData = z.infer<
 
 interface HomeoPatientProps {
   onNext: () => void;
-  organizationId?: string;
+  organizationSlug?: string;
   setPatientUid: (patientUid: string) => void;
 }
 
 export const AddHomeoPatient: React.FC<HomeoPatientProps> = ({
   onNext,
-  organizationId,
+  organizationSlug,
   setPatientUid,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -211,7 +211,7 @@ export const AddHomeoPatient: React.FC<HomeoPatientProps> = ({
 
     try {
       const [status, response] = await postData(
-        `/organization/homeopathy/${organizationId}/patients`,
+        `/organization/homeopathy/${organizationSlug}/patients`,
         formData
       );
 
@@ -348,14 +348,14 @@ export const AddHomeoPatient: React.FC<HomeoPatientProps> = ({
 };
 
 interface AdditionalInformationProps {
-  organizationId?: string;
+  organizationSlug?: string;
   patientUid: string;
   onComplete: () => void;
 }
 
 export const HomeoPatientAdditonalInformations: React.FC<
   AdditionalInformationProps
-> = ({ organizationId, patientUid, onComplete }) => {
+> = ({ organizationSlug, patientUid, onComplete }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState<{
     type: "success" | "error";
@@ -391,7 +391,7 @@ export const HomeoPatientAdditonalInformations: React.FC<
 
       try {
         const [status, response] = await patchData(
-          `/organization/homeopathy/${organizationId}/patients/${patientUid}`,
+          `/organization/homeopathy/${organizationSlug}/patients/${patientUid}`,
           formData
         );
 

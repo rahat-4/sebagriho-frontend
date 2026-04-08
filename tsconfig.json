@@ -33,7 +33,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "app/[organizationId]/patients/[patientId]/components",
+    "app/[organizationSlug]/patients/[patientId]/components",
     ".next/dev/types/**/*.ts"
   ],
   "exclude": [

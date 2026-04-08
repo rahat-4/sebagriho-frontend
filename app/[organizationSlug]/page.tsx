@@ -3,14 +3,14 @@ import { redirect } from "next/navigation";
 const Organization = async ({
   params,
 }: {
-  params: Promise<{ organizationId: string }>;
+  params: Promise<{ organizationSlug: string }>;
 }) => {
   
   const resolvedParams = await params;
   console.log("llllllllllllllllllll", resolvedParams)
-  const organizationId = resolvedParams.organizationId;
+  const organizationSlug = resolvedParams.organizationSlug;
 
-  redirect(`/${organizationId}/dashboard`);
+  redirect(`/${organizationSlug}/dashboard`);
 };
 
 export default Organization;

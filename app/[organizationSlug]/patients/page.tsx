@@ -15,7 +15,7 @@ import { LoadingComponent } from "@/components/LoadingComponent";
 import StatCard from "./components/StatCard";
 
 const Patients = () => {
-  const { organizationId } = useParams();
+  const { organizationSlug } = useParams();
   const [patients, setPatients] = useState<Patient[]>([]);
   const [filteredPatients, setFilteredPatients] = useState<Patient[]>([]);
   const [loading, setLoading] = useState(true);
@@ -31,7 +31,7 @@ const Patients = () => {
     const fetchPatients = async () => {
       try {
         const [status, response] = await getData(
-          `/organization/homeopathy/${organizationId}/patients`
+          `/organization/homeopathy/${organizationSlug}/patients`
         );
 
         if (status !== 200) {
@@ -48,7 +48,7 @@ const Patients = () => {
     };
 
     fetchPatients();
-  }, [organizationId]);
+  }, [organizationSlug]);
 
   // Filter and search logic
   useEffect(() => {

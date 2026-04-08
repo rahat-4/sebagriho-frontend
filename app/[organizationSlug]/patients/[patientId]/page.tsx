@@ -11,10 +11,10 @@ import PatientDetail from "./components/PatientDetail";
 import Overview from "./components/Overview";
 import Medical from "./components/Medical";
 import History from "./components/History";
-import { PatientAppointment } from "@/app/[organizationId]/patients/components/AddAppointment";
+import { PatientAppointment } from "@/app/[organizationSlug]/patients/components/AddAppointment";
 
 const PatientProfile = () => {
-  const { organizationId, patientId } = useParams();
+  const { organizationSlug, patientId } = useParams();
   const [patient, setPatient] = useState<Patient | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -27,7 +27,7 @@ const PatientProfile = () => {
         setError(null);
 
         const [status, response] = await getData(
-          `/organization/homeopathy/${organizationId}/patients/${patientId}`
+          `/organization/homeopathy/${organizationSlug}/patients/${patientId}`
         );
 
         if (status !== 200) {
@@ -44,10 +44,10 @@ const PatientProfile = () => {
       }
     };
 
-    if (organizationId && patientId) {
+    if (organizationSlug && patientId) {
       fetchPatient();
     }
-  }, [organizationId, patientId]);
+  }, [organizationSlug, patientId]);
 
   if (loading) {
     return (
@@ -130,7 +130,7 @@ const PatientProfile = () => {
           <TabsContent value="history" className="space-y-6">
             <History
               patientId={patientId as string}
-              organizationId={organizationId as string}
+              organizationSlug={organizationSlug as string}
             />
           </TabsContent>
         </Tabs>
@@ -138,7 +138,7 @@ const PatientProfile = () => {
 
       <div className="fixed bottom-6 right-6 flex flex-col gap-3 md:hidden">
         <PatientAppointment
-          organizationId={organizationId as string}
+          organizationSlug={organizationSlug as string}
           patientId={patientId as string}
         />
       </div>
