@@ -125,7 +125,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       formData.append("password", credentials.password);
       formData.append("remember_me", String(credentials.rememberMe || false));
 
-      const [status, response] = await postData("/public/auth/login", formData);
+      const [status, response] = await postData("/auth/login", formData);
 
       if (status !== 200) {
         return {

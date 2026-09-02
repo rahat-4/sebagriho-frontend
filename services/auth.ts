@@ -87,7 +87,7 @@ export async function login(
   formData.append("password", credentials.password);
   formData.append("remember_me", String(credentials.rememberMe || false));
 
-  const response = await postData("/public/auth/login", formData);
+  const response = await postData("/auth/login", formData);
   const [status, data] = response;
 
   if (status !== 200) {

@@ -98,13 +98,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const login = async (credentials: any) => {
-    const [status] = await postData("/public/auth/login", credentials);
+    const [status] = await postData("/auth/login", credentials);
     await checkAuth();
     return status === 200;
   };
 
   const logout = async () => {
-    await postData("/public/auth/logout", {});
+    await postData("/auth/logout", {});
     setUser(null);
     router.push("/login");
   };
