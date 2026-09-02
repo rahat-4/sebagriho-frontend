@@ -111,7 +111,7 @@ export async function logout(): Promise<void> {
 }
 
 export async function refreshToken(): Promise<AuthResponse> {
-  const response = await fetch(`${API_URL}/api/auth/refresh/`, {
+  const response = await fetch(`${API_URL}/auth/refresh/`, {
     method: "POST",
     credentials: "include",
   });
@@ -172,7 +172,7 @@ export async function getCurrentUserServer(): Promise<User | null> {
     const cookieString = cookieStore.toString();
 
     const response = await fetch(
-      `${process.env.API_URL || API_URL}/api/auth/me/`,
+      `${API_URL}/auth/me/`,
       {
         method: "GET",
         headers: {
