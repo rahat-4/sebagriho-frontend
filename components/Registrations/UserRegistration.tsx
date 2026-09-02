@@ -160,7 +160,7 @@ const UserRegistration: React.FC<StepProps> = ({ onNext }) => {
 
     try {
       const [status, response] = await postData(
-        "/public/auth/initial-registration",
+        "/auth/initial-registration",
         formData
       );
 

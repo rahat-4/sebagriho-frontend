@@ -62,7 +62,7 @@ const OneTimePassword: React.FC<StepProps> = ({ onNext }) => {
       formData.append("otp", data.otp);
 
       const [status, response] = await postData(
-        "/public/auth/otp-verification",
+        "/auth/otp-verification",
         formData
       );
 

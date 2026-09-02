@@ -56,7 +56,7 @@ const PhoneVerification = ({ onNext }: StepProps) => {
       formData.append("phone", fullPhoneNumber);
 
       const [status, response] = await postData(
-        "/public/auth/phone-verification",
+        "/auth/phone-verification",
         formData
       );
 

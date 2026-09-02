@@ -95,7 +95,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const checkAuth = async () => {
     try {
-      const [status, response] = await getData("/public/auth/me");
+      const [status, response] = await getData("/auth/me");
 
       if (status === 200) {
         const { organization, ...userOnly } = response;
@@ -154,7 +154,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const logout = async () => {
     try {
-      await postData("/public/auth/logout", {});
+      await postData("/auth/logout", {});
     } catch (error) {
       console.error("Logout failed:", error);
     } finally {

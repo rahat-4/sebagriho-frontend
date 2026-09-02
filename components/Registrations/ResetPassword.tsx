@@ -74,7 +74,7 @@ const ResetPassword = () => {
         formData.append("confirm_password", data.confirmPassword);
 
         const [status, response] = await postData(
-          "/public/auth/forgot-password",
+          "/auth/forgot-password",
           formData
         );
 
